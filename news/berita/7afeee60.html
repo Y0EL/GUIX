@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Georgia',serif;background:#f4f4f4;color:#222}
+.navbar{background:#c0392b}
+.navbar-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
+.logo{color:#fff;font-size:1.5em;font-weight:900;text-decoration:none;font-family:Arial,sans-serif}
+.logo span{color:#ffcdd2;font-size:0.5em;font-weight:400;display:block}
+.nav-links a{color:#ffcdd2;text-decoration:none;font-size:0.85em;font-family:Arial,sans-serif;margin-left:18px}
+.nav-links a:hover{color:#fff}
+.breaking{background:#222;color:#ffeb3b;font-size:0.78em;padding:5px 20px;font-family:Arial}
+.container{max-width:1200px;margin:20px auto;padding:0 20px;display:grid;grid-template-columns:1fr 300px;gap:24px}
+.main{} .sidebar{}
+.card{background:#fff;border-radius:4px;margin-bottom:18px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.1);cursor:pointer}
+.card:hover{box-shadow:0 3px 10px rgba(0,0,0,.15)}
+.card img{width:100%;height:200px;object-fit:cover}
+.card-body{padding:14px}
+.cat{font-size:.72em;font-weight:700;text-transform:uppercase;color:#c0392b;letter-spacing:.5px;font-family:Arial;margin-bottom:5px}
+.title{font-size:1.1em;font-weight:700;line-height:1.35;margin-bottom:6px}
+.title a{color:#111;text-decoration:none}
+.title a:hover{color:#c0392b}
+.meta{font-size:.75em;color:#888;font-family:Arial;margin-bottom:6px}
+.summary{font-size:.88em;color:#555;line-height:1.6}
+.headline img{height:320px}
+.headline .title{font-size:1.4em}
+.badge{background:#c0392b;color:#fff;font-size:.65em;padding:2px 6px;border-radius:2px;font-family:Arial;font-weight:700;margin-right:5px}
+.sw{background:#fff;border-radius:4px;padding:14px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.sw-title{font-size:.82em;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid #c0392b;padding-bottom:7px;margin-bottom:12px;font-family:Arial}
+.si{padding:9px 0;border-bottom:1px solid #eee;font-size:.84em}
+.si:last-child{border-bottom:none}
+.si a{color:#222;text-decoration:none;line-height:1.4;display:block}
+.si a:hover{color:#c0392b}
+.si .sm{font-size:.74em;color:#999;margin-top:2px;font-family:Arial}
+.footer{background:#222;color:#aaa;text-align:center;padding:22px;font-size:.8em;font-family:Arial;margin-top:30px}
+/* Article page */
+.art-container{max-width:780px;margin:0 auto;padding:28px 20px}
+.art-cat{font-size:.75em;font-weight:700;text-transform:uppercase;color:#c0392b;letter-spacing:.5px;font-family:Arial;margin-bottom:8px}
+.art-title{font-size:1.85em;font-weight:700;line-height:1.25;margin-bottom:8px}
+.art-sub{font-size:1.05em;color:#555;line-height:1.5;margin-bottom:14px;font-style:italic}
+.art-meta{font-size:.78em;color:#888;font-family:Arial;display:flex;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.art-meta .author{color:#c0392b;font-weight:600}
+.hero{width:100%;border-radius:4px;margin-bottom:6px;max-height:460px;object-fit:cover}
+.caption{font-size:.78em;color:#888;font-family:Arial;margin-bottom:22px;font-style:italic}
+.art-body{font-size:1em;line-height:1.8;color:#333}
+.art-body p{margin-bottom:15px}
+.art-body blockquote{border-left:3px solid #c0392b;padding:10px 15px;margin:18px 0;background:#fff8f8;font-style:italic;color:#555}
+.related{margin-top:28px}
+.rel-title{font-size:.88em;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid #c0392b;padding-bottom:7px;margin-bottom:14px;font-family:Arial}
+.rel-item{padding:9px 0;border-bottom:1px solid #eee;font-size:.87em}
+.rel-item a{color:#222;text-decoration:none}
+.rel-item a:hover{color:#c0392b}
+.share{background:#fff;border:1px solid #eee;border-radius:4px;padding:14px;margin-top:22px;font-family:Arial;font-size:.84em}
+.share strong{display:block;margin-bottom:8px}
+.sbtn{display:inline-block;padding:5px 13px;border-radius:3px;color:#fff;font-size:.8em;margin-right:7px;border:none;cursor:pointer}
+.fb{background:#1877f2}.tw{background:#1da1f2}.wa{background:#25d366}
+@media(max-width:768px){.container{grid-template-columns:1fr}.sidebar{display:none}}
+</style></head><body>
+<nav class="navbar"><div class="navbar-inner">
+<a href="../index.html" class="logo">Kabar Nusantara<span>Terpercaya, Cepat, Berimbang</span></a>
+<div class="nav-links"><a href="../kategori/kriminal.html">Kriminal</a><a href="../kategori/keamanan.html">Keamanan</a><a href="../kategori/hukum.html">Hukum</a><a href="../kategori/bencana.html">Bencana</a><a href="../kategori/politik.html">Politik</a><a href="../kategori/umum.html">Umum</a></div>
+</div></nav>
+<div class="breaking">TERKINI: Ikuti terus perkembangan berita dari seluruh Indonesia &nbsp;|&nbsp; Kirim info ke redaksi &nbsp;|&nbsp; Aktifkan notifikasi</div>
+<div class="art-container">
+<div class="art-cat">Hukum & Kriminal</div>
+<h1 class="art-title">Penembakan di Kotamobagu, Satu Korban Tewas dan Beberapa Terluka</h1>
+<p class="art-sub">Kelompok bersenjata tidak dikenal menyerang warga di tengah kota, polisi masih menyelidiki kasus ini.</p>
+<div class="art-meta">
+  <span class="author">&#9998; Lestari Ningrum</span>
+  <span>&#128336; 14 Maret 2026, 00:38 WIB</span>
+  <span>&#128205; Kotamobagu, Nusa Tenggara Barat</span>
+</div>
+<img class="hero" src="../images/82a4ef0a.jpg" alt="Penembakan di Kotamobagu, Satu Korban Tewas dan Beberapa Terluka">
+<p class="caption">Foto: Tim Redaksi / Kabar Nusantara</p>
+<div class="art-body"><p>Satu orang dilaporkan tewas dan beberapa lainnya terluka dalam insiden penembakan yang terjadi di Kotamobagu, Nusa Tenggara Barat, pada Senin, 14 Maret 2026. Penembakan ini terjadi sekitar pukul 17.30 WITA di kawasan pemukiman yang padat penduduk. Menurut informasi awal, sekelompok orang bersenjata tidak dikenal melakukan serangan secara mendadak terhadap warga yang sedang berkumpul di area tersebut.</p>
+<p>Kapolres Kotamobagu, AKBP Rudi Santoso, mengungkapkan bahwa pihaknya saat ini masih melakukan penyelidikan untuk mengidentifikasi pelaku dan motif di balik penembakan ini. "Kami telah mengamankan beberapa saksi untuk dimintai keterangan dan melakukan olah TKP. Kami juga mengimbau masyarakat untuk tetap tenang dan tidak terprovokasi," ujar Rudi dalam keterangan persnya.</p>
+<p>Pengamatan di lokasi kejadian menunjukkan bahwa warga tampak panik dan berlarian saat tembakan terdengar. Saksi mata, Rina (34), mengungkapkan ketakutannya saat melihat kejadian itu. "Saya tidak menyangka akan terjadi penembakan di sini. Suara tembakan sangat kencang dan semua orang berlarian," ungkapnya.</p>
+<p>Hingga saat ini, korban yang tewas telah dibawa ke rumah sakit terdekat untuk diotopsi, sementara korban luka masih dirawat intensif. Pihak kepolisian juga melibatkan TNI untuk memperketat keamanan di wilayah tersebut agar tidak terjadi insiden serupa.</p>
+<p>Situasi di Kotamobagu saat ini masih dalam pemantauan, dan pihak berwenang berjanji akan memberikan informasi terbaru kepada masyarakat. Penyelidikan lebih lanjut diharapkan dapat mengungkap siapa pelaku di balik penembakan yang menimbulkan ketakutan di kalangan warga ini.</p>
+</div>
+<div class="share"><strong>Bagikan:</strong>
+  <button class="sbtn fb">Facebook</button>
+  <button class="sbtn tw">Twitter/X</button>
+  <button class="sbtn wa">WhatsApp</button>
+</div>
+<div class="related"><div class="rel-title">Berita Terkait</div><div class="rel-item"><a href="02dc5983.html">Jembatan di Palu Ambruk Saat Dilintasi Kendaraan Berat</a><div style="font-size:.74em;color:#999;font-family:Arial;margin-top:2px">Daerah &bull; Palu</div></div><div class="rel-item"><a href="07f3cb4d.html">Sindikat Narkotika Jaringan Internasional Digerebek di Yogyakarta</a><div style="font-size:.74em;color:#999;font-family:Arial;margin-top:2px">Hukum & Kriminal &bull; Yogyakarta</div></div><div class="rel-item"><a href="7af38eec.html">Jembatan di Binjai Ambruk Saat Dilintasi Kendaraan Berat</a><div style="font-size:.74em;color:#999;font-family:Arial;margin-top:2px">Daerah &bull; Binjai</div></div><div class="rel-item"><a href="a3f501bf.html">Guru di Palembang Dianiaya Orang Tua Murid di Dalam Kelas</a><div style="font-size:.74em;color:#999;font-family:Arial;margin-top:2px">Sosial &bull; Palembang</div></div></div>
+</div><div class="footer">&copy; 2026 Kabar Nusantara. Seluruh hak cipta dilindungi.<br>Redaksi | Iklan | Karir | Syarat & Ketentuan | Kebijakan Privasi</div></body></html>

@@ -1,0 +1,12 @@
+{
+  "name": "uix-orchestration-backend",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "back": "node scripts/jalankan-backend.js",
+    "back:docker": "node scripts/jalankan-backend.js --dengan-docker",
+    "back:live": "node scripts/jalankan-backend-live.js --dengan-docker",
+    "back:stop": "node scripts/hentikan-backend.js",
+    "back:status": "node scripts/jalankan-backend.js --status-saja"
+  }
+}

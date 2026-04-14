@@ -1,405 +1,752 @@
-# News + Persona Dataset Generator
+# Orkestrasi OSINT TIA / NAA / PTA
 
-Workspace ini sekarang punya dua jalur generator:
+Workspace ini memuat dua lapisan yang saling melengkapi:
 
-1. `generate.py` + `render.py` untuk dataset berita dan portal HTML.
-2. `generate_profiles.py`, `generate_cases.py`, dan `generate_dataset.py` untuk paket **persona Indonesia + multi-case correlation dataset**.
+1. Generator data uji berita dan persona yang sudah tersedia di root project.
+2. Backend orkestrasi agent di folder `orchestration/` untuk memproses data tersebut dengan service nyata: OpenAI, LangChain, LangGraph, Kafka, Redis Streams, PostgreSQL, Neo4j, dan Celery.
 
-Semua data di repo ini ditujukan untuk **demo internal, testing agent, dan simulasi workflow**. Bukan untuk identifikasi orang nyata, doxxing, deep web lookup, atau atribusi final terhadap pihak sungguhan.
+Data yang ada di `news/` dan `dataset/` adalah data uji internal. Backend agent tetap diperlakukan sebagai runtime nyata: event masuk lewat Kafka, TIA memproses dengan LangGraph dan OpenAI, NAA membaca hasil lewat Redis Streams dan meng-upsert ke Neo4j, lalu PTA berjalan sebagai worker Celery terpisah untuk analitik prediktif.
 
-## Setup
+Versi orkestrasi saat ini sudah memakai pola **graph terkontrol**:
+
+- TIA: planner -> retrieval -> verifier -> threat assessment -> critic -> evidence ranking -> briefing review
+- NAA: candidate relation extraction -> relation verifier -> graph analytics -> cluster interpreter
+- PTA: scope planner -> feature builder -> anomaly/forecast -> uncertainty interpreter -> recommendation critic
+
+## Stack Backend
+
+- `OpenAI` untuk ekstraksi entitas, penilaian ancaman, ekstraksi relasi, dan rekomendasi aksi.
+- `LangChain` untuk prompt orchestration dan structured output.
+- `LangGraph` untuk state machine TIA.
+- `Kafka` untuk ingestion OSINT.
+- `Redis Streams` untuk A2A TIA -> NAA serta hasil ke jalur review.
+- `Celery` untuk job PTA yang berat.
+- `PostgreSQL` untuk store relasional, audit trail, briefing TIA, dan hasil PTA.
+- `Neo4j` untuk graph persistence dan analitik jaringan.
+
+## Struktur Modul
+
+- `orchestration/config.py`: pemuatan env dan validasi fail-fast.
+- `orchestration/schema.py`: kontrak event dan payload typed.
+- `orchestration/openai_stack.py`: klien OpenAI nyata dan wrapper LangChain.
+- `orchestration/mcp.py`: gateway tunggal ke PostgreSQL dan Neo4j.
+- `orchestration/seed_data.py`: import data uji ke PostgreSQL dan Neo4j, plus publisher Kafka.
+- `orchestration/tia_graph.py`: pipeline LangGraph untuk TIA.
+- `orchestration/naa_worker.py`: worker Redis Streams untuk NAA.
+- `orchestration/pta_tasks.py`: task Celery untuk PTA.
+- `orchestration/hitl.py`: routing payload review.
+- `orchestration/cli.py`: entrypoint operasi backend.
+
+## Variabel Lingkungan
+
+Konfigurasi utama ada di `.env` dan `.env.example`. Variabel wajib:
+
+- `OPENAI_API_KEY`
+- `OPENAI_MODEL`
+- `KAFKA_BOOTSTRAP_SERVERS`
+- `KAFKA_TOPIC_OSINT_RAW`
+- `KAFKA_CONSUMER_GROUP_TIA`
+- `REDIS_URL`
+- `REDIS_STREAM_TIA_OUT`
+- `REDIS_STREAM_NAA_OUT`
+- `REDIS_STREAM_CLUSTER_ALERT`
+- `REDIS_STREAM_HITL_REVIEW`
+- `REDIS_STREAM_PTA_RESULT`
+- `CELERY_BROKER_URL`
+- `CELERY_RESULT_BACKEND`
+- `POSTGRES_DSN`
+- `NEO4J_URI`
+- `NEO4J_USERNAME`
+- `NEO4J_PASSWORD`
+- `MCP_SHARED_TOKEN`
+
+Startup backend akan gagal cepat bila `OPENAI_API_KEY` atau endpoint service inti belum diisi.
+
+Untuk stack Docker bawaan repo ini, Neo4j dikonfigurasi dengan:
+
+- `NEO4J_USERNAME=neo4j`
+- `NEO4J_PASSWORD=123`
+
+## Jalur Yang Disarankan
+
+Untuk Windows lokal, jalur utama sekarang adalah **tanpa Docker**. Anda menyalakan service infrastruktur sendiri, lalu memakai launcher backend dari repo ini.
+
+`npm run back` hanya:
+
+1. mengecek service inti
+2. menjalankan `seed`
+3. menyalakan worker `TIA`, `NAA`, dan `PTA`
+4. memverifikasi worker tidak mati di awal
+5. menjalankan `publish-osint`
+
+`npm run back` tidak:
+
+1. mengunduh Java
+2. menginstal PostgreSQL
+3. menginstal Memurai
+4. menginstal Neo4j
+5. menginstal Kafka
+6. membunuh service sistem Anda di port infrastruktur
+
+## Instal Dependency Python
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Untuk generator berita lama, set `OPENAI_API_KEY` sesuai kebutuhan. Generator persona/case baru bisa pakai dua cara:
+## Setup Manual Windows Tanpa Docker
 
-1. Hardcode langsung di [synthetic_dataset.py](C:/Users/WIN10/Desktop/GUIX/synthetic_dataset.py) pada `HARDCODED_OPENAI_API_KEY` dan `HARDCODED_OPENAI_MODEL`.
-2. Pakai environment variable `OPENAI_API_KEY` dan `OPENAI_MODEL`.
+Urutan yang disarankan:
 
-Kalau key tidak diisi, generator persona/case akan fallback ke generator lokal.
+1. Install Java JDK 21
+2. Install PostgreSQL
+3. Install Memurai
+4. Install Neo4j
+5. Install Apache Kafka
+6. Isi `.env`
+7. Jalankan seed dan worker backend
 
-## Generator Berita
+## Link Download Resmi
 
-```bash
-# Generate artikel
-python generate.py --count 20 --out-dir out_news
+- Temurin JDK 21: `https://adoptium.net/`
+- PostgreSQL Windows: `https://www.postgresql.org/download/windows/`
+- Memurai: `https://www.memurai.com/`
+- Neo4j: `https://neo4j.com/download/`
+- Apache Kafka: `https://kafka.apache.org/downloads`
 
-# Render portal berita statis
-python render.py
+## 1. Install Java JDK 21
+
+Install JDK 21 terlebih dahulu.
+
+Langkah:
+
+1. Buka halaman Temurin.
+2. Pilih Windows.
+3. Pilih JDK 21.
+4. Install sampai selesai.
+5. Tutup dan buka ulang terminal.
+6. Verifikasi:
+
+```powershell
+java -version
 ```
 
-Output utamanya ada di `out_news/`:
+Kalau `java -version` gagal, berarti `PATH` Java belum benar.
+
+## 2. Install PostgreSQL
+
+Install PostgreSQL untuk Windows, lalu buat user dan database untuk backend.
+
+Nilai yang direkomendasikan:
+
+- host: `localhost`
+- port: `5432`
+- database: `intel_orchestrator`
+- user aplikasi: `123`
+- password aplikasi: `123`
+
+Setelah PostgreSQL terpasang, buka `psql` atau `pgAdmin`, lalu jalankan:
+
+```sql
+CREATE USER "123" WITH PASSWORD '123';
+CREATE DATABASE intel_orchestrator OWNER "123";
+```
+
+Kalau user atau database sudah ada, cukup sesuaikan `.env`.
+
+Contoh:
+
+```env
+POSTGRES_DSN=postgresql://123:123@localhost:5432/intel_orchestrator
+```
+
+## 3. Install Memurai
+
+Untuk Windows native, gunakan Memurai sebagai server yang kompatibel dengan Redis.
+
+Langkah:
+
+1. Unduh installer Memurai.
+2. Install sebagai Windows service.
+3. Pastikan servicenya berjalan.
+4. Pastikan port `6379` aktif.
+
+Contoh:
+
+```env
+REDIS_URL=redis://localhost:6379/0
+CELERY_BROKER_URL=redis://localhost:6379/1
+CELERY_RESULT_BACKEND=redis://localhost:6379/2
+```
+
+## 4. Install Neo4j
+
+Pilih salah satu:
+
+- `Neo4j Desktop` jika ingin setup lebih cepat.
+- `Neo4j Community` jika ingin service yang lebih langsung.
+
+Yang wajib sesuai backend ini:
+
+- Bolt aktif di `7687`
+- username sesuai `.env`
+- password sesuai `.env`
+
+Contoh:
+
+```env
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USERNAME=neo4j
+NEO4J_PASSWORD=123
+```
+
+## 5. Install Apache Kafka
+
+Gunakan distribusi binary Kafka dan jalankan mode KRaft single node.
+
+Contoh lokasi:
 
 ```text
-out_news/
-|-- index.html
-|-- berita/
-|-- images/
-`-- dataset.jsonl
+C:\tools\kafka
 ```
 
-## Generator Persona + Kasus
+Masuk ke folder Kafka:
 
-### 1. Generate persona
+```powershell
+cd C:\tools\kafka
+```
+
+Buat UUID storage:
+
+```powershell
+.\bin\windows\kafka-storage.bat random-uuid
+```
+
+Ambil UUID yang keluar, lalu format storage:
+
+```powershell
+.\bin\windows\kafka-storage.bat format --standalone -t <UUID_HASIL> -c .\config\server.properties
+```
+
+Jalankan broker:
+
+```powershell
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+```
+
+Contoh:
+
+```env
+KAFKA_BOOTSTRAP_SERVERS=localhost:9092
+KAFKA_TOPIC_OSINT_RAW=osint_raw
+KAFKA_CONSUMER_GROUP_TIA=tia_group
+```
+
+## 6. Isi `.env`
+
+Minimal isi nilai berikut:
+
+```env
+OPENAI_API_KEY=<KUNCI_VALID_ANDA>
+OPENAI_MODEL=gpt-5-nano
+KAFKA_BOOTSTRAP_SERVERS=localhost:9092
+REDIS_URL=redis://localhost:6379/0
+POSTGRES_DSN=postgresql://123:123@localhost:5432/intel_orchestrator
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USERNAME=neo4j
+NEO4J_PASSWORD=123
+```
+
+Kalau user, password, host, atau port Anda berbeda, ubah `.env` agar sama persis.
+
+## 7. Seed Data dan Jalankan Worker
+
+Urutan yang benar untuk backend manual adalah:
+
+1. `seed`
+2. nyalakan worker `TIA`
+3. nyalakan worker `NAA`
+4. nyalakan worker `PTA`
+5. baru `publish-osint`
+
+Jangan membalik urutan ini jika tujuan Anda adalah melihat satu kasus diproses end-to-end saat itu juga.
+
+Kalau Anda memakai launcher, jalur termudah tetap:
 
 ```bash
-python generate_profiles.py --count 300 --out-dir out_profiles
+npm run back:docker
 ```
 
-Kalau ingin download avatar dari 100k-faces:
+Perintah itu akan menghidupkan stack, seed, publish, dan menjalankan worker sekaligus.
+
+Kalau ingin manual per terminal, gunakan urutan di bawah ini.
+
+Setelah semua service hidup:
 
 ```bash
-python generate_profiles.py --count 300 --out-dir out_profiles --with-images --model gpt-5-nano
+python -m orchestration.cli seed
 ```
 
-Avatar memakai sumber:
-- `https://100k-faces.vercel.app/api/random-image`
-- provider: `100k-faces`
-
-### 2. Tambahkan kasus ke dataset yang sudah ada
+Lalu buka tiga terminal terpisah dan jalankan:
 
 ```bash
-python generate_cases.py --out-dir out_profiles --cases warehouse_fire,suspicious_funding,propaganda
+python -m orchestration.cli run-tia
 ```
-
-### 3. Generate dataset penuh sekaligus
 
 ```bash
-python generate_dataset.py --count 300 --out-dir out_profiles
+python -m orchestration.cli run-naa
 ```
-
-Atau dengan avatar lokal:
 
 ```bash
-python generate_dataset.py --count 300 --out-dir out_profiles --with-images
+python -m orchestration.cli run-pta-worker
 ```
 
-## Struktur Output Persona
+Setelah ketiga worker hidup, baru terbitkan event OSINT:
+
+```bash
+python -m orchestration.cli publish-osint
+```
+
+Kalau ingin satu kasus saja:
+
+```bash
+python -m orchestration.cli publish-osint --id 94bc7039
+```
+
+Catatan penting:
+
+log sukses dari `publish-osint` hanya berarti event berhasil dikirim ke Kafka.
+
+Log itu belum membuktikan bahwa TIA, NAA, dan PTA sudah selesai memproses kasus.
+
+Untuk memastikan kasus benar-benar jalan, Anda harus melihat hasilnya di PostgreSQL, Redis, atau Neo4j.
+
+## Cara Cek Cepat Sebelum Menjalankan Worker
+
+```powershell
+java -version
+```
+
+```powershell
+Test-NetConnection localhost -Port 5432
+```
+
+```powershell
+Test-NetConnection localhost -Port 6379
+```
+
+```powershell
+Test-NetConnection localhost -Port 7687
+```
+
+```powershell
+Test-NetConnection localhost -Port 9092
+```
+
+Kalau semua port di atas merespons, launcher backend biasanya sudah bisa lanjut.
+
+## Shortcut NPM
+
+Menyalakan seluruh worker setelah service aktif:
+
+```bash
+npm run back
+```
+
+Script ini akan:
+
+1. mengecek Kafka, Redis, PostgreSQL, dan Neo4j dari `.env`
+2. menjalankan `seed`
+3. menyalakan worker `TIA`, `NAA`, dan `PTA` sebagai proses background
+4. menunggu beberapa detik untuk memastikan worker tidak langsung mati
+5. menjalankan `publish-osint`
+6. menyimpan PID proses ke `runtime_state/backend-processes.json`
+7. menulis log ke folder `logs/`
+
+Kalau ingin tetap memakai container:
+
+```bash
+npm run back:docker
+```
+
+Untuk melihat status proses:
+
+```bash
+npm run back:status
+```
+
+Untuk menghentikan worker yang dinyalakan launcher:
+
+```bash
+npm run back:stop
+```
+
+## Jika `npm run back` Masih Gagal
+
+- Cek `.env`, biasanya masalah ada pada host, port, atau password yang tidak cocok.
+- Cek apakah service benar-benar hidup, bukan hanya terpasang.
+- Cek log worker di folder `logs/`.
+- Jalankan `npm run back:status`.
+- Jalankan `npm run back:stop` bila ada proses worker lama yang masih tertinggal.
+
+## Urutan Operasional Manual
+
+1. Seed relasional dan graf:
+
+```bash
+python -m orchestration.cli seed
+```
+
+2. Jalankan TIA di terminal pertama:
+
+```bash
+python -m orchestration.cli run-tia
+```
+
+3. Jalankan NAA di terminal kedua:
+
+```bash
+python -m orchestration.cli run-naa
+```
+
+4. Jalankan PTA worker di terminal ketiga:
+
+```bash
+python -m orchestration.cli run-pta-worker
+```
+
+5. Terbitkan berita OSINT dari dataset ke Kafka di terminal keempat:
+
+```bash
+python -m orchestration.cli publish-osint
+```
+
+Kalau ingin menerbitkan satu kasus saja:
+
+```bash
+python -m orchestration.cli publish-osint --id 94bc7039
+```
+
+Kalau ingin membatasi jumlah berita:
+
+```bash
+python -m orchestration.cli publish-osint --limit 5
+```
+
+### Arti log `publish-osint`
+
+Jika terminal `publish-osint` hanya menampilkan log koneksi Kafka lalu selesai tanpa error, itu berarti:
+
+- producer berhasil terkoneksi,
+- event berhasil didorong ke topic,
+- dan sekarang worker yang sedang hidup akan mengambil event tersebut.
+
+Itu belum berarti:
+
+- kasus sudah masuk ke `tia_briefings`,
+- jaringan sudah masuk ke Neo4j,
+- atau hasil PTA sudah selesai.
+
+Karena itu, `publish-osint` harus selalu dipasangkan dengan worker yang memang sedang berjalan.
+
+### Tanda bahwa TIA benar-benar sedang bekerja
+
+- ada log `TIA deteksi_sinyal_awal selesai`
+- ada request `POST https://api.openai.com/v1/chat/completions`
+- tidak ada traceback di terminal TIA
+- setelah selesai, ada data baru di PostgreSQL
+
+### Tanda bahwa NAA benar-benar sedang bekerja
+
+- worker NAA membaca stream Redis dari hasil TIA
+- Neo4j mulai menerima node dan edge baru
+- ada payload graf untuk kasus yang sama
+
+### Tanda bahwa PTA benar-benar sedang bekerja
+
+- worker Celery menerima tugas dari hasil NAA
+- PostgreSQL menerima hasil baru di tabel PTA
+- payload review ikut bertambah
+
+## Alur Data
+
+### TIA
+
+- Kafka consumer membaca `osint_raw`.
+- Relevance classifier menapis noise awal dan membuat sinyal aturan awal.
+- Planner retrieval memilih tool MCP yang perlu dipanggil.
+- OpenAI mengekstrak entitas terstruktur lalu memverifikasinya.
+- Fuzzy watchlist matching dilakukan ke PostgreSQL melalui MCP.
+- OpenAI membuat penilaian ancaman awal lalu menjalankan critic pass kedua.
+- Bukti diperingkat sebelum penyusunan briefing.
+- OpenAI menyusun intelligence briefing lalu briefing direview lagi sebelum publish.
+- Hasil diterbitkan ke Redis Stream `tia_out` dan payload review dikirim ke jalur HITL.
+
+### NAA
+
+- Redis Stream consumer membaca `tia_out`.
+- OpenAI mengekstrak relasi `subject-predicate-object` kandidat.
+- Verifier relasi membuang relasi lemah atau terlalu inferensial.
+- MCP meng-upsert relasi valid ke Neo4j.
+- Worker menghitung Louvain communities, PageRank, betweenness, eigenvector, dan bridge score.
+- Interpreter cluster menjelaskan broker utama, cluster penting, dan perubahan struktural.
+- Backend mengeluarkan `viz-ready JSON` yang lebih kaya untuk UI di masa depan.
+- Alert klaster diterbitkan ke `cluster_alert` jika ada perubahan struktur yang signifikan.
+- Event NAA diterbitkan ke `naa_out` dan memicu PTA.
+
+### PTA
+
+- Celery menerima event dari NAA.
+- Scope planner memilih retrieval historis yang paling relevan.
+- MCP memuat konteks historis dari PostgreSQL dan Neo4j.
+- Feature matrix dibangun dari domain temporal, spasial, relasional, dan transaksional.
+- `IsolationForest` dan autoencoder dipakai untuk anomali.
+- `RandomForestRegressor` dipakai untuk baseline forecast.
+- OpenAI menginterpretasikan ketidakpastian model.
+- OpenAI menyusun rekomendasi aksi lalu menjalankan critic pass untuk rekomendasi.
+- Hasil diterbitkan ke `pta_result` dan juga diarahkan ke jalur review.
+
+## Cara Memastikan Satu Kasus Benar-Benar Terdeteksi
+
+Contoh kasus yang sering dipakai:
+
+```bash
+python -m orchestration.cli publish-osint --id 94bc7039
+```
+
+Setelah itu, jangan menilai keberhasilan hanya dari log Kafka.
+
+Lakukan verifikasi berikut.
+
+### Verifikasi TIA di PostgreSQL
+
+Masuk ke PostgreSQL:
+
+```bash
+docker exec -it intel-postgres psql -U 123 -d intel_orchestrator
+```
+
+Lihat tabel yang tersedia:
+
+```sql
+\dt
+```
+
+Cek hasil TIA:
+
+```sql
+SELECT id_berita, level_ancaman, skor_agregat
+FROM tia_briefings
+WHERE id_berita = '94bc7039'
+ORDER BY dibuat_pada DESC;
+```
+
+Kalau query ini mengembalikan baris, berarti TIA benar-benar memproses kasus tersebut.
+
+### Verifikasi orang yang terhubung ke kasus
+
+Masih di PostgreSQL, buka payload briefing:
+
+```sql
+SELECT briefing_json
+FROM tia_briefings
+WHERE id_berita = '94bc7039'
+ORDER BY dibuat_pada DESC
+LIMIT 1;
+```
+
+Di dalam JSON ini, fokus ke:
+
+- `entitas`
+- `hit_watchlist`
+
+Jika `hit_watchlist` berisi data, berarti sistem tidak hanya mendeteksi kasus, tetapi juga menemukan orang yang cocok dengan watchlist.
+
+### Verifikasi graph di Neo4j
+
+Masuk ke Neo4j Browser:
+
+- URL: `neo4j://localhost:7687`
+- Username: `neo4j`
+- Password: `123`
+
+Cek apakah graf hidup:
+
+```cypher
+MATCH (n) RETURN count(n);
+```
+
+Cek relasi terbaru:
+
+```cypher
+MATCH (a)-[r]-(b)
+RETURN a, r, b
+LIMIT 50;
+```
+
+Kalau ingin fokus ke tiga kasus uji:
+
+```cypher
+MATCH (k:Kasus)
+RETURN k;
+```
+
+### Verifikasi PTA
+
+Masih di PostgreSQL:
+
+```sql
+SELECT trace_id, skor_ensemble, probabilitas_eskalasi, confidence_score
+FROM pta_results
+ORDER BY dibuat_pada DESC
+LIMIT 10;
+```
+
+Kalau tabel ini bertambah setelah satu kasus diterbitkan, berarti rantai TIA -> NAA -> PTA berjalan.
+
+### Verifikasi review manusia
+
+```sql
+SELECT trace_id, risk_level, approver_role
+FROM hitl_reviews
+ORDER BY dibuat_pada DESC
+LIMIT 10;
+```
+
+Kalau tabel ini bertambah, berarti hasil akhir sudah mencapai jalur review.
+
+## Tiga Cara Menjalankan Backend
+
+### Cara 1 — Paling mudah
+
+```bash
+npm run back:docker
+```
+
+Gunakan ini jika ingin stack hidup sekaligus.
+
+### Cara 2 — Manual penuh
+
+Gunakan empat terminal:
+
+- terminal 1: `python -m orchestration.cli run-tia`
+- terminal 2: `python -m orchestration.cli run-naa`
+- terminal 3: `python -m orchestration.cli run-pta-worker`
+- terminal 4: `python -m orchestration.cli publish-osint --id 94bc7039`
+
+### Cara 3 — Launcher tanpa Docker
+
+```bash
+npm run back
+```
+
+Gunakan ini hanya jika Kafka, Redis, PostgreSQL, dan Neo4j sudah Anda hidupkan sendiri di mesin lokal.
+
+## Analisis Kasus Menjadi Artefak File
+
+Jika tujuan Anda adalah melihat agent menalar satu kasus dari `dataset/kasus.json` lalu menghasilkan artefak yang bisa dibaca manusia, gunakan command berikut:
+
+```bash
+.venv\Scripts\python.exe -m orchestration.cli analisis-kasus --id kasus-pendanaan-mencurigakan
+```
+
+Atau untuk kasus lain:
+
+```bash
+.venv\Scripts\python.exe -m orchestration.cli analisis-kasus --id kasus-kebakaran-gudang
+```
+
+```bash
+.venv\Scripts\python.exe -m orchestration.cli analisis-kasus --id kasus-propaganda-burst
+```
+
+Command ini:
+
+1. mengambil bundel kasus dari PostgreSQL dan Neo4j melalui MCP
+2. memuat laporan, skor risiko, transaksi, kampanye, profil, lokasi, postingan, dan graph terkait
+3. meminta OpenAI melalui LangChain untuk menyusun dossier sindikat terstruktur
+4. menulis hasil ke folder `analisa/`
+
+Artefak yang dibuat:
+
+- `JSON`
+- `MD`
+- `CSV` ringkasan
+- `CSV` aktor
+- `CSV` relasi
+- `CSV` transaksi
+- `XLSX`
+- `DOCX`
+- `PDF`
+- `manifest.json`
+
+Setiap run membuat direktori baru dengan pola:
 
 ```text
-out_profiles/
-|-- profiles.json
-|-- accounts.json
-|-- contacts.json
-|-- preferences.json
-|-- photos.json
-|-- posts.json
-|-- friends.json
-|-- network.json
-|-- locations.json
-|-- cases.json
-|-- transactions.json
-|-- funding_alerts.json
-|-- campaigns.json
-|-- message_clusters.json
-|-- crawling.json
-|-- entities.json
-|-- alerts.json
-|-- risk_scores.json
-|-- reports.json
-`-- images/
+analisa/<id_kasus>/<id_kasus>_<timestamp>_<fingerprint>/
 ```
 
-## Contoh Kasus
+File tidak ditimpa.
 
-Dataset default saat menjalankan `generate_dataset.py` berisi 3 kasus utama:
+Setiap artefak memiliki fingerprint berbasis `SHA-256`.
 
-1. `warehouse_fire`
-   Kebakaran gudang logistik di area industri, dengan sinyal ledakan awal, pergerakan kendaraan sebelum api membesar, narasi saksi yang tidak sepenuhnya konsisten, dan akun yang aktif hampir bersamaan setelah kejadian.
+`manifest.json` menyimpan:
 
-2. `suspicious_funding`
-   Pola pendanaan tersebar dengan transfer kecil berulang, shared device atau shared IP, titik temu lokasi yang sama, dan hubungan antar akun yang tidak selalu terlihat dari graf pertemanan biasa.
+- fingerprint utama analisa
+- nama file
+- ukuran file
+- fingerprint per file
 
-3. `propaganda`
-   Satu akun pusat memunculkan narasi, lalu beberapa akun lain mengamplifikasi dengan wording mirip, jeda waktu sempit, dan overlap dengan aktor dari kasus lain.
+Contoh hasil yang diharapkan:
 
-## Isi Dataset Baru
-
-Dataset persona baru berisi:
-- persona Indonesia dengan `email`, nomor Indonesia dummy, `latitude`, `longitude`, akun sosial, minat, dan ringkasan profil
-- graph sosial yang **tidak fully connected**
-- mayoritas akun berdiri sendiri atau punya koneksi tipis
-- beberapa cluster kecil yang rapat
-- 1-2 bridge account yang menghubungkan cluster
-- shared meeting points agar agent bisa menguji korelasi lokasi + waktu
-
-Kasus default v1:
-- `warehouse_fire`
-- `suspicious_funding`
-- `propaganda`
-
-Secara praktis, dataset ini memuat 3 lapisan:
-- `persona layer`: identitas, kontak, minat, akun, aktivitas, dan lokasi dasar
-- `network layer`: friendship edges, bridge accounts, meeting point overlap, amplifikasi pesan, dan transfer edge
-- `case layer`: crawling data, entity extraction, alerts, risk scores, reports, campaigns, transactions, dan message clusters
-
-## Contoh Field Persona
-
-```json
-{
-  "profile_id": "prof-1234567890",
-  "full_name": "Nama Pengguna",
-  "city": "Bekasi",
-  "province": "Jawa Barat",
-  "latitude": -6.234901,
-  "longitude": 106.989611,
-  "avatar_source": "100k-faces",
-  "case_links": []
-}
+```text
+analisa/kasus-pendanaan-mencurigakan/kasus-pendanaan-mencurigakan_20260414_132500_ab12cd34ef56gh78/
 ```
 
-Kontak dibuat dummy tetapi konsisten lintas file:
-- email domain aman seperti `example.com` dan `mail.test`
-- nomor Indonesia format lokal `08...`
-- nomor internasional format `+62...`
+Format ini dipilih agar:
 
-## Extraction Schema
+- hasil lama tetap ada
+- setiap analisa punya identitas kuat
+- file mudah diaudit dan dibandingkan
 
-Setiap persona punya blok `extracted_profile` yang mengikuti kebutuhan metadata ala profiler secara aman:
-- `personal_information`
-- `locations`
-- `accounts`
-- `statistics`
-- `friends`
-- `photos`
-- `posts`
-- `web_search_results`
-- `preferences`
-- `contact_info`
-- `synopsis`
-- `case_links`
+Kasus yang paling cocok untuk uji dugaan sindikat adalah:
 
-Field sensitif yang sengaja **tidak** dibuat:
-- password
-- IMSI
-- deep web lookup nyata
-- data breach nyata
-- doxxing field
-- identitas orang riil
+```text
+kasus-pendanaan-mencurigakan
+```
 
-## Cara Uji Pengkajian Kasus
+Karena dataset ini memiliki jejaring transaksi yang paling jelas untuk penalaran aktor inti, relasi kunci, dan pola koordinasi.
 
-Berikut alur uji yang disarankan kalau kamu ingin menilai apakah agent atau dashboard bisa membaca kasus dengan baik:
+## Data Uji Yang Dipakai
 
-1. Mulai dari `reports.json` dan `risk_scores.json`
-   Lihat ringkasan tiap kasus, skor risiko, dan driver utamanya.
+Data uji tetap berasal dari file yang sudah ada:
 
-2. Turun ke `alerts.json`, `entities.json`, dan `crawling.json`
-   Cek apakah agent bisa menjelaskan kenapa suatu kasus naik ke medium atau high, misalnya karena ledakan awal, copy-paste wording, shared device, atau overlap lokasi.
+- `news/dataset.jsonl`
+- `dataset/profil.json`
+- `dataset/kontak.json`
+- `dataset/akun.json`
+- `dataset/lokasi.json`
+- `dataset/transaksi.json`
+- `dataset/kampanye.json`
+- `dataset/postingan.json`
+- `dataset/laporan.json`
+- `dataset/skor_risiko.json`
+- `dataset/kasus.json`
 
-3. Validasi aktor utama lewat `profiles.json` dan `case_links`
-   Cari siapa saja profil yang terhubung ke satu kasus, lalu cek apakah ada profil yang muncul di lebih dari satu kasus.
+Seed pipeline memindahkan data tersebut ke PostgreSQL dan Neo4j agar runtime agent tidak membaca file langsung saat memproses event.
 
-4. Uji korelasi jaringan lewat `friends.json`, `network.json`, dan `transactions.json`
-   Pastikan agent bisa membedakan:
-   - koneksi langsung
-   - bridge account
-   - overlap lokasi tanpa pertemanan langsung
-   - hubungan finansial tanpa relasi sosial yang jelas
+## UI
 
-5. Uji korelasi lokasi lewat `locations.json`
-   Bandingkan `meeting_point_id`, `latitude`, `longitude`, dan `observed_at` untuk melihat apakah beberapa aktor pernah berada di titik yang sama dalam rentang waktu yang dekat.
+UI belum dibangun pada tahap ini. Backend sudah menyiapkan keluaran yang bisa dipakai Flask atau React nantinya:
 
-6. Uji narasi dan amplifikasi lewat `posts.json`, `campaigns.json`, dan `message_clusters.json`
-   Cek apakah agent bisa menemukan akun pusat, akun pengikut, kemiripan frasa, dan pola waktu posting.
+- briefing TIA
+- payload review HITL
+- event NAA
+- `viz-ready JSON`
+- hasil forecast PTA
 
-7. Susun ulang kesimpulan
-   Agent yang bagus harus bisa menulis ulang:
-   - kronologi
-   - aktor terkait
-   - sinyal penguat
-   - korelasi lintas kasus
-   - prioritas tindak lanjut
+## Catatan Operasional
 
-Contoh pertanyaan uji:
-- siapa akun penghubung antara kasus warehouse fire dan propaganda?
-- siapa saja yang tidak berteman langsung tapi pernah muncul di titik lokasi yang sama?
-- akun mana yang terkait transfer berulang dan juga aktif di kampanye narasi?
-- sinyal apa yang paling kuat menaikkan risk score suatu kasus?
-- dari semua kasus, siapa aktor yang paling sering overlap?
-
-## Stack Agentic Yang Direkomendasikan
-
-Untuk use case kita, arsitektur agentic yang paling cocok adalah:
-
-1. `TIA` - Threat Intelligence Agent
-   Fokus ke pengumpulan dan normalisasi data OSINT, crawling, entity extraction, timeline awal, dan penandaan sinyal.
-
-2. `NAA` - Network Analysis Agent
-   Fokus ke graph reasoning: relasi akun, bridge account, overlap lokasi, transfer edge, amplifikasi pesan, dan cluster detection.
-
-3. `PTA` - Predictive Threat Agent
-   Fokus ke risk scoring, escalation logic, early warning, dan penyusunan daily intelligence brief.
-
-### Pilihan stack
-
-#### LangChain + LangGraph
-
-Ini yang paling direkomendasikan untuk project kita.
-
-Kenapa cocok:
-- mudah mulai cepat dengan agent abstraction
-- tetap bisa turun ke orchestration graph yang rigid saat workflow makin kompleks
-- cocok untuk stateful pipeline yang panjang
-- enak untuk multi-step reasoning, tool calling, checkpointing, dan human-in-the-loop
-- paling pas untuk arsitektur 3 agent yang saling kirim state lalu berujung ke laporan harian
-
-Cara pakainya untuk kasus kita:
-- TIA jalan dulu untuk ingest data, extraction, dan summarization
-- output TIA masuk ke NAA untuk graph linking dan network scoring
-- output NAA masuk ke PTA untuk threat scoring, escalation, dan daily brief
-- semua state disimpan per case/day supaya rerun dan audit trail mudah
-
-#### CrewAI
-
-CrewAI cocok kalau kamu ingin framing multi-agent yang lebih eksplisit sejak awal, dengan role, task, memory, dan flow yang sudah terasa “crew-like”.
-
-Nilainya untuk kita:
-- bagus untuk demo multi-agent yang mudah dipahami stakeholder
-- cocok untuk assignment role TIA/NAA/PTA secara eksplisit
-- cepat untuk proof-of-concept dan task delegation
-
-Tapi buat use case kita, aku lihat CrewAI lebih cocok sebagai opsi kedua:
-- bagus untuk menunjukkan “ada 3 agent yang kerja bareng”
-- kurang ideal kalau kita ingin graph orchestration yang sangat ketat, stateful, dan mudah diaudit per tahap
-
-#### OpenHands
-
-OpenHands menurutku bukan stack utama untuk kasus ini.
-
-Alasannya:
-- kekuatan utamanya ada di coding agents, SDK/CLI/cloud coding workflow, dan autonomous software tasks
-- sangat bagus untuk bantu engineering automation, code review, patching, evaluasi, atau outer-loop development
-- tapi bukan pilihan paling natural untuk intelligence workflow yang butuh orchestrated analysis pipeline lintas OSINT, graph, scoring, dan reporting
-
-Posisi OpenHands yang masuk akal di project ini:
-- dipakai tim engineering untuk mempercepat development agentic platform
-- dipakai bantu generate evaluasi, test harness, ingestion adapters, atau analytics code
-- bukan engine utama untuk TIA/NAA/PTA
-
-### Keputusan yang disarankan
-
-Kalau kamu memang prefer LangChain, menurutku itu keputusan yang benar, dengan catatan:
-- pakai `LangChain` untuk high-level agent interface dan tool wiring
-- pakai `LangGraph` untuk orchestration utama production
-
-Jadi bukan “LangChain saja”, tapi:
-
-`LangChain untuk ergonomics`  
-`LangGraph untuk runtime dan control`
-
-Dengan kombinasi itu, kita bisa tetap cepat waktu bikin demo, tapi tidak mentok saat masuk ke pipeline harian yang stateful dan terus berjalan.
-
-## Manfaat Stack Ini Untuk Use Case Kita
-
-Kalau stack utamanya LangChain + LangGraph, manfaat langsungnya untuk TIA/NAA/PTA adalah:
-
-- workflow antar agent bisa dibuat jelas dan berurutan
-- state per kasus bisa disimpan, dilanjutkan, atau diulang
-- hasil tiap tahap mudah diaudit
-- gampang nambah human review sebelum escalation
-- mudah bikin output terstruktur untuk daily intelligence brief
-- fleksibel kalau nanti mau tambah agent lain seperti Geo Agent, Finance Signal Agent, atau Report QA Agent
-
-## Next Steps Ke Production Yang Kontinyu
-
-Kalau target akhirnya adalah production yang jalan terus dan menghasilkan laporan intelligence harian, next step yang aku sarankan adalah:
-
-1. Tetapkan state model per kasus
-   Definisikan schema baku untuk input, intermediate state, alert state, dan final report state.
-
-2. Pisahkan tool layer dari agent layer
-   Tool OSINT, graph analysis, geospatial correlation, report renderer, dan risk scorer harus modular.
-
-3. Bangun workflow graph resmi
-   Minimal node production:
-   - ingest
-   - normalize
-   - extract entities
-   - correlate network
-   - score risk
-   - generate brief
-   - QA / approval
-
-4. Tambahkan evaluation harness
-   Ukur apakah agent:
-   - menemukan aktor overlap
-   - menemukan bridge account
-   - menemukan shared location
-   - menjelaskan alasan risk score
-   - menghasilkan laporan yang konsisten
-
-5. Tambahkan observability
-   Log tiap step, latency, tool calls, confidence, dan perubahan skor antar rerun.
-
-6. Tambahkan scheduled run harian
-   Jalankan pipeline per hari atau per batch kasus, lalu simpan hasilnya sebagai daily brief archive.
-
-7. Tambahkan human review gate
-   Sebelum laporan final dipublish, sediakan approval step untuk analyst lead.
-
-8. Siapkan regression dataset
-   Dataset yang sekarang bisa jadi benchmark awal. Nanti tambahkan case pack baru agar agent tidak overfit ke 3 kasus yang sama.
-
-### Urutan implementasi yang paling masuk akal
-
-Kalau mau production bergerak terus, urutannya menurutku:
-
-1. finalkan schema dataset dan output report
-2. bangun TIA di atas tool ingestion + extraction
-3. bangun NAA untuk graph dan co-location analysis
-4. bangun PTA untuk scoring + escalation + brief
-5. bungkus semuanya dalam LangGraph workflow
-6. tambah evaluation + monitoring
-7. baru setelah itu deploy scheduled daily runs
-
-## Apa Yang Bisa Diuji
-
-Beberapa skenario test yang cocok untuk agent atau dashboard:
-
-- deteksi akun cluster vs akun umum
-- cari persona yang punya shared meeting point berdasarkan `lat/lon` + `observed_at`
-- temukan pasangan akun yang tidak berteman langsung tetapi muncul di lokasi sama
-- cari bridge account yang muncul di lebih dari satu kasus
-- hitung pola copy-paste atau posting sinkron
-- cocokkan transaksi dengan edge sosial dan lokasi pertemuan
-- cek overlap antara `campaigns.json`, `transactions.json`, dan `reports.json`
-- uji risk scoring untuk indikator koordinasi berbahaya atau indikator aktivitas ekstrem yang terduga
-
-Yang perlu dicari agent:
-- pola
-- korelasi
-- prioritas investigasi
-- indikator awal
-
-Bukan:
-- identifikasi ekstremis nyata
-- bukti kriminal
-- vonis
-- atribusi final
-
-## Catatan Multi-Case Correlation
-
-Korelasi lintas kasus bisa muncul lewat:
-- `phone_local`, `phone_e164`, atau `email` yang konsisten
-- `meeting_point_id`
-- kedekatan `latitude/longitude` dan waktu check-in
-- repost atau amplifikasi narasi
-- transfer edge di `transactions.json`
-- `case_links` dalam profil
-
-Dengan desain ini, agent bisa menemukan:
-- siapa yang benar-benar terhubung langsung
-- siapa yang hanya overlap di lokasi
-- siapa yang jadi penghubung narasi atau pendanaan
-- siapa yang muncul di beberapa kasus sekaligus
-
-## Catatan Keamanan
-
-Catatan penggunaan:
-- tidak mewakili orang riil
-- tidak dibuat untuk profiling dunia nyata
-- tidak boleh dipakai untuk doxxing, investigasi nyata, atau pelabelan individu
-- cocok untuk benchmark extraction, correlation, graph analysis, dan report generation internal
+- Tidak ada automated test harness pada fase ini.
+- Fokus tahap ini adalah wiring backend nyata dan kontrak antar service.
+- Jika ingin menambah UI setelah backend stabil, jalur yang paling natural adalah membaca `viz-ready JSON` dan payload HITL dari Redis atau PostgreSQL.

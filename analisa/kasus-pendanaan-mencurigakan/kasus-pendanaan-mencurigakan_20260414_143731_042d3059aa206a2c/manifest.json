@@ -1,0 +1,52 @@
+{
+  "id_kasus": "kasus-pendanaan-mencurigakan",
+  "dibuat_pada": "20260414_143731",
+  "fingerprint_sha256": "042d3059aa206a2c1723aa44e25d151cc0563e38da4448319825dd89b21f8c0e",
+  "artefak": [
+    {
+      "nama_file": "kasus-pendanaan-mencurigakan_20260414_143731_042d3059aa206a2c.json",
+      "ukuran_byte": 472228,
+      "sha256": "18789fed96bd420097842a88e53ab7761a2d2052e6a3c90158ec471f919972ec"
+    },
+    {
+      "nama_file": "kasus-pendanaan-mencurigakan_20260414_143731_042d3059aa206a2c.md",
+      "ukuran_byte": 6671,
+      "sha256": "f0efa5e4be1277116a8478b8d5fcda02640a8daa77040a55575b1e9d33b5d141"
+    },
+    {
+      "nama_file": "kasus-pendanaan-mencurigakan_20260414_143731_042d3059aa206a2c_ringkasan.csv",
+      "ukuran_byte": 535,
+      "sha256": "28048c2480ae33d90dcf3af7d3dd4903d70ef7615914f618566e66fee919ef99"
+    },
+    {
+      "nama_file": "kasus-pendanaan-mencurigakan_20260414_143731_042d3059aa206a2c_aktor.csv",
+      "ukuran_byte": 954,
+      "sha256": "94af1a4c371341e8561886f929bd36cbd3fa8e98f91d4939a7984e006cf277d5"
+    },
+    {
+      "nama_file": "kasus-pendanaan-mencurigakan_20260414_143731_042d3059aa206a2c_relasi.csv",
+      "ukuran_byte": 1289,
+      "sha256": "5df7ab9a7886a772ed0e9d082de3e752ab50f0c71d7f07163a57094212600fc1"
+    },
+    {
+      "nama_file": "kasus-pendanaan-mencurigakan_20260414_143731_042d3059aa206a2c_transaksi.csv",
+      "ukuran_byte": 1212,
+      "sha256": "e7b8c5421ace84b68fadd9304cd06eceda96d46cc27da293c96173c4da0bdaa1"
+    },
+    {
+      "nama_file": "kasus-pendanaan-mencurigakan_20260414_143731_042d3059aa206a2c.xlsx",
+      "ukuran_byte": 12605,
+      "sha256": "63a0511207887c95b80c2fa7e10c296f855af33d03df33d19a9bfc6d63fadc1b"
+    },
+    {
+      "nama_file": "kasus-pendanaan-mencurigakan_20260414_143731_042d3059aa206a2c.docx",
+      "ukuran_byte": 40649,
+      "sha256": "48e10d48ef7c05232dba97bdbf7e47cb9d6dd8230006fce0f8d58cd81fb46659"
+    },
+    {
+      "nama_file": "kasus-pendanaan-mencurigakan_20260414_143731_042d3059aa206a2c.pdf",
+      "ukuran_byte": 50703,
+      "sha256": "e2ff9965eff1d5575ef33a97002aae0eea2fe2569b29bdcc44054d8ddb2cb8b4"
+    }
+  ]
+}

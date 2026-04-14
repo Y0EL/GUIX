@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pencarian — Liputan9</title>
+
+<style>
+:root {
+  --brand:     #F97316;
+  --brand-dk:  #EA580C;
+  --brand-lt:  #FFF7ED;
+  --text:      #1a1a1a;
+  --text-muted:#6b7280;
+  --border:    #e5e7eb;
+  --bg:        #f9fafb;
+  --card:      #ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:15px}
+a{color:inherit;text-decoration:none}
+
+/* ── Topbar ── */
+.topbar{background:#1a1a1a;padding:6px 0;font-size:11px;color:#9ca3af;font-family:monospace}
+.topbar-inner{max-width:1280px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center}
+.topbar a{color:#9ca3af;margin-left:16px}
+.topbar a:hover{color:#fff}
+
+/* ── Navbar ── */
+.navbar{background:#fff;border-bottom:3px solid var(--brand);position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.navbar-inner{max-width:1280px;margin:0 auto;padding:0 20px;display:flex;align-items:stretch;gap:0}
+.nav-logo{display:flex;align-items:center;padding:12px 24px 12px 0;border-right:1px solid var(--border);margin-right:8px}
+.nav-logo .wordmark{font-size:1.75em;font-weight:900;letter-spacing:-1px;line-height:1;color:var(--brand)}
+.nav-logo .wordmark span{color:#1a1a1a}
+.nav-logo .tagline{font-size:9px;color:var(--text-muted);letter-spacing:.5px;margin-top:2px;text-transform:uppercase}
+.nav-links{display:flex;align-items:stretch;flex:1;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{display:flex;align-items:center;padding:0 14px;font-size:12.5px;font-weight:600;color:#374151;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-3px;transition:.15s}
+.nav-links a:hover,.nav-links a.active{color:var(--brand);border-bottom-color:var(--brand)}
+.nav-search{display:flex;align-items:center;padding:8px 0 8px 16px;border-left:1px solid var(--border);margin-left:auto}
+.nav-search input{border:1px solid var(--border);border-radius:20px;padding:5px 12px 5px 32px;font-size:12px;background:var(--bg);width:180px;outline:none}
+.nav-search input:focus{border-color:var(--brand);background:#fff}
+.search-icon{position:relative;}
+.search-icon::before{content:'🔍';font-size:12px;position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;z-index:1}
+
+/* ── Breaking Ticker ── */
+.ticker{background:var(--brand);color:#fff;padding:5px 0;overflow:hidden;font-size:12px;font-weight:600}
+.ticker-inner{max-width:1280px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:12px}
+.ticker-label{background:#fff;color:var(--brand);padding:2px 10px;border-radius:2px;font-size:11px;font-weight:800;white-space:nowrap;flex-shrink:0}
+.ticker-wrap{overflow:hidden;flex:1}
+.ticker-track{display:flex;gap:40px;white-space:nowrap;animation:ticker 40s linear infinite}
+.ticker-track span{white-space:nowrap}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── Layout ── */
+.container{max-width:1280px;margin:24px auto;padding:0 20px;display:grid;grid-template-columns:1fr 340px;gap:28px}
+.container.full{grid-template-columns:1fr}
+
+/* ── Cards ── */
+.card{background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);transition:.2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.12);transform:translateY(-1px)}
+.card a:hover .card-title{color:var(--brand)}
+
+/* ── Hero Card ── */
+.hero-card{position:relative;border-radius:8px;overflow:hidden;margin-bottom:24px;cursor:pointer}
+.hero-card img{width:100%;height:420px;object-fit:cover;display:block}
+.hero-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.85));padding:32px 24px 24px}
+.hero-cat{display:inline-block;background:var(--brand);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:2px;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+.hero-title{font-size:1.6em;font-weight:800;color:#fff;line-height:1.25;margin-bottom:8px}
+.hero-meta{font-size:12px;color:rgba(255,255,255,.7);display:flex;gap:12px}
+
+/* ── Grid Cards ── */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px}
+.card-img{width:100%;height:170px;object-fit:cover}
+.card-body{padding:14px}
+.card-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--brand);margin-bottom:6px}
+.card-title{font-size:.9em;font-weight:700;line-height:1.4;color:var(--text);margin-bottom:8px;transition:.15s}
+.card-meta{font-size:11px;color:var(--text-muted);display:flex;gap:8px;flex-wrap:wrap}
+
+/* ── List Cards (sidebar style) ── */
+.list-card{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}
+.list-card:last-child{border-bottom:none}
+.list-card img{width:88px;height:66px;object-fit:cover;border-radius:4px;flex-shrink:0}
+.list-card-body{flex:1;min-width:0}
+.list-card-cat{font-size:10px;font-weight:700;color:var(--brand);text-transform:uppercase;margin-bottom:4px}
+.list-card-title{font-size:.82em;font-weight:700;line-height:1.4;color:var(--text);transition:.15s}
+.list-card:hover .list-card-title{color:var(--brand)}
+.list-card-meta{font-size:10.5px;color:var(--text-muted);margin-top:4px}
+
+/* ── Sidebar ── */
+.sidebar-widget{background:var(--card);border-radius:8px;padding:20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.widget-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text);border-left:3px solid var(--brand);padding-left:10px;margin-bottom:16px}
+.sidebar-rank-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.sidebar-rank-item:last-child{border-bottom:none}
+.rank-num{font-size:1.4em;font-weight:900;color:var(--border);line-height:1;width:24px;flex-shrink:0}
+.sidebar-rank-item:nth-child(1) .rank-num{color:var(--brand)}
+.sidebar-rank-item:nth-child(2) .rank-num{color:#f59e0b}
+.sidebar-rank-item:nth-child(3) .rank-num{color:#6b7280}
+.rank-title{font-size:.82em;font-weight:600;line-height:1.4;color:var(--text);transition:.15s}
+.sidebar-rank-item:hover .rank-title{color:var(--brand)}
+.rank-meta{font-size:10.5px;color:var(--text-muted);margin-top:3px}
+
+/* ── Section Header ── */
+.section-hdr{display:flex;align-items:center;gap:12px;margin-bottom:16px;border-bottom:2px solid var(--border);padding-bottom:10px}
+.section-hdr h2{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.6px}
+.section-hdr .line{flex:1;height:2px;background:linear-gradient(90deg,var(--brand),transparent)}
+.section-hdr a{font-size:11px;color:var(--brand);font-weight:600}
+
+/* ── Article Page ── */
+.art-container{max-width:860px;margin:28px auto;padding:0 20px}
+.art-breadcrumb{font-size:11px;color:var(--text-muted);margin-bottom:16px;display:flex;gap:6px;align-items:center}
+.art-breadcrumb a{color:var(--brand)}
+.art-cat-badge{display:inline-block;background:var(--brand);color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:2px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.art-title{font-size:2em;font-weight:900;line-height:1.2;color:var(--text);margin-bottom:12px;font-family:'Georgia',serif}
+.art-subjudul{font-size:1.1em;color:#4b5563;line-height:1.6;margin-bottom:16px;font-style:italic;border-left:3px solid var(--brand);padding-left:14px}
+.art-meta{font-size:12px;color:var(--text-muted);display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.art-meta .author{color:var(--brand);font-weight:700}
+.art-hero{width:100%;border-radius:8px;margin-bottom:8px;max-height:500px;object-fit:cover;display:block}
+.art-caption{font-size:11.5px;color:var(--text-muted);margin-bottom:28px;font-style:italic}
+.art-body{font-size:1em;line-height:1.85;color:#374151;font-family:'Georgia',serif}
+.art-body p{margin-bottom:18px}
+.art-body blockquote{border-left:4px solid var(--brand);padding:12px 18px;margin:24px 0;background:var(--brand-lt);border-radius:0 6px 6px 0;font-style:italic;color:#374151}
+.art-body blockquote strong{color:var(--brand);font-style:normal;display:block;margin-top:8px;font-size:.9em}
+
+/* ── Share Bar ── */
+.share-bar{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-top:28px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.share-bar span{font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px}
+.share-btn{padding:7px 18px;border-radius:4px;font-size:12px;font-weight:700;border:none;cursor:pointer;color:#fff;transition:.15s}
+.share-btn:hover{opacity:.85}
+.share-btn.fb{background:#1877f2}
+.share-btn.tw{background:#000}
+.share-btn.wa{background:#25d366}
+.share-btn.tg{background:#0088cc}
+
+/* ── Tag Cloud ── */
+.tag-cloud{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
+.tag{background:var(--bg);border:1px solid var(--border);padding:4px 12px;border-radius:20px;font-size:11.5px;color:var(--text-muted);cursor:pointer;transition:.15s}
+.tag:hover{background:var(--brand-lt);border-color:var(--brand);color:var(--brand)}
+
+/* ── Related ── */
+.related-section{margin-top:32px}
+.related-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:14px}
+
+/* ── Category Page ── */
+.cat-header{background:var(--card);border-radius:8px;padding:20px 24px;margin-bottom:24px;border-left:5px solid var(--brand)}
+.cat-header h1{font-size:1.5em;font-weight:900;color:var(--text)}
+.cat-header p{font-size:13px;color:var(--text-muted);margin-top:4px}
+.article-list{display:flex;flex-direction:column;gap:16px}
+.list-item{background:var(--card);border-radius:8px;overflow:hidden;display:flex;box-shadow:0 1px 3px rgba(0,0,0,.08);transition:.2s;cursor:pointer}
+.list-item:hover{box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.list-item img{width:200px;height:140px;object-fit:cover;flex-shrink:0}
+.list-item-body{padding:16px 20px;flex:1}
+.list-item-cat{font-size:10px;font-weight:700;color:var(--brand);text-transform:uppercase;margin-bottom:6px}
+.list-item-title{font-size:1.05em;font-weight:700;line-height:1.35;color:var(--text);margin-bottom:8px;transition:.15s}
+.list-item:hover .list-item-title{color:var(--brand)}
+.list-item-summary{font-size:13px;color:#6b7280;line-height:1.55;margin-bottom:10px}
+.list-item-meta{font-size:11px;color:var(--text-muted);display:flex;gap:12px}
+.no-img-placeholder{width:200px;height:140px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:12px;flex-shrink:0}
+
+/* ── Footer ── */
+.footer{background:#111;color:#9ca3af;padding:40px 0 20px;margin-top:48px}
+.footer-inner{max-width:1280px;margin:0 auto;padding:0 20px}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:32px}
+.footer-brand .wordmark{font-size:1.6em;font-weight:900;color:var(--brand);letter-spacing:-1px}
+.footer-brand .wordmark span{color:#fff}
+.footer-brand p{font-size:12px;margin-top:8px;line-height:1.6}
+.footer-col h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#fff;margin-bottom:14px}
+.footer-col a{display:block;font-size:12px;color:#9ca3af;margin-bottom:8px;transition:.15s}
+.footer-col a:hover{color:var(--brand)}
+.footer-bottom{border-top:1px solid #2d2d2d;padding-top:16px;display:flex;justify-content:space-between;font-size:11px;flex-wrap:wrap;gap:8px}
+
+/* ── Responsive ── */
+@media(max-width:900px){
+  .container{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .grid-3{grid-template-columns:repeat(2,1fr)}
+  .footer-top{grid-template-columns:1fr 1fr}
+  .list-item img{width:120px;height:100px}
+  .art-title{font-size:1.5em}
+  .hero-card img{height:260px}
+  .related-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .grid-3,.grid-2{grid-template-columns:1fr}
+  .list-item{flex-direction:column}
+  .list-item img,.no-img-placeholder{width:100%;height:180px}
+  .nav-links a{padding:0 10px;font-size:11px}
+}
+</style>
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span>📅 Tuesday, 14 April 2026</span>
+    <div><a href="#">Tentang Kami</a><a href="#">Redaksi</a><a href="#">Kontak</a><a href="#">Iklan</a></div>
+  </div>
+</div>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="nav-logo">
+      <div>
+        <div class="wordmark">Liputan<span>9</span></div>
+        <div class="tagline">Berita Terdepan, Terpercaya</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="kategori/nasional.html" class="">Nasional</a>
+<a href="kategori/hukum.html" class="">Hukum & Kriminal</a>
+<a href="kategori/keamanan.html" class="">Keamanan</a>
+<a href="kategori/daerah.html" class="">Daerah</a>
+<a href="kategori/ekonomi.html" class="">Ekonomi</a>
+<a href="kategori/sosial.html" class="">Sosial</a>
+<a href="kategori/olahraga.html" class="">Olahraga</a>
+<a href="kategori/teknologi.html" class="">Teknologi</a>
+
+    </div>
+    <div class="nav-search search-icon">
+      <input type="text" placeholder="Cari berita..." id="searchInput" oninput="doSearch(this.value)">
+    </div>
+  </div>
+</nav>
+
+<div class="container full">
+  <div class="cat-header">
+    <h1>🔍 Hasil Pencarian</h1>
+    <p id="search-info">Masukkan kata kunci di kolom pencarian</p>
+  </div>
+  <div id="results" class="article-list"></div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="wordmark">Liputan<span>9</span></div>
+        <p>Portal berita terdepan Indonesia. Menghadirkan informasi akurat, cepat, dan berimbang dari seluruh penjuru nusantara.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Kategori</h4>
+        <a href="kategori/nasional.html">Nasional</a><a href="kategori/hukum.html">Hukum & Kriminal</a><a href="kategori/keamanan.html">Keamanan</a><a href="kategori/daerah.html">Daerah</a><a href="kategori/ekonomi.html">Ekonomi</a><a href="kategori/sosial.html">Sosial</a><a href="kategori/olahraga.html">Olahraga</a><a href="kategori/teknologi.html">Teknologi</a>
+      </div>
+      <div class="footer-col">
+        <h4>Layanan</h4>
+        <a href="#">Newsletter</a>
+        <a href="#">Podcast</a>
+        <a href="#">Aplikasi Mobile</a>
+        <a href="#">RSS Feed</a>
+        <a href="#">Notifikasi</a>
+      </div>
+      <div class="footer-col">
+        <h4>Perusahaan</h4>
+        <a href="#">Tentang Kami</a>
+        <a href="#">Redaksi</a>
+        <a href="#">Karir</a>
+        <a href="#">Iklan</a>
+        <a href="#">Kebijakan Privasi</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Liputan9. Hak cipta dilindungi undang-undang.</span>
+      <span>Syarat & Ketentuan &nbsp;|&nbsp; Kebijakan Privasi &nbsp;|&nbsp; Disclaimer</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const ARTICLES = [{"id": "4559d609", "judul": "Banjir Bandang Landa Bitung, Ribuan Warga Terpaksa Mengungsi", "subjudul": "Hujan deras yang berlangsung sejak Selasa sore menyebabkan Sungai Manembo-Nembo meluap dan merendam ribuan rumah di Bitung.", "kategori": "Daerah", "lokasi": "Bitung", "tanggal": "1 Feb 2026, 05:34 WIB"}, {"id": "94bc7039", "judul": "Sindikat Perdagangan Manusia Digerebek di Kota Administrasi Jakarta Timur", "subjudul": "Operasi tersebut menghasilkan penangkapan 10 tersangka dan penyelamatan 25 korban.", "kategori": "Hukum & Kriminal", "lokasi": "Kota Administrasi Jakarta Timur", "tanggal": "11 Apr 2026, 05:04 WIB"}, {"id": "f9c6d826", "judul": "Harga Gula Melonjak di Pasar Tebingtinggi, Warga Mengeluh", "subjudul": "Kenaikan Harga Hingga 30 Persen dalam Sepekan", "kategori": "Ekonomi", "lokasi": "Tebingtinggi", "tanggal": "5 Feb 2026, 04:00 WIB"}, {"id": "7afeee60", "judul": "Penembakan di Kotamobagu, Satu Korban Tewas dan Beberapa Terluka", "subjudul": "Kelompok bersenjata tidak dikenal menyerang warga di tengah kota, polisi masih menyelidiki kasus ini.", "kategori": "Hukum & Kriminal", "lokasi": "Kotamobagu", "tanggal": "14 Mar 2026, 00:38 WIB"}, {"id": "e19829f4", "judul": "Ancaman Bom Terima Pejabat Daerah Palopo", "subjudul": "Dinas terkait segera melakukan penyelidikan dan pengamanan", "kategori": "Keamanan", "lokasi": "Palopo", "tanggal": "29 Jan 2026, 17:38 WIB"}, {"id": "02dc5983", "judul": "Jembatan di Palu Ambruk Saat Dilintasi Kendaraan Berat", "subjudul": "Insiden terjadi pada siang hari, menyebabkan satu kendaraan terjatuh ke sungai", "kategori": "Daerah", "lokasi": "Palu", "tanggal": "21 Feb 2026, 09:20 WIB"}, {"id": "a3f501bf", "judul": "Guru di Palembang Dianiaya Orang Tua Murid di Dalam Kelas", "subjudul": "Peristiwa ini mengundang keprihatinan dari berbagai pihak, termasuk Dinas Pendidikan setempat.", "kategori": "Sosial", "lokasi": "Palembang", "tanggal": "13 Apr 2026, 11:49 WIB"}, {"id": "0b86d3b7", "judul": "Anak Hilang di Purwokerto Ditemukan dalam Kondisi Mengenaskan", "subjudul": "Keluarga dan warga menyatakan duka mendalam atas kejadian tragis ini", "kategori": "Sosial", "lokasi": "Purwokerto", "tanggal": "14 Jan 2026, 05:53 WIB"}, {"id": "f8eb4a7d", "judul": "Longsor di Batu Menimbun Pemukiman Warga, Dua Tewas", "subjudul": "Bencana alam terjadi pada Senin pagi, 2 Maret 2026, warga bersiaga untuk evakuasi", "kategori": "Daerah", "lokasi": "Batu", "tanggal": "2 Mar 2026, 07:32 WIB"}, {"id": "7d3f430c", "judul": "Sindikat Perdagangan Manusia Digerebek di Padangpanjang", "subjudul": "Operasi gabungan berhasil amankan 12 korban dan 5 pelaku sindikat", "kategori": "Hukum & Kriminal", "lokasi": "Padangpanjang", "tanggal": "27 Jan 2026, 16:17 WIB"}, {"id": "e3c73f7d", "judul": "Konflik Suku di Jambi Meledak, Satu Desa Hangus Terbakar", "subjudul": "Kejadian ini terjadi pada Sabtu malam, 17 Maret 2026, akibat ketegangan antar kelompok masyarakat", "kategori": "Sosial", "lokasi": "Jambi", "tanggal": "17 Mar 2026, 20:46 WIB"}, {"id": "7af38eec", "judul": "Jembatan di Binjai Ambruk Saat Dilintasi Kendaraan Berat", "subjudul": "Kecelakaan ini menyebabkan satu orang terluka dan lalu lintas terhambat selama beberapa jam.", "kategori": "Daerah", "lokasi": "Binjai", "tanggal": "7 Apr 2026, 00:26 WIB"}, {"id": "07f3cb4d", "judul": "Sindikat Narkotika Jaringan Internasional Digerebek di Yogyakarta", "subjudul": "Penangkapan ini melibatkan 10 tersangka dan menyita 250 kilogram narkotika jenis sabu-sabu", "kategori": "Hukum & Kriminal", "lokasi": "Yogyakarta", "tanggal": "17 Mar 2026, 09:53 WIB"}, {"id": "82a4ef0a", "judul": "Kelompok Bersenjata Serang Warga Sipil di Pedalaman Ternate", "subjudul": "Kejadian tersebut menyebabkan tiga orang tewas dan lima lainnya luka-luka.", "kategori": "Keamanan", "lokasi": "Ternate", "tanggal": "23 Jan 2026, 22:04 WIB"}, {"id": "8bf41369", "judul": "Sindikat Perdagangan Manusia Digerebek di Cirebon, 10 Tersangka Ditangkap", "subjudul": "Penggerebekan dilakukan oleh Polda Nusa Tenggara Barat atas laporan masyarakat", "kategori": "Hukum & Kriminal", "lokasi": "Cirebon", "tanggal": "14 Feb 2026, 10:34 WIB"}, {"id": "a1dcf04b", "judul": "Harga Kedelai Melonjak di Madiun, Warga Keluhkan Lonjakan Biaya", "subjudul": "Kenaikan harga kedelai menyulitkan pedagang dan konsumen di Madiun", "kategori": "Ekonomi", "lokasi": "Madiun", "tanggal": "4 Feb 2026, 23:54 WIB"}, {"id": "5c3c839d", "judul": "Startup Teknologi Asal Payakumbuh Raih Pendanaan Seri A", "subjudul": "Inovasi Digital Mendorong Perkembangan Ekonomi Lokal", "kategori": "Teknologi", "lokasi": "Payakumbuh", "tanggal": "31 Mar 2026, 03:02 WIB"}, {"id": "2c50d4a7", "judul": "Jembatan di Prabumulih Ambruk Saat Dilintasi Kendaraan Berat", "subjudul": "Kecelakaan Akibat Struktur Jembatan yang Tidak Memadai", "kategori": "Daerah", "lokasi": "Prabumulih", "tanggal": "16 Mar 2026, 16:56 WIB"}, {"id": "0d7cfe1c", "judul": "Investasi Asing Masuk ke Sawahlunto, Ribuan Lapangan Kerja Terbuka", "subjudul": "Proyek Pembangunan Pabrik Energi Terbarukan Dapat Mendorong Pertumbuhan Ekonomi", "kategori": "Ekonomi", "lokasi": "Sawahlunto", "tanggal": "7 Mar 2026, 17:25 WIB"}, {"id": "cb36e786", "judul": "Demo Besar di Kendari Ricuh, Polisi Kerahkan Water Cannon", "subjudul": "Aksi unjuk rasa yang awalnya damai berujung pada kericuhan setelah terjadi bentrokan antara demonstran dan aparat keamanan.", "kategori": "Keamanan", "lokasi": "Kendari", "tanggal": "3 Feb 2026, 02:37 WIB"}];
+
+function getQuery() {
+  return new URLSearchParams(window.location.search).get('q') || '';
+}
+
+function render(q) {
+  const el = document.getElementById('results');
+  const info = document.getElementById('search-info');
+  if (!q) { el.innerHTML = ''; return; }
+  const lq = q.toLowerCase();
+  const hits = ARTICLES.filter(a => 
+    a.judul.toLowerCase().includes(lq) || 
+    a.subjudul.toLowerCase().includes(lq) ||
+    a.kategori.toLowerCase().includes(lq) ||
+    a.lokasi.toLowerCase().includes(lq)
+  );
+  info.textContent = `Ditemukan ${hits.length} hasil untuk "${q}"`;
+  el.innerHTML = hits.map(a => `
+    <a href="berita/${a.id}.html">
+    <div class="list-item">
+      <div class="no-img-placeholder">📰</div>
+      <div class="list-item-body">
+        <div class="list-item-cat">${a.kategori}</div>
+        <div class="list-item-title">${a.judul}</div>
+        <div class="list-item-summary">${a.subjudul.slice(0,150)}...</div>
+        <div class="list-item-meta"><span>📍 ${a.lokasi}</span><span>🕐 ${a.tanggal}</span></div>
+      </div>
+    </div>
+    </a>`).join('');
+}
+
+const q = getQuery();
+if (q) document.getElementById('searchInput').value = q;
+render(q);
+
+function doSearch(v) {
+  window.location.href = 'search.html?q=' + encodeURIComponent(v);
+}
+</script>
+</body></html>

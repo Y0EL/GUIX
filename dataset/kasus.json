@@ -1,0 +1,35 @@
+[
+  {
+    "id_kasus": "kasus-kebakaran-gudang",
+    "tipe_kasus": "kebakaran_gudang",
+    "judul": "Kebakaran Gudang Logistik - Indikasi Sabotase Terkoordinasi",
+    "kota": "Bekasi",
+    "provinsi": "Jawa Barat",
+    "waktu_insiden": "2026-04-11T02:30:00+07:00",
+    "id_titik_pertemuan": "pertemuan-bekasi-warehouse_hub",
+    "jumlah_aktor": 11,
+    "status": "monitoring"
+  },
+  {
+    "id_kasus": "kasus-pendanaan-mencurigakan",
+    "tipe_kasus": "pendanaan_mencurigakan",
+    "judul": "Pola Pendanaan Tersebar - Indikasi Koordinasi Finansial",
+    "kota": "Jakarta",
+    "provinsi": "DKI Jakarta",
+    "waktu_insiden": "2026-04-07T20:00:00+07:00",
+    "id_titik_pertemuan": "pertemuan-jakarta-coworking_space",
+    "jumlah_aktor": 11,
+    "status": "analisis"
+  },
+  {
+    "id_kasus": "kasus-propaganda-burst",
+    "tipe_kasus": "propaganda",
+    "judul": "Amplifikasi Narasi Terkoordinasi - Indikasi Propaganda",
+    "kota": "Cikarang",
+    "provinsi": "Jawa Barat",
+    "waktu_insiden": "2026-04-12T19:15:00+07:00",
+    "id_titik_pertemuan": "pertemuan-cikarang-cafe",
+    "jumlah_aktor": 12,
+    "status": "monitoring"
+  }
+]

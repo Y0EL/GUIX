@@ -9,8 +9,8 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 # ── CONFIG ──────────────────────────────────
-JSONL_PATH   = "out_news/dataset.jsonl"
-OUT_DIR      = "out_news"
+JSONL_PATH   = "news/dataset.jsonl"
+OUT_DIR      = "news"
 PORTAL_NAME  = "Kabar Nusantara"
 TAGLINE      = "Terpercaya, Cepat, Berimbang"
 # ────────────────────────────────────────────

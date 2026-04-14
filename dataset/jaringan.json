@@ -1,0 +1,827 @@
+[
+  {
+    "id_edge": "edge-55bf3902ee",
+    "id_profil_sumber": "prof-1e0403e12f",
+    "id_profil_tujuan": "prof-838dbed843",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.77,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-81366b4394",
+    "id_profil_sumber": "prof-1e0403e12f",
+    "id_profil_tujuan": "prof-2fa2e9ea7b",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.89,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-45fba1a52e",
+    "id_profil_sumber": "prof-1e0403e12f",
+    "id_profil_tujuan": "prof-62622dfbad",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.58,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-d488aece91",
+    "id_profil_sumber": "prof-1e0403e12f",
+    "id_profil_tujuan": "prof-46835d8ea6",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.66,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-f27e825c50",
+    "id_profil_sumber": "prof-1e0403e12f",
+    "id_profil_tujuan": "prof-2960544ab8",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.71,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-422667a1d2",
+    "id_profil_sumber": "prof-044e991493",
+    "id_profil_tujuan": "prof-5d42267c65",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.94,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-2c91a15869",
+    "id_profil_sumber": "prof-044e991493",
+    "id_profil_tujuan": "prof-739dafdf3b",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.89,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-0dbbad78c8",
+    "id_profil_sumber": "prof-044e991493",
+    "id_profil_tujuan": "prof-c1bd6e64bd",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.78,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-a2c86e5941",
+    "id_profil_sumber": "prof-5d42267c65",
+    "id_profil_tujuan": "prof-6c0beb297b",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.73,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-1d53467a30",
+    "id_profil_sumber": "prof-5d42267c65",
+    "id_profil_tujuan": "prof-739dafdf3b",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.94,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-4540ce5d75",
+    "id_profil_sumber": "prof-5d42267c65",
+    "id_profil_tujuan": "prof-7e364ba897",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.75,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-2b820090f9",
+    "id_profil_sumber": "prof-5d42267c65",
+    "id_profil_tujuan": "prof-c1bd6e64bd",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.57,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-35ec8bf216",
+    "id_profil_sumber": "prof-6c0beb297b",
+    "id_profil_tujuan": "prof-739dafdf3b",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.89,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-143d6957f2",
+    "id_profil_sumber": "prof-6c0beb297b",
+    "id_profil_tujuan": "prof-c1bd6e64bd",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.91,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-a423b50cb7",
+    "id_profil_sumber": "prof-739dafdf3b",
+    "id_profil_tujuan": "prof-c1bd6e64bd",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.92,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-864bdab59d",
+    "id_profil_sumber": "prof-4d69ca4db8",
+    "id_profil_tujuan": "prof-ed3530b0d1",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.65,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-f34aa96538",
+    "id_profil_sumber": "prof-4d69ca4db8",
+    "id_profil_tujuan": "prof-6c2741bdfe",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.7,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-36aa71263e",
+    "id_profil_sumber": "prof-d78adef44d",
+    "id_profil_tujuan": "prof-ed3530b0d1",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.51,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-c20dd17f10",
+    "id_profil_sumber": "prof-843b8bef88",
+    "id_profil_tujuan": "prof-ed3530b0d1",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.94,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-33e0e4475e",
+    "id_profil_sumber": "prof-cb26309010",
+    "id_profil_tujuan": "prof-ed3530b0d1",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.93,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-e6b975a274",
+    "id_profil_sumber": "prof-843b8bef88",
+    "id_profil_tujuan": "prof-d78adef44d",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.56,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-ee373cb286",
+    "id_profil_sumber": "prof-cb26309010",
+    "id_profil_tujuan": "prof-d78adef44d",
+    "tipe_edge": "koneksi_sosial",
+    "bobot": 0.82,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-6f03a4a284",
+    "id_profil_sumber": "prof-2511183081",
+    "id_profil_tujuan": "prof-1e0403e12f",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.73,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-98076ea35a",
+    "id_profil_sumber": "prof-2511183081",
+    "id_profil_tujuan": "prof-2fa2e9ea7b",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.79,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-173ddb39d1",
+    "id_profil_sumber": "prof-2511183081",
+    "id_profil_tujuan": "prof-838dbed843",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.68,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-cb7e1c0918",
+    "id_profil_sumber": "prof-2511183081",
+    "id_profil_tujuan": "prof-62622dfbad",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.95,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-be3d30ab98",
+    "id_profil_sumber": "prof-2511183081",
+    "id_profil_tujuan": "prof-46835d8ea6",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.82,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-0bf3b87ea5",
+    "id_profil_sumber": "prof-2511183081",
+    "id_profil_tujuan": "prof-843b8bef88",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.89,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-cb642bb6c7",
+    "id_profil_sumber": "prof-2511183081",
+    "id_profil_tujuan": "prof-ed3530b0d1",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.63,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-0a8e271350",
+    "id_profil_sumber": "prof-2511183081",
+    "id_profil_tujuan": "prof-4d69ca4db8",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.8,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-2257ff0c60",
+    "id_profil_sumber": "prof-2511183081",
+    "id_profil_tujuan": "prof-d78adef44d",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.97,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-8206e6f9dc",
+    "id_profil_sumber": "prof-2511183081",
+    "id_profil_tujuan": "prof-6c2741bdfe",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.88,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-67e12443ff",
+    "id_profil_sumber": "prof-2253494b01",
+    "id_profil_tujuan": "prof-6c2741bdfe",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.97,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-707034ed00",
+    "id_profil_sumber": "prof-2253494b01",
+    "id_profil_tujuan": "prof-ed3530b0d1",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.9,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-8e58eb9326",
+    "id_profil_sumber": "prof-2253494b01",
+    "id_profil_tujuan": "prof-cb26309010",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.75,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-5aadda3439",
+    "id_profil_sumber": "prof-2253494b01",
+    "id_profil_tujuan": "prof-d78adef44d",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.83,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-c478bfdbf3",
+    "id_profil_sumber": "prof-2253494b01",
+    "id_profil_tujuan": "prof-4d69ca4db8",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.75,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-e034fdf25d",
+    "id_profil_sumber": "prof-2253494b01",
+    "id_profil_tujuan": "prof-1e0403e12f",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.77,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-1fa10936f8",
+    "id_profil_sumber": "prof-2253494b01",
+    "id_profil_tujuan": "prof-2960544ab8",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.77,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-8ac1cbb35c",
+    "id_profil_sumber": "prof-2253494b01",
+    "id_profil_tujuan": "prof-838dbed843",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.66,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-c2c51cd6ec",
+    "id_profil_sumber": "prof-2253494b01",
+    "id_profil_tujuan": "prof-46835d8ea6",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.75,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-2e3397ea53",
+    "id_profil_sumber": "prof-2253494b01",
+    "id_profil_tujuan": "prof-2fa2e9ea7b",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.82,
+    "id_klaster": "klaster-1"
+  },
+  {
+    "id_edge": "edge-87543c5d73",
+    "id_profil_sumber": "prof-b52f349a0c",
+    "id_profil_tujuan": "prof-739dafdf3b",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.98,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-3d77921324",
+    "id_profil_sumber": "prof-b52f349a0c",
+    "id_profil_tujuan": "prof-6c0beb297b",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.65,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-78e3f2c097",
+    "id_profil_sumber": "prof-b52f349a0c",
+    "id_profil_tujuan": "prof-c1bd6e64bd",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.66,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-cf7b936a29",
+    "id_profil_sumber": "prof-b52f349a0c",
+    "id_profil_tujuan": "prof-7e364ba897",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.95,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-5a5beefe14",
+    "id_profil_sumber": "prof-b52f349a0c",
+    "id_profil_tujuan": "prof-5d42267c65",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.8,
+    "id_klaster": "klaster-2"
+  },
+  {
+    "id_edge": "edge-b438196514",
+    "id_profil_sumber": "prof-b52f349a0c",
+    "id_profil_tujuan": "prof-4d69ca4db8",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.76,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-d6257b5213",
+    "id_profil_sumber": "prof-b52f349a0c",
+    "id_profil_tujuan": "prof-d78adef44d",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.96,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-b56899780b",
+    "id_profil_sumber": "prof-b52f349a0c",
+    "id_profil_tujuan": "prof-6c2741bdfe",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.95,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-e74bef8975",
+    "id_profil_sumber": "prof-b52f349a0c",
+    "id_profil_tujuan": "prof-cb26309010",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.85,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-8336bed3d6",
+    "id_profil_sumber": "prof-b52f349a0c",
+    "id_profil_tujuan": "prof-843b8bef88",
+    "tipe_edge": "koneksi_jembatan",
+    "bobot": 0.62,
+    "id_klaster": "klaster-3"
+  },
+  {
+    "id_edge": "edge-644d77870a",
+    "id_profil_sumber": "prof-1e0403e12f",
+    "id_profil_tujuan": "prof-2253494b01",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.69,
+    "id_titik_pertemuan": "pertemuan-bekasi-warehouse_hub",
+    "id_kasus": "kasus-kebakaran-gudang"
+  },
+  {
+    "id_edge": "edge-0e6d72645b",
+    "id_profil_sumber": "prof-1e0403e12f",
+    "id_profil_tujuan": "prof-2511183081",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.66,
+    "id_titik_pertemuan": "pertemuan-bekasi-warehouse_hub",
+    "id_kasus": "kasus-kebakaran-gudang"
+  },
+  {
+    "id_edge": "edge-ad82773103",
+    "id_profil_sumber": "prof-62622dfbad",
+    "id_profil_tujuan": "prof-2960544ab8",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.76,
+    "id_titik_pertemuan": "pertemuan-bekasi-warehouse_hub",
+    "id_kasus": "kasus-kebakaran-gudang"
+  },
+  {
+    "id_edge": "edge-6575cb3ec5",
+    "id_profil_sumber": "prof-62622dfbad",
+    "id_profil_tujuan": "prof-2fa2e9ea7b",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.62,
+    "id_titik_pertemuan": "pertemuan-bekasi-warehouse_hub",
+    "id_kasus": "kasus-kebakaran-gudang"
+  },
+  {
+    "id_edge": "edge-b602292978",
+    "id_profil_sumber": "prof-62622dfbad",
+    "id_profil_tujuan": "prof-2253494b01",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.86,
+    "id_titik_pertemuan": "pertemuan-bekasi-warehouse_hub",
+    "id_kasus": "kasus-kebakaran-gudang"
+  },
+  {
+    "id_edge": "edge-62f68218e5",
+    "id_profil_sumber": "prof-2960544ab8",
+    "id_profil_tujuan": "prof-2253494b01",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.63,
+    "id_titik_pertemuan": "pertemuan-bekasi-warehouse_hub",
+    "id_kasus": "kasus-kebakaran-gudang"
+  },
+  {
+    "id_edge": "edge-72a9e0b305",
+    "id_profil_sumber": "prof-46835d8ea6",
+    "id_profil_tujuan": "prof-838dbed843",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.55,
+    "id_titik_pertemuan": "pertemuan-bekasi-warehouse_hub",
+    "id_kasus": "kasus-kebakaran-gudang"
+  },
+  {
+    "id_edge": "edge-509e5c571d",
+    "id_profil_sumber": "prof-2fa2e9ea7b",
+    "id_profil_tujuan": "prof-2253494b01",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.56,
+    "id_titik_pertemuan": "pertemuan-bekasi-warehouse_hub",
+    "id_kasus": "kasus-kebakaran-gudang"
+  },
+  {
+    "id_edge": "edge-1c9dfd1c52",
+    "id_profil_sumber": "prof-2fa2e9ea7b",
+    "id_profil_tujuan": "prof-2511183081",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.84,
+    "id_titik_pertemuan": "pertemuan-bekasi-warehouse_hub",
+    "id_kasus": "kasus-kebakaran-gudang"
+  },
+  {
+    "id_edge": "edge-9e4016b8f0",
+    "id_profil_sumber": "prof-2fa2e9ea7b",
+    "id_profil_tujuan": "prof-b52f349a0c",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.71,
+    "id_titik_pertemuan": "pertemuan-bekasi-warehouse_hub",
+    "id_kasus": "kasus-kebakaran-gudang"
+  },
+  {
+    "id_edge": "edge-0122a7da97",
+    "id_profil_sumber": "prof-2253494b01",
+    "id_profil_tujuan": "prof-2511183081",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.55,
+    "id_titik_pertemuan": "pertemuan-bekasi-warehouse_hub",
+    "id_kasus": "kasus-kebakaran-gudang"
+  },
+  {
+    "id_edge": "edge-bddebf3f60",
+    "id_profil_sumber": "prof-2511183081",
+    "id_profil_tujuan": "prof-b52f349a0c",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.73,
+    "id_titik_pertemuan": "pertemuan-bekasi-warehouse_hub",
+    "id_kasus": "kasus-kebakaran-gudang"
+  },
+  {
+    "id_edge": "edge-8856f84f0f",
+    "id_profil_sumber": "prof-b52f349a0c",
+    "id_profil_tujuan": "prof-7e364ba897",
+    "tipe_edge": "transfer_finansial",
+    "bobot": 0.19,
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-90e6398484",
+    "id_profil_sumber": "prof-739dafdf3b",
+    "id_profil_tujuan": "prof-8f45d00a8b",
+    "tipe_edge": "transfer_finansial",
+    "bobot": 0.23,
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-bbd384ba63",
+    "id_profil_sumber": "prof-b52f349a0c",
+    "id_profil_tujuan": "prof-7e364ba897",
+    "tipe_edge": "transfer_finansial",
+    "bobot": 0.41,
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-0210ce93c2",
+    "id_profil_sumber": "prof-7e364ba897",
+    "id_profil_tujuan": "prof-739dafdf3b",
+    "tipe_edge": "transfer_finansial",
+    "bobot": 0.46,
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-8f955d6d80",
+    "id_profil_sumber": "prof-5d42267c65",
+    "id_profil_tujuan": "prof-c1bd6e64bd",
+    "tipe_edge": "transfer_finansial",
+    "bobot": 0.65,
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-dd33a55352",
+    "id_profil_sumber": "prof-044e991493",
+    "id_profil_tujuan": "prof-76862d2c17",
+    "tipe_edge": "transfer_finansial",
+    "bobot": 0.56,
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-37b26763e7",
+    "id_profil_sumber": "prof-8f45d00a8b",
+    "id_profil_tujuan": "prof-3708908c68",
+    "tipe_edge": "transfer_finansial",
+    "bobot": 0.2,
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-96d15acdc2",
+    "id_profil_sumber": "prof-5d42267c65",
+    "id_profil_tujuan": "prof-739dafdf3b",
+    "tipe_edge": "transfer_finansial",
+    "bobot": 0.12,
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-b8b905c8d1",
+    "id_profil_sumber": "prof-b52f349a0c",
+    "id_profil_tujuan": "prof-8f45d00a8b",
+    "tipe_edge": "transfer_finansial",
+    "bobot": 0.73,
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-2d9e6de4ae",
+    "id_profil_sumber": "prof-739dafdf3b",
+    "id_profil_tujuan": "prof-5d42267c65",
+    "tipe_edge": "transfer_finansial",
+    "bobot": 0.44,
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-c40f7aca52",
+    "id_profil_sumber": "prof-7e364ba897",
+    "id_profil_tujuan": "prof-6c0beb297b",
+    "tipe_edge": "transfer_finansial",
+    "bobot": 0.39,
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-0651f6fd23",
+    "id_profil_sumber": "prof-3708908c68",
+    "id_profil_tujuan": "prof-739dafdf3b",
+    "tipe_edge": "transfer_finansial",
+    "bobot": 0.15,
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-701c560886",
+    "id_profil_sumber": "prof-6c0beb297b",
+    "id_profil_tujuan": "prof-b52f349a0c",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.59,
+    "id_titik_pertemuan": "pertemuan-jakarta-coworking_space",
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-663daf97a6",
+    "id_profil_sumber": "prof-6c0beb297b",
+    "id_profil_tujuan": "prof-044e991493",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.76,
+    "id_titik_pertemuan": "pertemuan-jakarta-coworking_space",
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-62b45980cc",
+    "id_profil_sumber": "prof-c1bd6e64bd",
+    "id_profil_tujuan": "prof-739dafdf3b",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.59,
+    "id_titik_pertemuan": "pertemuan-jakarta-coworking_space",
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-3de1305ea9",
+    "id_profil_sumber": "prof-b52f349a0c",
+    "id_profil_tujuan": "prof-739dafdf3b",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.85,
+    "id_titik_pertemuan": "pertemuan-jakarta-coworking_space",
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-c7dd856bf9",
+    "id_profil_sumber": "prof-044e991493",
+    "id_profil_tujuan": "prof-739dafdf3b",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.87,
+    "id_titik_pertemuan": "pertemuan-jakarta-coworking_space",
+    "id_kasus": "kasus-pendanaan-mencurigakan"
+  },
+  {
+    "id_edge": "edge-41a35ab8b4",
+    "id_profil_sumber": "prof-6c2741bdfe",
+    "id_profil_tujuan": "prof-b52f349a0c",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.86,
+    "id_titik_pertemuan": "pertemuan-cikarang-cafe",
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-6ff3c1fa2d",
+    "id_profil_sumber": "prof-6c2741bdfe",
+    "id_profil_tujuan": "prof-2511183081",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.83,
+    "id_titik_pertemuan": "pertemuan-cikarang-cafe",
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-cacabbcd03",
+    "id_profil_sumber": "prof-6c2741bdfe",
+    "id_profil_tujuan": "prof-d78adef44d",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.55,
+    "id_titik_pertemuan": "pertemuan-cikarang-cafe",
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-c60341b355",
+    "id_profil_sumber": "prof-843b8bef88",
+    "id_profil_tujuan": "prof-b52f349a0c",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.69,
+    "id_titik_pertemuan": "pertemuan-cikarang-cafe",
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-be1bb9948a",
+    "id_profil_sumber": "prof-843b8bef88",
+    "id_profil_tujuan": "prof-2511183081",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.65,
+    "id_titik_pertemuan": "pertemuan-cikarang-cafe",
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-74fd7a71c3",
+    "id_profil_sumber": "prof-843b8bef88",
+    "id_profil_tujuan": "prof-d78adef44d",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.83,
+    "id_titik_pertemuan": "pertemuan-cikarang-cafe",
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-ba854daf49",
+    "id_profil_sumber": "prof-2511183081",
+    "id_profil_tujuan": "prof-d78adef44d",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.62,
+    "id_titik_pertemuan": "pertemuan-cikarang-cafe",
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-f44cf61993",
+    "id_profil_sumber": "prof-2511183081",
+    "id_profil_tujuan": "prof-ed3530b0d1",
+    "tipe_edge": "titik_pertemuan_bersama",
+    "bobot": 0.83,
+    "id_titik_pertemuan": "pertemuan-cikarang-cafe",
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-829d2fcb09",
+    "id_profil_sumber": "prof-6c2741bdfe",
+    "id_profil_tujuan": "prof-843b8bef88",
+    "tipe_edge": "amplifikasi_pesan",
+    "bobot": 0.64,
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-3bd6a8f877",
+    "id_profil_sumber": "prof-6c2741bdfe",
+    "id_profil_tujuan": "prof-b52f349a0c",
+    "tipe_edge": "amplifikasi_pesan",
+    "bobot": 0.65,
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-301a0f43ee",
+    "id_profil_sumber": "prof-6c2741bdfe",
+    "id_profil_tujuan": "prof-2511183081",
+    "tipe_edge": "amplifikasi_pesan",
+    "bobot": 0.91,
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-96b5551a0d",
+    "id_profil_sumber": "prof-6c2741bdfe",
+    "id_profil_tujuan": "prof-d78adef44d",
+    "tipe_edge": "amplifikasi_pesan",
+    "bobot": 0.69,
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-e7be099200",
+    "id_profil_sumber": "prof-6c2741bdfe",
+    "id_profil_tujuan": "prof-ed3530b0d1",
+    "tipe_edge": "amplifikasi_pesan",
+    "bobot": 0.9,
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-c854cc5faf",
+    "id_profil_sumber": "prof-6c2741bdfe",
+    "id_profil_tujuan": "prof-cb26309010",
+    "tipe_edge": "amplifikasi_pesan",
+    "bobot": 0.92,
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-2beda8088f",
+    "id_profil_sumber": "prof-6c2741bdfe",
+    "id_profil_tujuan": "prof-4d69ca4db8",
+    "tipe_edge": "amplifikasi_pesan",
+    "bobot": 0.88,
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-eb1d035682",
+    "id_profil_sumber": "prof-6c2741bdfe",
+    "id_profil_tujuan": "prof-2253494b01",
+    "tipe_edge": "amplifikasi_pesan",
+    "bobot": 0.94,
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-9d4328ed3f",
+    "id_profil_sumber": "prof-6c2741bdfe",
+    "id_profil_tujuan": "prof-76862d2c17",
+    "tipe_edge": "amplifikasi_pesan",
+    "bobot": 0.67,
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-3911e455d8",
+    "id_profil_sumber": "prof-6c2741bdfe",
+    "id_profil_tujuan": "prof-62622dfbad",
+    "tipe_edge": "amplifikasi_pesan",
+    "bobot": 0.76,
+    "id_kasus": "kasus-propaganda-burst"
+  },
+  {
+    "id_edge": "edge-1558cfe168",
+    "id_profil_sumber": "prof-6c2741bdfe",
+    "id_profil_tujuan": "prof-3708908c68",
+    "tipe_edge": "amplifikasi_pesan",
+    "bobot": 0.83,
+    "id_kasus": "kasus-propaganda-burst"
+  }
+]

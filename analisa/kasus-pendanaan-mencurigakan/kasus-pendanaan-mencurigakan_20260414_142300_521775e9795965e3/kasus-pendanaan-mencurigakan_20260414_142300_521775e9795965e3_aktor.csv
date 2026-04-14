@@ -1,0 +1,7 @@
+id_profil,nama,peran,confidence,alasan
+,Galih Valentina,aktor_pendanaan,0.0,Kunci pendanaan awal dalam graf; beberapa transfer besar antar profil inti; jaringan lintas kota
+,Wisnu Handoko,aktor_pendanaan,0.0,Terlibat dalam transfer signifikan dompet_digital dan transfer_bank; hubungan dengan profil lain
+,Mamat Abdi Hamdani,aktor_pendanaan,0.0,Terlihat sebagai sumber dana yang terlibat dalam beberapa transaksi lintas profil
+,Jefri Firdaus,aktor_pendanaan,0.0,Aktif di pendanaan dengan node Depok; beberapa transaksi menandai aliran pendanaan berulang
+,Lutfi Junaedi,aktor_pendanaan,0.0,Akun sinyal pendanaan dan keterlibatan dalam jaringan multi-kasus
+,Adi Supriyanto,aktor_pendanaan,0.0,"Hubungan ke klaster pendanaan di Karawang, beberapa interaksi transfer"

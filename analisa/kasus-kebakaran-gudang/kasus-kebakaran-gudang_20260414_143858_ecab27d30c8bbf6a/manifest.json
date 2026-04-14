@@ -1,0 +1,52 @@
+{
+  "id_kasus": "kasus-kebakaran-gudang",
+  "dibuat_pada": "20260414_143858",
+  "fingerprint_sha256": "ecab27d30c8bbf6ada7bd6a90d294bf62e376a3ce8a413bd534a8654bc0f2e4a",
+  "artefak": [
+    {
+      "nama_file": "kasus-kebakaran-gudang_20260414_143858_ecab27d30c8bbf6a.json",
+      "ukuran_byte": 6908,
+      "sha256": "47473b67de550b6cf54204739c296eaf153b655952135e83ae20b1a6b867d16a"
+    },
+    {
+      "nama_file": "kasus-kebakaran-gudang_20260414_143858_ecab27d30c8bbf6a.md",
+      "ukuran_byte": 2964,
+      "sha256": "5e5361db8e6679123b03445798b5ddfb1223eaafd2daee0f92954c2b7d1ddc66"
+    },
+    {
+      "nama_file": "kasus-kebakaran-gudang_20260414_143858_ecab27d30c8bbf6a_ringkasan.csv",
+      "ukuran_byte": 416,
+      "sha256": "166135bd62640e986b59391e485e42e834c8aca915ac5d373f7f4b53f0612d05"
+    },
+    {
+      "nama_file": "kasus-kebakaran-gudang_20260414_143858_ecab27d30c8bbf6a_aktor.csv",
+      "ukuran_byte": 40,
+      "sha256": "43355acfccbb9c3ae1a7de4684e308e32e997e5ceafa390784bd8e694288be09"
+    },
+    {
+      "nama_file": "kasus-kebakaran-gudang_20260414_143858_ecab27d30c8bbf6a_relasi.csv",
+      "ukuran_byte": 228,
+      "sha256": "10b36b5d4c151e18931ce158f7b05870c6215fd59a348333a40cf432c67c1319"
+    },
+    {
+      "nama_file": "kasus-kebakaran-gudang_20260414_143858_ecab27d30c8bbf6a_transaksi.csv",
+      "ukuran_byte": 65,
+      "sha256": "9a00c2694c75f9961531e0bb642fc1572ae628ed5df50dab783879251f28edcf"
+    },
+    {
+      "nama_file": "kasus-kebakaran-gudang_20260414_143858_ecab27d30c8bbf6a.xlsx",
+      "ukuran_byte": 10267,
+      "sha256": "a754d2d7b6eb7357f762707a1b749626e49e115b11a647c490e074d52e18ce58"
+    },
+    {
+      "nama_file": "kasus-kebakaran-gudang_20260414_143858_ecab27d30c8bbf6a.docx",
+      "ukuran_byte": 39020,
+      "sha256": "431d78134c6399ad1a0de210535ba8c10bccc92c7104e77ba34c944ab90ce616"
+    },
+    {
+      "nama_file": "kasus-kebakaran-gudang_20260414_143858_ecab27d30c8bbf6a.pdf",
+      "ukuran_byte": 47130,
+      "sha256": "6b5efa5c6ae0c302ed0ad904b92bbbb67fe9d9cd1c718408605e159dbbde5b70"
+    }
+  ]
+}

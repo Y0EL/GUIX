@@ -1,0 +1,59 @@
+[
+  {
+    "id_laporan": "laporan-98ee7ea21a",
+    "id_kasus": "kasus-kebakaran-gudang",
+    "judul": "Kebakaran Gudang Logistik - Indikasi Sabotase Terkoordinasi",
+    "ringkasan": "Data crawling menunjukkan indikasi ledakan awal, narasi seragam, dan sinyal kehadiran bersama sebelum kejadian.",
+    "temuan": [
+      "Sekitar 30% mention menyebut ledakan sebelum api besar.",
+      "Sebagian akun menyebarkan narasi seragam dalam waktu hampir bersamaan.",
+      "Terdapat posting pra-insiden dan sinyal shared meeting point."
+    ],
+    "analisis": "Belum cukup dasar untuk atribusi final, namun pola konsisten dengan sabotase terorganisir atau koordinasi narasi pasca-insiden.",
+    "rekomendasi": [
+      "Monitor akun dan bridge account yang overlap dengan kasus lain.",
+      "Bandingkan check-in lokasi dengan data posting dan edge jaringan.",
+      "Uji kembali wording copy-paste dan kedekatan timestamp."
+    ],
+    "digenerate_pada": "2026-04-14T09:14:17+07:00",
+    "penafian": "Laporan ini bersifat indikatif untuk kebutuhan analisis internal."
+  },
+  {
+    "id_laporan": "laporan-1b31dc160e",
+    "id_kasus": "kasus-pendanaan-mencurigakan",
+    "judul": "Pola Pendanaan Tersebar - Indikasi Koordinasi Finansial",
+    "ringkasan": "Data memperlihatkan transaksi kecil berulang, kedekatan lokasi antar aktor, dan penggunaan perangkat/IP yang tumpang tindih.",
+    "temuan": [
+      "Transfer tersebar muncul menjelang aktivitas lapangan tertentu.",
+      "Beberapa profil yang sama juga terlihat pada klaster propaganda atau kasus kebakaran gudang.",
+      "Titik pertemuan bersama memperkuat sinyal korelasi lintas kasus."
+    ],
+    "analisis": "Pola dapat dibaca sebagai koordinasi finansial, namun masih butuh validasi lintas sumber.",
+    "rekomendasi": [
+      "Uji graf transfer versus graf sosial.",
+      "Periksa overlap perangkat/IP dan titik temu lokasi bersama.",
+      "Prioritaskan bridge account yang muncul lintas kasus."
+    ],
+    "digenerate_pada": "2026-04-14T09:14:17+07:00",
+    "penafian": "Laporan ini bersifat indikatif untuk kebutuhan analisis internal."
+  },
+  {
+    "id_laporan": "laporan-2737ad2abf",
+    "id_kasus": "kasus-propaganda-burst",
+    "judul": "Amplifikasi Narasi Terkoordinasi - Indikasi Propaganda",
+    "ringkasan": "Narasi beredar melalui akun pusat dan akun amplifikasi dengan jeda waktu pendek, termasuk akun yang juga muncul di kasus lain.",
+    "temuan": [
+      "Pola posting serempak menguat pada window kurang dari satu jam.",
+      "Klaster pesan menunjukkan kemiripan frasa yang tinggi.",
+      "Bridge account memperluas korelasi lintas kasus."
+    ],
+    "analisis": "Sinyal konsisten dengan koordinasi narasi, namun masih bersifat indikatif.",
+    "rekomendasi": [
+      "Kelompokkan akun berdasarkan copy similarity dan waktu posting.",
+      "Bandingkan overlap dengan edge transfer serta meeting point.",
+      "Pisahkan akun baru dari akun lama untuk menguji pola bootstrap."
+    ],
+    "digenerate_pada": "2026-04-14T09:14:17+07:00",
+    "penafian": "Laporan ini bersifat indikatif untuk kebutuhan analisis internal."
+  }
+]

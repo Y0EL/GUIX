@@ -1,3 +1,10 @@
 __pycache__
 out_news
 out_profiles
+.venv
+.env
+.celerybeat-schedule
+logs
+runtime_state
+.pytest_cache
+analisa

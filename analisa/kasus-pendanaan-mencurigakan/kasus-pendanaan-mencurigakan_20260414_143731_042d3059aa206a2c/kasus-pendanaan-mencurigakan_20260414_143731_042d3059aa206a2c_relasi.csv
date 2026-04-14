@@ -1,0 +1,13 @@
+sumber,target,jenis_relasi,confidence,alasan
+prof-b52f349a0c,prof-7e364ba897,MENTRANSFER,0.85,Hub utama transfer antar profil inti; kanal dompet digital; indikasi koordinasi finansial
+prof-739dafdf3b,prof-8f45d00a8b,MENTRANSFER,0.82,Hub pendanaan lanjutan; transfer dompet digital
+prof-b52f349a0c,prof-7e364ba897,MENTRANSFER,0.8,Transfer bank yang menghubungkan profil inti
+prof-7e364ba897,prof-739dafdf3b,MENTRANSFER,0.8,Transfer tunai antar akun; sinyal koordinasi finansial
+prof-5d42267c65,prof-c1bd6e64bd,MENTRANSFER,0.75,Bridge ke akun pendanaan lain melalui transfer bank
+prof-044e991493,prof-76862d2c17,MENTRANSFER,0.8,Transfer bank antara profil pendanaan; memperluas jaringan
+prof-8f45d00a8b,prof-3708908c68,MENTRANSFER,0.78,Dompet digital transfer; memperluas lingkup pendanaan
+prof-5d42267c65,prof-739dafdf3b,MENTRANSFER,0.75,Dompet digital transfer antar akun pendanaan
+prof-b52f349a0c,prof-8f45d00a8b,MENTRANSFER,0.85,Transfer tunai sebagai hub antara akun pendanaan
+prof-739dafdf3b,prof-5d42267c65,MENTRANSFER,0.8,"Transfer tunai antar akun pendanaan, memperkuat jaringan"
+prof-7e364ba897,prof-6c0beb297b,MENTRANSFER,0.75,Transfer dompet digital antar klaster
+prof-3708908c68,prof-739dafdf3b,MENTRANSFER,0.75,Transfer bank; memperluas lingkup jaringan pendanaan

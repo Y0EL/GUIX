@@ -1,0 +1,12 @@
+sumber,target,jenis_relasi,confidence,alasan
+prof-b52f349a0c,prof-7e364ba897,MENTRANSFER,0.0,transfer antar profil inti dompet_digital/transfer_bank
+prof-739dafdf3b,prof-8f45d00a8b,MENTRANSFER,0.0,transfer antar profil terkait dompet_digital
+prof-b52f349a0c,prof-7e364ba897,MENTRANSFER,0.0,transfer antar profil inti transfer_bank
+prof-7e364ba897,prof-739dafdf3b,MENTRANSFER,0.0,transfer antar profil tunai
+prof-5d42267c65,prof-c1bd6e64bd,MENTRANSFER,0.0,transfer antar profil transfer_bank
+prof-044e991493,prof-76862d2c17,MENTRANSFER,0.0,transfer antar profil transfer_bank
+prof-8f45d00a8b,prof-3708908c68,MENTRANSFER,0.0,transfer antar profil dompet_digital
+prof-5d42267c65,prof-739dafdf3b,MENTRANSFER,0.0,transfer antar profil dompet_digital
+prof-b52f349a0c,prof-8f45d00a8b,MENTRANSFER,0.0,transfer antar profil tunai
+prof-739dafdf3b,prof-5d42267c65,MENTRANSFER,0.0,transfer antar profil tunai
+prof-7e364ba897,prof-6c0beb297b,MENTRANSFER,0.0,transfer antar profil dompet_digital

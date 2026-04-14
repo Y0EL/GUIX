@@ -1,0 +1,50 @@
+[
+  {
+    "id_peringatan": "alert-715bfe94cf",
+    "id_kasus": "kasus-kebakaran-gudang",
+    "tingkat_keparahan": "tinggi",
+    "tipe_sinyal": "posting_pra_kejadian",
+    "deskripsi": "Post 2 hari sebelum kejadian menyebut kejutan besar di kawasan industri.",
+    "kepercayaan": 0.82
+  },
+  {
+    "id_peringatan": "alert-f1a956f54d",
+    "id_kasus": "kasus-kebakaran-gudang",
+    "tingkat_keparahan": "menengah",
+    "tipe_sinyal": "narasi_copy_paste",
+    "deskripsi": "Sekelompok akun menyebarkan wording mirip soal ledakan dan bau kimia dalam rentang waktu sempit.",
+    "kepercayaan": 0.79
+  },
+  {
+    "id_peringatan": "alert-c56104e45b",
+    "id_kasus": "kasus-kebakaran-gudang",
+    "tingkat_keparahan": "menengah",
+    "tipe_sinyal": "co_lokasi",
+    "deskripsi": "Beberapa profil terlihat check-in di titik logistik yang sama sebelum insiden.",
+    "kepercayaan": 0.74
+  },
+  {
+    "id_peringatan": "alert-adffa2a769",
+    "id_kasus": "kasus-pendanaan-mencurigakan",
+    "tingkat_keparahan": "menengah",
+    "tipe_sinyal": "pola_finansial",
+    "deskripsi": "Pola transfer menunjukkan distribusi dana kecil berulang ke cluster terbatas.",
+    "kepercayaan": 0.76
+  },
+  {
+    "id_peringatan": "alert-a27d839056",
+    "id_kasus": "kasus-propaganda-burst",
+    "tingkat_keparahan": "tinggi",
+    "tipe_sinyal": "posting_tersinkronisasi",
+    "deskripsi": "Terdapat klaster akun dengan pola posting hampir serentak dan wording serupa.",
+    "kepercayaan": 0.84
+  },
+  {
+    "id_peringatan": "alert-b92f8bc13f",
+    "id_kasus": "kasus-propaganda-burst",
+    "tingkat_keparahan": "menengah",
+    "tipe_sinyal": "overlap_jembatan",
+    "deskripsi": "Sebagian akun juga muncul dalam sinyal pendanaan atau kebakaran gudang.",
+    "kepercayaan": 0.72
+  }
+]

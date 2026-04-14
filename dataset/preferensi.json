@@ -1,0 +1,1267 @@
+[
+  {
+    "id_preferensi": "pref-3522016abd",
+    "id_profil": "prof-b90000841f",
+    "minat": [
+      "olahraga",
+      "fotografi",
+      "otomotif",
+      "aktivisme",
+      "hiburan"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-f364b37be0",
+    "id_profil": "prof-2fa2e9ea7b",
+    "minat": [
+      "bisnis_online",
+      "kesehatan",
+      "kuliner"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-89d6938e21",
+    "id_profil": "prof-942151957b",
+    "minat": [
+      "gaming",
+      "keagamaan",
+      "keuangan",
+      "pendidikan",
+      "olahraga"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-6c1ccec92b",
+    "id_profil": "prof-0e8681f93d",
+    "minat": [
+      "kuliner",
+      "properti",
+      "seni"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-cc7f3e520f",
+    "id_profil": "prof-bd38c44f68",
+    "minat": [
+      "bisnis_online",
+      "seni",
+      "pendidikan",
+      "olahraga"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-c2d13450fb",
+    "id_profil": "prof-27476fd163",
+    "minat": [
+      "olahraga",
+      "pariwisata",
+      "fashion",
+      "keuangan",
+      "pendidikan"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-70ca8f41cf",
+    "id_profil": "prof-cdb4439854",
+    "minat": [
+      "musik",
+      "hiburan",
+      "kesehatan",
+      "fotografi",
+      "aktivisme"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-2709c50a45",
+    "id_profil": "prof-13b20df0ef",
+    "minat": [
+      "musik",
+      "lingkungan",
+      "komunitas_lokal",
+      "transportasi"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-7b050ecb9c",
+    "id_profil": "prof-c8440b2687",
+    "minat": [
+      "komunitas_lokal",
+      "pendidikan",
+      "musik",
+      "bisnis_online"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-9329cd1119",
+    "id_profil": "prof-6c2741bdfe",
+    "minat": [
+      "pertanian",
+      "kesehatan",
+      "keagamaan",
+      "logistik",
+      "aktivisme"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-7770d63fdf",
+    "id_profil": "prof-5ea20e55ea",
+    "minat": [
+      "olahraga",
+      "pendidikan"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-19c372b28a",
+    "id_profil": "prof-e3f0f1f504",
+    "minat": [
+      "properti",
+      "fotografi",
+      "bisnis_online",
+      "pariwisata"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-b2315d73be",
+    "id_profil": "prof-6c0beb297b",
+    "minat": [
+      "hukum",
+      "aktivisme"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-63e2714e5d",
+    "id_profil": "prof-f8c364f17f",
+    "minat": [
+      "kesehatan",
+      "lingkungan",
+      "transportasi"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-4550fe9ca0",
+    "id_profil": "prof-a88094e552",
+    "minat": [
+      "kuliner",
+      "keagamaan",
+      "kesehatan",
+      "transportasi"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-0358463016",
+    "id_profil": "prof-1f5606e846",
+    "minat": [
+      "teknologi",
+      "aktivisme"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-d6bf0498eb",
+    "id_profil": "prof-b41d539874",
+    "minat": [
+      "musik",
+      "komunitas_lokal",
+      "properti",
+      "bisnis_online",
+      "fotografi"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-281953ff36",
+    "id_profil": "prof-f051a72f13",
+    "minat": [
+      "fashion",
+      "aktivisme",
+      "bisnis_online",
+      "hukum",
+      "hiburan"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-f8828d03c2",
+    "id_profil": "prof-5ad74f9837",
+    "minat": [
+      "lingkungan",
+      "olahraga",
+      "seni",
+      "gaming",
+      "otomotif"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-8d2e10d9a2",
+    "id_profil": "prof-9e0b931770",
+    "minat": [
+      "fotografi",
+      "kesehatan"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-ee852b9817",
+    "id_profil": "prof-7057909876",
+    "minat": [
+      "pertanian",
+      "musik",
+      "olahraga"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-0c6995ea5e",
+    "id_profil": "prof-6a5617f5e7",
+    "minat": [
+      "hukum",
+      "keuangan",
+      "otomotif",
+      "fashion",
+      "kesehatan"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-6d29bd356e",
+    "id_profil": "prof-c1bd6e64bd",
+    "minat": [
+      "kuliner",
+      "gaming",
+      "kesehatan"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-b9aa16cd93",
+    "id_profil": "prof-fb26abba73",
+    "minat": [
+      "properti",
+      "lingkungan"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-dcb2e942bc",
+    "id_profil": "prof-5a1ab6bac1",
+    "minat": [
+      "gaming",
+      "bisnis_online"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-55f8a3c161",
+    "id_profil": "prof-316a646232",
+    "minat": [
+      "teknologi",
+      "hiburan"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-89c64c7295",
+    "id_profil": "prof-ad0bd8546a",
+    "minat": [
+      "hiburan",
+      "teknologi",
+      "lingkungan",
+      "hukum",
+      "kuliner"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-1f39610f55",
+    "id_profil": "prof-23775464c1",
+    "minat": [
+      "seni",
+      "teknologi"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-ae842eae4f",
+    "id_profil": "prof-843b8bef88",
+    "minat": [
+      "bisnis_online",
+      "properti",
+      "keuangan",
+      "hiburan",
+      "komunitas_lokal"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-5c0abc32ab",
+    "id_profil": "prof-aa4d356913",
+    "minat": [
+      "logistik",
+      "pendidikan",
+      "teknologi"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-a65c89708d",
+    "id_profil": "prof-ecba33bd3a",
+    "minat": [
+      "gaming",
+      "musik",
+      "properti"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-3dcc72e490",
+    "id_profil": "prof-b52f349a0c",
+    "minat": [
+      "olahraga",
+      "komunitas_lokal"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-c8b2614c28",
+    "id_profil": "prof-7e364ba897",
+    "minat": [
+      "pertanian",
+      "keuangan",
+      "hukum",
+      "olahraga"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-fa104ec49f",
+    "id_profil": "prof-211a4cbb61",
+    "minat": [
+      "fotografi",
+      "gaming",
+      "olahraga",
+      "pertanian",
+      "teknologi"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-17d8811f73",
+    "id_profil": "prof-2f550d429a",
+    "minat": [
+      "otomotif",
+      "pariwisata"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-75e7711917",
+    "id_profil": "prof-a9496e8493",
+    "minat": [
+      "olahraga",
+      "komunitas_lokal",
+      "hiburan",
+      "gaming",
+      "properti"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-6d3c51affd",
+    "id_profil": "prof-363d837be7",
+    "minat": [
+      "hiburan",
+      "olahraga",
+      "pariwisata"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-571edcf5fa",
+    "id_profil": "prof-d0cc7b4042",
+    "minat": [
+      "kuliner",
+      "pendidikan",
+      "properti"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-261cf0e312",
+    "id_profil": "prof-4dbdfbae33",
+    "minat": [
+      "keuangan",
+      "otomotif",
+      "pariwisata"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-8857dd3458",
+    "id_profil": "prof-f5a1ef2bbe",
+    "minat": [
+      "musik",
+      "lingkungan",
+      "seni",
+      "bisnis_online",
+      "hiburan"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-5f05619caa",
+    "id_profil": "prof-d55b232713",
+    "minat": [
+      "logistik",
+      "komunitas_lokal",
+      "fashion",
+      "seni",
+      "keagamaan"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-401114edbf",
+    "id_profil": "prof-532ad3ccc4",
+    "minat": [
+      "teknologi",
+      "hukum",
+      "lingkungan",
+      "musik"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-c02448dd6d",
+    "id_profil": "prof-d59db86cde",
+    "minat": [
+      "keagamaan",
+      "keuangan",
+      "bisnis_online"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-712f67bc2f",
+    "id_profil": "prof-0f4f63bc94",
+    "minat": [
+      "teknologi",
+      "transportasi",
+      "logistik",
+      "gaming",
+      "keuangan"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-2253753143",
+    "id_profil": "prof-2511183081",
+    "minat": [
+      "keuangan",
+      "transportasi",
+      "kesehatan"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-a011bc18db",
+    "id_profil": "prof-a9bb07c27d",
+    "minat": [
+      "aktivisme",
+      "kesehatan",
+      "bisnis_online"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-8bb7f93948",
+    "id_profil": "prof-2c3b3b908b",
+    "minat": [
+      "keuangan",
+      "politik",
+      "olahraga",
+      "fashion"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-4ac01048f6",
+    "id_profil": "prof-1e0403e12f",
+    "minat": [
+      "pariwisata",
+      "lingkungan",
+      "fashion",
+      "politik",
+      "bisnis_online"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-899589dd27",
+    "id_profil": "prof-b43fcc05fa",
+    "minat": [
+      "aktivisme",
+      "gaming",
+      "lingkungan",
+      "keagamaan"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-f84b5ff21b",
+    "id_profil": "prof-27237dabd1",
+    "minat": [
+      "hukum",
+      "fashion"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-12d951e800",
+    "id_profil": "prof-0a9c5bc11c",
+    "minat": [
+      "bisnis_online",
+      "aktivisme",
+      "fashion",
+      "kesehatan",
+      "hiburan"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-2696e5c267",
+    "id_profil": "prof-ea41254a3c",
+    "minat": [
+      "fashion",
+      "komunitas_lokal",
+      "keuangan",
+      "pertanian",
+      "lingkungan"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-7657dd5b74",
+    "id_profil": "prof-6ac49e07a0",
+    "minat": [
+      "fotografi",
+      "musik"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-a350ecc428",
+    "id_profil": "prof-215583c272",
+    "minat": [
+      "pendidikan",
+      "musik",
+      "kesehatan",
+      "pertanian"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-31eaa3406d",
+    "id_profil": "prof-2dfcf53068",
+    "minat": [
+      "musik",
+      "komunitas_lokal",
+      "properti",
+      "hukum",
+      "keuangan"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-8980b29a32",
+    "id_profil": "prof-0acbca0d39",
+    "minat": [
+      "aktivisme",
+      "pertanian",
+      "keagamaan",
+      "properti"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-dc6de800af",
+    "id_profil": "prof-d6d11e55a1",
+    "minat": [
+      "fashion",
+      "aktivisme",
+      "olahraga",
+      "teknologi"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-12a93732d2",
+    "id_profil": "prof-0b46ced03a",
+    "minat": [
+      "teknologi",
+      "properti",
+      "hiburan"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-5196c60cac",
+    "id_profil": "prof-fbc436c50d",
+    "minat": [
+      "transportasi",
+      "fotografi",
+      "aktivisme",
+      "fashion"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-6d2cd782d7",
+    "id_profil": "prof-46835d8ea6",
+    "minat": [
+      "pendidikan",
+      "hiburan",
+      "hukum",
+      "keagamaan",
+      "musik"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-7e0f5b10c2",
+    "id_profil": "prof-a5a6c96c9c",
+    "minat": [
+      "otomotif",
+      "pertanian",
+      "seni"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-0f9dde36c0",
+    "id_profil": "prof-c41d6b8882",
+    "minat": [
+      "logistik",
+      "hukum",
+      "properti",
+      "fashion"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-99295490b0",
+    "id_profil": "prof-01ca88f70d",
+    "minat": [
+      "bisnis_online",
+      "teknologi",
+      "pendidikan",
+      "keagamaan",
+      "komunitas_lokal"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-2320f01e59",
+    "id_profil": "prof-838dbed843",
+    "minat": [
+      "bisnis_online",
+      "gaming"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-e666d68c9e",
+    "id_profil": "prof-f68816616d",
+    "minat": [
+      "bisnis_online",
+      "politik",
+      "pendidikan"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-e11c0dd485",
+    "id_profil": "prof-31480d2c85",
+    "minat": [
+      "komunitas_lokal",
+      "politik",
+      "keuangan"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-3effa540c9",
+    "id_profil": "prof-e30aec7681",
+    "minat": [
+      "aktivisme",
+      "gaming",
+      "logistik",
+      "komunitas_lokal",
+      "teknologi"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-c1494cbe20",
+    "id_profil": "prof-2960544ab8",
+    "minat": [
+      "seni",
+      "komunitas_lokal",
+      "politik"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-c0adbf3f72",
+    "id_profil": "prof-2a3f64450c",
+    "minat": [
+      "transportasi",
+      "logistik",
+      "hiburan",
+      "kuliner"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-32425ef229",
+    "id_profil": "prof-17ae8d2c6b",
+    "minat": [
+      "politik",
+      "olahraga",
+      "fotografi"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-7ed66f9337",
+    "id_profil": "prof-04f5046f1d",
+    "minat": [
+      "kuliner",
+      "aktivisme"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-9d22117648",
+    "id_profil": "prof-33e00fe483",
+    "minat": [
+      "aktivisme",
+      "seni",
+      "kesehatan",
+      "logistik",
+      "gaming"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-873c1eb5d9",
+    "id_profil": "prof-73c6b1fe0e",
+    "minat": [
+      "keuangan",
+      "teknologi"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-5fe96a96e4",
+    "id_profil": "prof-76862d2c17",
+    "minat": [
+      "politik",
+      "hukum"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-7cc1c3b03a",
+    "id_profil": "prof-570e0427be",
+    "minat": [
+      "seni",
+      "politik",
+      "aktivisme",
+      "properti",
+      "keagamaan"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-b772199a51",
+    "id_profil": "prof-592dcf974d",
+    "minat": [
+      "musik",
+      "pariwisata",
+      "properti",
+      "hukum",
+      "aktivisme"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-6fc057a524",
+    "id_profil": "prof-d78adef44d",
+    "minat": [
+      "kesehatan",
+      "pendidikan",
+      "pariwisata"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-166d87242a",
+    "id_profil": "prof-6f0ab8225e",
+    "minat": [
+      "hukum",
+      "pariwisata",
+      "pertanian",
+      "properti"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-308405bda1",
+    "id_profil": "prof-ed3530b0d1",
+    "minat": [
+      "fashion",
+      "transportasi"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-e5b440888c",
+    "id_profil": "prof-28a1df6e79",
+    "minat": [
+      "lingkungan",
+      "olahraga",
+      "hiburan",
+      "seni"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-4a2e9fa852",
+    "id_profil": "prof-79bd0b0a2d",
+    "minat": [
+      "pariwisata",
+      "keagamaan",
+      "olahraga"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-f5bf0576ec",
+    "id_profil": "prof-62622dfbad",
+    "minat": [
+      "logistik",
+      "hukum"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-7481dda5c1",
+    "id_profil": "prof-6bb4fe9e3e",
+    "minat": [
+      "komunitas_lokal",
+      "otomotif",
+      "gaming"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-bb5f8ae5d0",
+    "id_profil": "prof-892a7d720e",
+    "minat": [
+      "bisnis_online",
+      "kuliner"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-124b3f97c9",
+    "id_profil": "prof-cb26309010",
+    "minat": [
+      "fotografi",
+      "bisnis_online",
+      "pariwisata",
+      "otomotif",
+      "gaming"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-4a4e7b86c9",
+    "id_profil": "prof-192e0c29e2",
+    "minat": [
+      "gaming",
+      "olahraga",
+      "komunitas_lokal",
+      "pariwisata",
+      "fotografi"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-f858be2203",
+    "id_profil": "prof-db255cc677",
+    "minat": [
+      "hukum",
+      "hiburan",
+      "seni",
+      "teknologi",
+      "aktivisme"
+    ],
+    "jendela_aktivitas": "siang",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-8326184448",
+    "id_profil": "prof-d8f76808bf",
+    "minat": [
+      "pendidikan",
+      "politik",
+      "pertanian",
+      "fashion",
+      "transportasi"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-21f0fc774e",
+    "id_profil": "prof-044e991493",
+    "minat": [
+      "gaming",
+      "komunitas_lokal",
+      "fotografi"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-8648f96621",
+    "id_profil": "prof-4d69ca4db8",
+    "minat": [
+      "gaming",
+      "pendidikan",
+      "logistik",
+      "keuangan",
+      "hukum"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "ios",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-a3ce03cff1",
+    "id_profil": "prof-c8bb148291",
+    "minat": [
+      "keagamaan",
+      "musik",
+      "seni"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-353fae6fa3",
+    "id_profil": "prof-739dafdf3b",
+    "minat": [
+      "otomotif",
+      "fashion",
+      "pendidikan"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "rendah"
+  },
+  {
+    "id_preferensi": "pref-2e01477f96",
+    "id_profil": "prof-bfba30fc24",
+    "minat": [
+      "logistik",
+      "gaming",
+      "pariwisata",
+      "keagamaan",
+      "politik"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-a3aeb3cfcb",
+    "id_profil": "prof-8f45d00a8b",
+    "minat": [
+      "gaming",
+      "kuliner",
+      "bisnis_online"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-da23acf8db",
+    "id_profil": "prof-59577dfdba",
+    "minat": [
+      "bisnis_online",
+      "pariwisata",
+      "otomotif"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-d854cebd43",
+    "id_profil": "prof-a3de97cac8",
+    "minat": [
+      "teknologi",
+      "lingkungan"
+    ],
+    "jendela_aktivitas": "malam",
+    "penggunaan_perangkat": "android+tablet",
+    "tingkat_mobilitas": "tinggi"
+  },
+  {
+    "id_preferensi": "pref-3c3e0729be",
+    "id_profil": "prof-3708908c68",
+    "minat": [
+      "kesehatan",
+      "transportasi",
+      "politik"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-1890cc096f",
+    "id_profil": "prof-5d42267c65",
+    "minat": [
+      "keuangan",
+      "hiburan",
+      "properti"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-e667202f15",
+    "id_profil": "prof-8cb7d7fb51",
+    "minat": [
+      "kuliner",
+      "logistik",
+      "properti",
+      "kesehatan",
+      "keagamaan"
+    ],
+    "jendela_aktivitas": "campuran",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "menengah"
+  },
+  {
+    "id_preferensi": "pref-0482d4a87e",
+    "id_profil": "prof-2253494b01",
+    "minat": [
+      "gaming",
+      "keagamaan",
+      "fashion",
+      "transportasi",
+      "kuliner"
+    ],
+    "jendela_aktivitas": "pagi",
+    "penggunaan_perangkat": "android+desktop",
+    "tingkat_mobilitas": "tinggi"
+  }
+]

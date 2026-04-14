@@ -1,5 +1,6 @@
 """
-Synthetic persona and incident dataset generator for internal testing.
+Generator persona dan insiden sintetis untuk pengujian internal.
+Versi tanpa OpenAI — semua teks dihasilkan dari template lokal yang diperluas.
 """
 
 from __future__ import annotations
@@ -17,1672 +18,1755 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from faker import Faker
+ZONA_INDONESIA = timezone(timedelta(hours=7))
+# ============================================================
+# GENERATOR NAMA INDONESIA (tanpa library eksternal)
+# ============================================================
 
-try:
-    from openai import OpenAI
-except ImportError:  # pragma: no cover
-    OpenAI = None
-
-
-INDONESIA_TZ = timezone(timedelta(hours=7))
-AVATAR_ENDPOINT = "https://100k-faces.vercel.app/api/random-image"
-AVATAR_SOURCE = "100k-faces"
-DEFAULT_OPENAI_MODEL = "gpt-5-nano"
-
-# Optional local overrides.
-# If you want to hardcode credentials instead of using environment variables,
-# paste your values here.
-HARDCODED_OPENAI_API_KEY = ""
-HARDCODED_OPENAI_MODEL = "gpt-5-nano"
-
-CITY_CLUSTERS = [
-    {"city": "Bekasi", "province": "Jawa Barat", "lat": -6.2349, "lon": 106.9896, "radius_km": 8.0},
-    {"city": "Karawang", "province": "Jawa Barat", "lat": -6.3054, "lon": 107.2961, "radius_km": 9.0},
-    {"city": "Cikarang", "province": "Jawa Barat", "lat": -6.2615, "lon": 107.1522, "radius_km": 7.5},
-    {"city": "Jakarta", "province": "DKI Jakarta", "lat": -6.2088, "lon": 106.8456, "radius_km": 12.0},
-    {"city": "Depok", "province": "Jawa Barat", "lat": -6.4025, "lon": 106.7942, "radius_km": 7.0},
-    {"city": "Bogor", "province": "Jawa Barat", "lat": -6.5950, "lon": 106.8166, "radius_km": 8.5},
+_NAMA_DEPAN_PRIA = [
+    "Adi", "Agus", "Ahmad", "Amir", "Andika", "Andre", "Anton", "Arif", "Arman", "Bagas",
+    "Budi", "Dani", "Denny", "Dian", "Didik", "Dimas", "Dwi", "Eko", "Fajar", "Fandi",
+    "Fauzi", "Febri", "Ferdi", "Ganda", "Gilang", "Hadi", "Hendra", "Heru", "Iwan", "Joko",
+    "Kevin", "Lutfi", "Mario", "Muhamad", "Nanda", "Nugroho", "Pandu", "Ragil", "Reza", "Ridho",
+    "Rio", "Rizal", "Rizky", "Roni", "Ryan", "Sapto", "Sigit", "Slamet", "Surya", "Teguh",
+    "Toni", "Tri", "Udin", "Wahyu", "Wawan", "Widi", "Yogi", "Yudha", "Yusuf", "Zaki",
+    "Alif", "Bayu", "Candra", "Danu", "Erik", "Fuad", "Gunawan", "Hafiz", "Imam", "Jefri",
+    "Krisna", "Lukman", "Mahendra", "Nanang", "Oki", "Panji", "Rafi", "Sandy", "Taufik", "Ucup",
+    "Vino", "Wisnu", "Yanto", "Zainal", "Abdi", "Bramasto", "Cahyo", "Darma", "Erwin", "Firman",
+    "Galih", "Hamid", "Indra", "Julio", "Karim", "Luthfi", "Mamat", "Niko", "Oky", "Prima",
+]
+_NAMA_DEPAN_WANITA = [
+    "Aini", "Alya", "Amanda", "Andini", "Anggi", "Anisa", "Annisa", "Ayu", "Bella", "Cinta",
+    "Desi", "Dewi", "Diana", "Dina", "Eka", "Elisa", "Ella", "Erni", "Fani", "Fatimah",
+    "Febri", "Fitri", "Gita", "Hana", "Hesti", "Indah", "Ines", "Intan", "Julia", "Kartika",
+    "Laila", "Leni", "Linda", "Lisa", "Lita", "Maya", "Mega", "Melati", "Mia", "Nadia",
+    "Nanda", "Nani", "Nita", "Novi", "Nurul", "Putri", "Ratna", "Reni", "Rina", "Rini",
+    "Santi", "Sarah", "Sari", "Sela", "Sinta", "Siti", "Sri", "Tari", "Tiara", "Tina",
+    "Tri", "Ulfa", "Vika", "Wahyu", "Winda", "Wulan", "Yeni", "Yuliana", "Yuni", "Zahra",
+    "Adinda", "Berliana", "Cantika", "Damayanti", "Elok", "Farah", "Gracia", "Hilda", "Irma", "Jasmine",
+    "Kinasih", "Lestari", "Mutia", "Nabilah", "Olivia", "Permata", "Qonita", "Rara", "Safira", "Titi",
+    "Ulfah", "Viona", "Wati", "Xena", "Yolanda", "Zainab", "Afifia", "Bening", "Cahaya", "Dara",
+]
+_NAMA_BELAKANG = [
+    "Santoso", "Wijaya", "Kusuma", "Rahayu", "Pratama", "Setiawan", "Putra", "Utama", "Sanjaya", "Hadiyanto",
+    "Nugroho", "Purnomo", "Kurniawan", "Wahyudi", "Susanto", "Hidayat", "Hartono", "Prasetyo", "Gunawan", "Saputra",
+    "Wibowo", "Hakim", "Siregar", "Simbolon", "Nasution", "Sitompul", "Manurung", "Lubis", "Hasibuan", "Siahaan",
+    "Suryadi", "Permana", "Wahyono", "Budiman", "Firmansyah", "Irawan", "Sulistyo", "Handoko", "Mulyono", "Supriyanto",
+    "Adiputra", "Basuki", "Cahyono", "Darwanto", "Endarto", "Fathoni", "Ginanjar", "Halim", "Iskandar", "Jatmiko",
+    "Kristanto", "Laksono", "Mahardika", "Nuraini", "Oktavian", "Prabowo", "Qomarudin", "Ramadhan", "Sudarmo", "Taufiqurrahman",
+    "Utomo", "Valentino", "Widodo", "Yasin", "Zulkarnain", "Abdillah", "Budianto", "Cahyadi", "Darmawan", "Effendi",
+    "Fadillah", "Gunarso", "Haryanto", "Ikhsan", "Juwono", "Kartono", "Listiyono", "Muhaimin", "Natsir", "Oryza",
+    "Pujiyanto", "Rohman", "Supriadi", "Trisno", "Umar", "Valentina", "Widyanto", "Yuliono", "Zaenuri", "Ardiansyah",
+    "Baskoro", "Ciptadi", "Darsono", "Erwanto", "Firdaus", "Gumilang", "Hamdani", "Irfandi", "Junaedi", "Koswara",
 ]
 
-CLUSTER_WEIGHTS = [0.20, 0.16, 0.18, 0.22, 0.12, 0.12]
-MEETING_POINT_TYPES = ["coworking_space", "cafe", "rest_area", "warehouse_hub", "rental_house", "industrial_parking"]
-PLATFORMS = ["twitter", "instagram", "facebook", "tiktok", "telegram", "forum"]
-LANGUAGE_SETS = [["id", "en"], ["id"], ["id", "jv"], ["id", "su"], ["id", "en", "jv"]]
-INTEREST_GROUPS = [
-    "otomotif",
-    "fotografi",
-    "kuliner",
-    "logistik",
-    "teknologi",
-    "gaming",
-    "komunitas_lokal",
-    "musik",
-    "olahraga",
-    "politik",
-    "aktivisme",
-    "bisnis_online",
+
+class GeneratorNamaIndonesia:
+    """Generator nama Indonesia tanpa dependensi eksternal."""
+
+    def __init__(self, rng: random.Random):
+        self.rng = rng
+
+    def nama_pria(self) -> str:
+        depan = self.rng.choice(_NAMA_DEPAN_PRIA)
+        belakang = self.rng.choice(_NAMA_BELAKANG)
+        if self.rng.random() < 0.3:
+            depan2 = self.rng.choice(_NAMA_DEPAN_PRIA)
+            return f"{depan} {depan2} {belakang}"
+        return f"{depan} {belakang}"
+
+    def nama_wanita(self) -> str:
+        depan = self.rng.choice(_NAMA_DEPAN_WANITA)
+        belakang = self.rng.choice(_NAMA_BELAKANG)
+        if self.rng.random() < 0.3:
+            depan2 = self.rng.choice(_NAMA_DEPAN_WANITA)
+            return f"{depan} {depan2} {belakang}"
+        return f"{depan} {belakang}"
+
+
+ENDPOINT_AVATAR = "https://100k-faces.vercel.app/api/random-image"
+SUMBER_AVATAR = "100k-faces"
+
+# ============================================================
+# TEMPLATE TEKS YANG DIPERBANYAK
+# ============================================================
+
+TEMPLATE_BIO = [
+    "Aktif di komunitas {minat}. Sering mobile antara {kota} dan sekitarnya.",
+    "Suka ngobrol soal {minat}, kerja fleksibel, dan sering nongkrong di {kota}.",
+    "Tertarik pada {minat}, update isu lokal, dan sering dokumentasi kegiatan harian.",
+    "Ngurus operasional kecil-kecilan, hobi {minat}, dan punya circle terbatas di {kota}.",
+    "Akun personal untuk catatan kegiatan, minat {minat}, dan koneksi komunitas lokal.",
+    "Tinggal di {kota}, sibuk dengan {minat} dan hal-hal sekitar lingkungan.",
+    "Freelancer yang juga aktif di komunitas {minat}. Base di {kota} tapi sering keliling.",
+    "Suka share insight soal {minat}. Keseharian di {kota} dan sekitarnya.",
+    "Remote worker. Hobi utama {minat}, sesekali dokumentasi jalan-jalan.",
+    "Warga lokal {kota} yang aktif di forum dan diskusi seputar {minat}.",
+    "Cuma orang biasa yang seneng {minat} dan update soal {kota}.",
+    "Pengguna aktif sejak lama. Biasa bahas {minat} dan isu-isu ringan harian.",
+    "Nongkrong online di {kota}. Topik favorit: {minat} dan hal sehari-hari.",
+    "Punya usaha kecil, aktif komunitas {minat}, dan suka jalan-jalan di {kota}.",
+    "Sering nulis catatan soal {minat}. Mayoritas aktivitas dari {kota}.",
+    "Anggota beberapa grup {minat}. Sesekali update lokasi dan kegiatan dari {kota}.",
+    "Bukan siapa-siapa, cuma hobi {minat} dan ngikutin perkembangan lokal di {kota}.",
+    "Part-time content creator, full-time penggemar {minat}. Domisili {kota}.",
+    "Suka eksplorasi tempat baru di sekitar {kota} sambil update soal {minat}.",
+    "Bergabung karena {minat}, menetap karena komunitasnya. Lokasi: {kota}.",
+    "Keseharian di {kota}, topik utama {minat}, sesekali bahas hal di luar itu.",
+    "Diam-diam aktif di komunitas {minat}. Jarang posting tapi sering baca.",
+    "Hidup nomaden di antara {kota} dan sekitarnya. Senang diskusi soal {minat}.",
+    "Penasaran dengan banyak hal, tapi fokus utama tetap di {minat}.",
+    "Akun untuk keperluan pribadi. Topik: {minat}, lokasi utama: {kota}.",
+    "Update harian dari {kota}. Isi konten mostly soal {minat} dan kegiatan lokal.",
+    "Santai tapi konsisten nulis soal {minat}. Berasa di rumah di {kota}.",
+    "Gabung komunitas {minat} dari awal. Sekarang tinggal di {kota}.",
+    "Sering cek update {minat} sambil menikmati suasana {kota} tiap hari.",
+    "Senang bikin konten ringan soal {minat} dan kehidupan di {kota}.",
+    "Wiraswasta yang aktif di forum {minat}. Sesekali nulis dari {kota}.",
+    "Ngikutin perkembangan {minat} dari jauh, tapi base tetap di {kota}.",
+    "Koleksi foto, diskusi {minat}, dan ngobrol soal dinamika lokal {kota}.",
+    "Masih belajar banyak soal {minat}. Sementara itu tinggal nyaman di {kota}.",
+    "Orang lapangan yang suka nulis. Minat utama {minat}, lokasi {kota}.",
+    "Aktif tapi low profile. Topik: {minat}. Domisili: sekitar {kota}.",
+    "Sehari-hari urus {minat} dan sesekali share cerita dari sudut {kota}.",
+    "Masih aktif di komunitas {minat} walau udah lama gabung. Based di {kota}.",
+    "Bukan influencer, cuma orang yang suka bahas {minat} di {kota}.",
+    "Catatan harian dari {kota} — mostly soal {minat} dan hal-hal sekitar.",
 ]
 
-BIO_TEMPLATES = [
-    "Aktif di komunitas {interest}. Sering mobile antara {city} dan sekitarnya.",
-    "Suka ngobrol soal {interest}, kerja fleksibel, dan sering nongkrong di {city}.",
-    "Tertarik pada {interest}, update isu lokal, dan sering dokumentasi kegiatan harian.",
-    "Ngurus operasional kecil-kecilan, hobi {interest}, dan punya circle terbatas di {city}.",
-    "Akun personal untuk catatan kegiatan, minat {interest}, dan koneksi komunitas lokal.",
-]
-
-POST_TEMPLATES = [
+TEMPLATE_POSTING = [
     "Lagi fokus urus agenda minggu ini. {tagline}",
-    "Baru kelar ketemu teman lama di {city}. {tagline}",
-    "Kalau malam begini enak buat beresin kerjaan sambil pantau update {interest}.",
-    "Hari ini ramai juga di sekitar {city}.",
-    "Masih cari referensi soal {interest}. Ada yang punya rekomendasi?",
+    "Baru kelar ketemu teman lama di {kota}. {tagline}",
+    "Kalau malam begini enak buat beresin kerjaan sambil pantau update {minat}.",
+    "Hari ini ramai juga di sekitar {kota}.",
+    "Masih cari referensi soal {minat}. Ada yang punya rekomendasi?",
     "Nanti malam kumpul singkat, semoga semua lancar.",
     "Kadang insight paling bagus datang pas lagi perjalanan pulang.",
     "Weekend begini biasanya santai, tapi timeline malah ramai.",
+    "Lagi ngulik soal {minat}, ternyata seru juga kalau ditelisik.",
+    "Balik ke {kota} setelah beberapa hari keluar. Capek tapi produktif.",
+    "Diskusi panjang soal {minat} tadi, banyak yang belum kepikiran sebelumnya.",
+    "Pagi yang sibuk, tapi sempet juga update soal {minat}.",
+    "Coba hal baru minggu ini. Berhubungan sama {minat}, hasilnya lumayan.",
+    "Salam dari {kota}. Hari ini cukup padat tapi masih bisa online.",
+    "Lagi baca-baca soal {minat}. Banyak banget yang belum tau sebelumnya.",
+    "Update dari lapangan. Situasi sekitar {kota} hari ini agak berbeda dari biasanya.",
+    "Meeting selesai. Sekarang me-time sambil ngulik {minat}.",
+    "Entah kenapa diskusi soal {minat} makin ramai belakangan ini.",
+    "Tadi keliling area {kota}, suasananya agak berbeda dari biasanya.",
+    "Masih standby. Sambil nunggu, update dulu soal {minat}.",
+    "Hari ini banyak notif masuk soal {minat}. Ramai juga komunitasnya.",
+    "Selesai urusan lapangan. Saatnya update dan baca-baca lagi.",
+    "Nggak banyak yang berubah di {kota}, tapi diskusi {minat} makin seru.",
+    "Lagi istirahat sebentar. Sambil scroll timeline soal {minat}.",
+    "Ada yang tau update terbaru soal {minat}? Share dong kalau ada.",
+    "Habis keliling {kota} tadi. Capek tapi puas bisa lihat langsung situasinya.",
+    "Pindah titik sebentar. Masih sekitar {kota}.",
+    "Lagi di perjalanan. Nggak bisa jauh dari update soal {minat}.",
+    "Baru sadar udah lama nggak nulis soal {minat}. Yuk mulai lagi.",
+    "Catch-up sama teman komunitas {minat} tadi. Ternyata banyak update.",
+    "Malam yang cukup tenang di {kota}. Cocok buat mikir-mikir soal {minat}.",
+    "Coba cari sudut pandang lain soal {minat}. Kadang perspektif baru itu perlu.",
+    "Urusan selesai lebih cepat dari dugaan. Sisa waktu buat update.",
+    "Lagi nunggu giliran. Sambil baca thread panjang soal {minat}.",
+    "Habis hujan deras di {kota}. Suasana jadi lebih adem, enak buat mikir.",
+    "Simpan dulu di draft, nanti dirapiin lagi sebelum dipost.",
+    "Udah lama nggak keliling area ini. Lumayan buat refreshing.",
+    "Sore yang santai di {kota}. Timeline ramai tapi tetap enjoy.",
+    "Baru upload beberapa foto dari kegiatan tadi. Semoga bermanfaat.",
+    "Nyoba tulis lebih panjang soal {minat}. Ternyata susah juga rangkumnya.",
+    "Tadi sempet ngobrol panjang soal {minat} sama beberapa orang. Seru.",
+    "Udah malam, tapi masih ada yang aktif di forum {minat}.",
+    "Lagi compile catatan dari minggu kemarin. Banyak yang ketinggalan.",
+    "Zona nyaman adalah diskusi {minat} sambil ngopi di sudut {kota}.",
+    "Baru tau ada update besar soal {minat}. Perlu dikaji lebih dalam.",
+    "Short trip ke area sekitar {kota}. Sedikit keluar dari rutinitas.",
+    "Agak telat buka notif hari ini. Banyak yang missed soal {minat}.",
+    "Reminder buat diri sendiri: istirahat itu penting. Tapi update dulu.",
+    "Tadi rapat singkat, sekarang back to ngulik {minat}.",
+    "Lagi di rest area. Perjalanan masih panjang, tapi koneksi bagus.",
+    "Nggak banyak yang bisa diceritain, tapi hari ini cukup berasa.",
+    "Timeline makin ramai soal {minat} minggu ini. Ada apa?",
+    "Cuaca {kota} hari ini nggak menentu. Tapi urusan tetap jalan.",
+    "Lagi evaluasi aktivitas bulan ini. Banyak yang bisa diperbaiki.",
+    "Forum {minat} hari ini penuh diskusi menarik. Sayang nggak sempat semua.",
+    "Slow day. Cocok buat baca-baca arsip soal {minat}.",
+    "Habis cek kondisi lapangan. Laporan menyusul kalau sempat.",
+    "Nggak tau kenapa tapi hari ini produktif banget. Semoga besok juga.",
+    "Selesai urusan {kota}. Perjalanan pulang sambil dengerin podcast.",
+    "Ada yang baru join komunitas {minat}? Salam kenal kalau ada.",
 ]
 
-SEARCH_RESULT_SNIPPETS = [
+TEMPLATE_PENCARIAN = [
     "Menampilkan hasil profil terkait aktivitas komunitas lokal.",
     "Akun ini beberapa kali muncul dalam percakapan publik dan forum komunitas.",
     "Jejak akun memperlihatkan aktivitas lintas platform dengan intensitas menengah.",
     "Hasil pencarian menemukan kemiripan username dan lokasi kegiatan.",
+    "Profil terkait terdeteksi pada beberapa forum diskusi dengan topik sejenis.",
+    "Akun menunjukkan pola aktivitas yang konsisten di beberapa platform.",
+    "Ditemukan referensi nama atau username serupa di kanal komunitas lokal.",
+    "Jejak digital menunjukkan kehadiran di forum dan grup berbasis lokasi.",
+    "Profil ini memiliki keterkaitan dengan beberapa akun lain di jaringan lokal.",
+    "Aktivitas akun terdeteksi pada rentang waktu yang berdekatan di beberapa platform.",
+    "Hasil menampilkan koneksi antara profil ini dan komunitas regional tertentu.",
+    "Terdeteksi kesamaan pola posting dengan sejumlah profil di klaster yang sama.",
+    "Username serupa ditemukan di beberapa layanan berbeda dengan konteks yang mirip.",
+    "Akun terhubung dengan topik diskusi yang berulang di forum lokal.",
+    "Data pencarian menunjukkan profil aktif dengan interaksi komunitas yang teratur.",
+    "Profil ini pernah muncul dalam thread diskusi publik mengenai isu lokal.",
+    "Jejak lokasi terdeteksi dari metadata posting dan check-in publik.",
+    "Akun memiliki riwayat interaksi dengan profil-profil di jaringan regional.",
+    "Pencarian menemukan referensi tidak langsung melalui mention dan reply.",
+    "Profil menampilkan aktivitas yang konsisten pada jam-jam tertentu.",
+    "Terdeteksi overlap antara jaringan pertemanan dan topik konten yang diposting.",
+    "Data forum menunjukkan bahwa profil ini aktif di beberapa thread komunitas.",
+    "Hasil agregasi menunjukkan profil ini memiliki jejak digital di beberapa platform.",
+    "Akun terhubung secara tidak langsung dengan beberapa profil yang dimonitor.",
+    "Pencarian menemukan histori aktivitas di platform yang saling tumpang tindih.",
+    "Profil ini muncul dalam hasil crawling dengan tag lokasi yang relevan.",
+    "Jejak digital konsisten dengan pola pengguna yang aktif di komunitas lokal.",
+    "Terdeteksi kemiripan pola waktu aktivitas antara profil ini dan beberapa akun lain.",
+    "Hasil menunjukkan akun pernah terlibat dalam diskusi kelompok di platform tertutup.",
+    "Profil memiliki koneksi langsung dan tidak langsung di jaringan yang dipantau.",
 ]
 
-PHONE_PREFIXES = [
-    "811",
-    "812",
-    "813",
-    "821",
-    "822",
-    "823",
-    "851",
-    "852",
-    "853",
-    "855",
-    "856",
-    "857",
-    "858",
-    "877",
-    "878",
-    "881",
-    "882",
-    "895",
-    "896",
-    "897",
-    "898",
-    "899",
+# ============================================================
+# KONFIGURASI UTAMA
+# ============================================================
+
+KLASTER_KOTA = [
+    {"kota": "Bekasi", "provinsi": "Jawa Barat", "lat": -6.2349, "lon": 106.9896, "radius_km": 8.0},
+    {"kota": "Karawang", "provinsi": "Jawa Barat", "lat": -6.3054, "lon": 107.2961, "radius_km": 9.0},
+    {"kota": "Cikarang", "provinsi": "Jawa Barat", "lat": -6.2615, "lon": 107.1522, "radius_km": 7.5},
+    {"kota": "Jakarta", "provinsi": "DKI Jakarta", "lat": -6.2088, "lon": 106.8456, "radius_km": 12.0},
+    {"kota": "Depok", "provinsi": "Jawa Barat", "lat": -6.4025, "lon": 106.7942, "radius_km": 7.0},
+    {"kota": "Bogor", "provinsi": "Jawa Barat", "lat": -6.5950, "lon": 106.8166, "radius_km": 8.5},
+    {"kota": "Tangerang", "provinsi": "Banten", "lat": -6.1781, "lon": 106.6297, "radius_km": 8.0},
+    {"kota": "Bandung", "provinsi": "Jawa Barat", "lat": -6.9175, "lon": 107.6191, "radius_km": 10.0},
+    {"kota": "Cibinong", "provinsi": "Jawa Barat", "lat": -6.4818, "lon": 106.8561, "radius_km": 5.5},
+    {"kota": "Cikampek", "provinsi": "Jawa Barat", "lat": -6.4116, "lon": 107.4607, "radius_km": 5.0},
 ]
 
-FUNDING_PURPOSES = [
-    "iuran logistik",
-    "dukungan operasional",
-    "pengadaan alat komunikasi",
-    "dana perjalanan",
-    "paket konsumsi",
+BOBOT_KLASTER = [0.15, 0.12, 0.13, 0.18, 0.09, 0.09, 0.08, 0.07, 0.05, 0.04]
+
+TIPE_TITIK_PERTEMUAN = [
+    "coworking_space", "cafe", "rest_area", "warehouse_hub",
+    "rental_house", "industrial_parking", "warung_kopi",
+    "mushola_pinggir_jalan", "mini_market", "pos_ronda",
 ]
 
-CASE_CONFIG = {
-    "warehouse_fire": {
-        "case_id": "case-warehouse-fire",
-        "title": "Kebakaran Gudang Logistik - Indikasi Sabotase Terkoordinasi",
-        "city": "Bekasi",
-        "province": "Jawa Barat",
-        "incident_at": datetime(2026, 4, 11, 2, 30, tzinfo=INDONESIA_TZ),
-        "meeting_type": "warehouse_hub",
+PLATFORM_SOSIAL = ["twitter", "instagram", "facebook", "tiktok", "telegram", "forum", "youtube", "whatsapp_channel"]
+
+SET_BAHASA = [
+    ["id", "en"], ["id"], ["id", "jv"], ["id", "su"], ["id", "en", "jv"],
+    ["id", "btk"], ["id", "min"], ["id", "bug"],
+]
+
+GRUP_MINAT = [
+    "otomotif", "fotografi", "kuliner", "logistik", "teknologi",
+    "gaming", "komunitas_lokal", "musik", "olahraga", "politik",
+    "aktivisme", "bisnis_online", "pertanian", "kesehatan", "pendidikan",
+    "keuangan", "pariwisata", "fashion", "properti", "transportasi",
+    "lingkungan", "hukum", "seni", "keagamaan", "hiburan",
+]
+
+PREFIKS_TELEPON = [
+    "811", "812", "813", "821", "822", "823", "851", "852", "853",
+    "855", "856", "857", "858", "877", "878", "881", "882", "895",
+    "896", "897", "898", "899",
+]
+
+TUJUAN_PENDANAAN = [
+    "iuran logistik", "dukungan operasional", "pengadaan alat komunikasi",
+    "dana perjalanan", "paket konsumsi", "sewa tempat", "keperluan teknis",
+    "pengadaan perlengkapan lapangan", "transportasi anggota", "dana darurat operasi",
+]
+
+# ============================================================
+# KONFIGURASI KASUS
+# ============================================================
+
+KONFIGURASI_KASUS = {
+    "kebakaran_gudang": {
+        "id_kasus": "kasus-kebakaran-gudang",
+        "judul": "Kebakaran Gudang Logistik - Indikasi Sabotase Terkoordinasi",
+        "kota": "Bekasi",
+        "provinsi": "Jawa Barat",
+        "waktu_insiden": datetime(2026, 4, 11, 2, 30, tzinfo=ZONA_INDONESIA),
+        "tipe_pertemuan": "warehouse_hub",
     },
-    "suspicious_funding": {
-        "case_id": "case-suspicious-funding",
-        "title": "Pola Pendanaan Tersebar - Indikasi Koordinasi Finansial",
-        "city": "Jakarta",
-        "province": "DKI Jakarta",
-        "incident_at": datetime(2026, 4, 7, 20, 0, tzinfo=INDONESIA_TZ),
-        "meeting_type": "coworking_space",
+    "pendanaan_mencurigakan": {
+        "id_kasus": "kasus-pendanaan-mencurigakan",
+        "judul": "Pola Pendanaan Tersebar - Indikasi Koordinasi Finansial",
+        "kota": "Jakarta",
+        "provinsi": "DKI Jakarta",
+        "waktu_insiden": datetime(2026, 4, 7, 20, 0, tzinfo=ZONA_INDONESIA),
+        "tipe_pertemuan": "coworking_space",
     },
     "propaganda": {
-        "case_id": "case-propaganda-burst",
-        "title": "Amplifikasi Narasi Terkoordinasi - Indikasi Propaganda",
-        "city": "Cikarang",
-        "province": "Jawa Barat",
-        "incident_at": datetime(2026, 4, 12, 19, 15, tzinfo=INDONESIA_TZ),
-        "meeting_type": "cafe",
+        "id_kasus": "kasus-propaganda-burst",
+        "judul": "Amplifikasi Narasi Terkoordinasi - Indikasi Propaganda",
+        "kota": "Cikarang",
+        "provinsi": "Jawa Barat",
+        "waktu_insiden": datetime(2026, 4, 12, 19, 15, tzinfo=ZONA_INDONESIA),
+        "tipe_pertemuan": "cafe",
     },
 }
 
 
+# ============================================================
+# DATACLASS BUNDLE
+# ============================================================
+
 @dataclass
-class Bundle:
-    profiles: list
-    accounts: list
-    contacts: list
-    preferences: list
-    photos: list
-    posts: list
-    friends: list
-    network: list
-    locations: list
-    cases: list
-    transactions: list
-    funding_alerts: list
-    campaigns: list
-    message_clusters: list
+class BundleData:
+    profil: list
+    akun: list
+    kontak: list
+    preferensi: list
+    foto: list
+    postingan: list
+    pertemanan: list
+    jaringan: list
+    lokasi: list
+    kasus: list
+    transaksi: list
+    peringatan_dana: list
+    kampanye: list
+    klaster_pesan: list
     crawling: list
-    entities: list
-    alerts: list
-    risk_scores: list
-    reports: list
+    entitas: list
+    peringatan: list
+    skor_risiko: list
+    laporan: list
 
 
-def now_iso() -> str:
-    return datetime.now(INDONESIA_TZ).replace(microsecond=0).isoformat()
+# ============================================================
+# UTILITAS
+# ============================================================
+
+def sekarang_iso() -> str:
+    return datetime.now(ZONA_INDONESIA).replace(microsecond=0).isoformat()
 
 
-def dt_to_iso(value: datetime) -> str:
-    return value.astimezone(INDONESIA_TZ).replace(microsecond=0).isoformat()
+def dt_ke_iso(nilai: datetime) -> str:
+    return nilai.astimezone(ZONA_INDONESIA).replace(microsecond=0).isoformat()
 
 
-def slugify(value: str) -> str:
-    value = value.lower().strip()
-    value = re.sub(r"[^a-z0-9]+", "-", value)
-    return value.strip("-")
+def slugify(nilai: str) -> str:
+    nilai = nilai.lower().strip()
+    nilai = re.sub(r"[^a-z0-9]+", "-", nilai)
+    return nilai.strip("-")
 
 
-def rand_id(prefix: str) -> str:
-    return f"{prefix}-{uuid.uuid4().hex[:10]}"
+def id_acak(prefiks: str) -> str:
+    return f"{prefiks}-{uuid.uuid4().hex[:10]}"
 
 
-def rounded(value: float) -> float:
-    return round(value, 6)
+def dibulatkan(nilai: float) -> float:
+    return round(nilai, 6)
 
 
-def random_point(rng: random.Random, lat: float, lon: float, radius_km: float) -> tuple[float, float]:
-    distance = radius_km * math.sqrt(rng.random())
-    bearing = rng.random() * math.pi * 2
-    lat_offset = (distance / 111.0) * math.cos(bearing)
-    lon_offset = (distance / (111.0 * math.cos(math.radians(lat)))) * math.sin(bearing)
-    return rounded(lat + lat_offset), rounded(lon + lon_offset)
+def titik_acak(rng: random.Random, lat: float, lon: float, radius_km: float) -> tuple[float, float]:
+    jarak = radius_km * math.sqrt(rng.random())
+    arah = rng.random() * math.pi * 2
+    offset_lat = (jarak / 111.0) * math.cos(arah)
+    offset_lon = (jarak / (111.0 * math.cos(math.radians(lat)))) * math.sin(arah)
+    return dibulatkan(lat + offset_lat), dibulatkan(lon + offset_lon)
 
 
-def random_time_between(rng: random.Random, start: datetime, end: datetime) -> datetime:
-    total = int((end - start).total_seconds())
+def waktu_acak_antara(rng: random.Random, mulai: datetime, akhir: datetime) -> datetime:
+    total = int((akhir - mulai).total_seconds())
     if total <= 0:
-        return start
-    return start + timedelta(seconds=rng.randint(0, total))
+        return mulai
+    return mulai + timedelta(seconds=rng.randint(0, total))
 
 
-def ensure_dirs(out_dir: Path) -> None:
-    out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "images").mkdir(parents=True, exist_ok=True)
+def pastikan_direktori(dir_output: Path) -> None:
+    dir_output.mkdir(parents=True, exist_ok=True)
+    (dir_output / "gambar").mkdir(parents=True, exist_ok=True)
 
 
-def dump_json(path: Path, payload) -> None:
-    with open(path, "w", encoding="utf-8") as handle:
-        json.dump(payload, handle, ensure_ascii=False, indent=2)
+def simpan_json(path: Path, data) -> None:
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
 
-def load_json(path: Path, default):
+def muat_json(path: Path, default):
     if not path.exists():
         return default
-    with open(path, "r", encoding="utf-8") as handle:
-        return json.load(handle)
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
-def build_phone_number(rng: random.Random) -> tuple[str, str]:
-    prefix = rng.choice(PHONE_PREFIXES)
-    remaining = 8 if rng.random() < 0.7 else 9
-    subscriber = "".join(rng.choices(string.digits, k=remaining))
-    local = f"0{prefix}{subscriber}"
-    e164 = f"+62{local[1:]}"
-    return local, e164
+def buat_nomor_telepon(rng: random.Random) -> tuple[str, str]:
+    prefiks = rng.choice(PREFIKS_TELEPON)
+    panjang = 8 if rng.random() < 0.7 else 9
+    pelanggan = "".join(rng.choices(string.digits, k=panjang))
+    lokal = f"0{prefiks}{pelanggan}"
+    e164 = f"+62{lokal[1:]}"
+    return lokal, e164
 
 
-def build_email(rng: random.Random, full_name: str) -> str:
-    domains = ["example.com", "mail.test"]
-    tokens = [t for t in re.split(r"[^a-zA-Z0-9]+", full_name.lower()) if t]
-    base = "".join(tokens[:2])[:16] or "user"
-    suffix = rng.randint(100, 9999)
-    return f"{base}{suffix}@{rng.choice(domains)}"
+def buat_email(rng: random.Random, nama_lengkap: str) -> str:
+    domain = ["example.com", "mail.test", "demo.id"]
+    token = [t for t in re.split(r"[^a-zA-Z0-9]+", nama_lengkap.lower()) if t]
+    dasar = "".join(token[:2])[:16] or "pengguna"
+    akhiran = rng.randint(100, 9999)
+    return f"{dasar}{akhiran}@{rng.choice(domain)}"
 
 
-def build_username(rng: random.Random, full_name: str) -> str:
-    tokens = [t for t in re.split(r"[^a-zA-Z0-9]+", full_name.lower()) if t]
-    base = "".join(tokens[:2])[:14] or "user"
+def buat_username(rng: random.Random, nama_lengkap: str) -> str:
+    token = [t for t in re.split(r"[^a-zA-Z0-9]+", nama_lengkap.lower()) if t]
+    dasar = "".join(token[:2])[:14] or "user"
     if rng.random() < 0.4:
-        base = f"{tokens[0]}_{tokens[-1]}"[:18]
-    suffix = str(rng.randint(10, 9999)) if rng.random() < 0.65 else ""
-    return f"{base}{suffix}"
+        dasar = f"{token[0]}_{token[-1]}"[:18]
+    akhiran = str(rng.randint(10, 9999)) if rng.random() < 0.65 else ""
+    return f"{dasar}{akhiran}"
 
 
-def avatar_url_for(profile_id: str) -> str:
-    return f"{AVATAR_ENDPOINT}?seed={profile_id}"
+def url_avatar(id_profil: str) -> str:
+    return f"{ENDPOINT_AVATAR}?seed={id_profil}"
 
 
-def maybe_download_avatar(url: str, local_path: Path) -> bool:
+def unduh_avatar(url: str, path_lokal: Path) -> bool:
     try:
-        with urllib.request.urlopen(url, timeout=20) as response:
-            data = response.read()
-        with open(local_path, "wb") as handle:
-            handle.write(data)
+        with urllib.request.urlopen(url, timeout=20) as resp:
+            data = resp.read()
+        with open(path_lokal, "wb") as f:
+            f.write(data)
         return True
     except (urllib.error.URLError, TimeoutError, ValueError):
         return False
 
 
-class SyntheticDatasetGenerator:
-    def __init__(self, seed: int = 42, openai_model: str | None = None):
+def pilih_template_bio(rng: random.Random, minat: str, kota: str) -> str:
+    template = rng.choice(TEMPLATE_BIO)
+    return template.format(minat=minat, kota=kota)
+
+
+def pilih_template_posting(rng: random.Random, minat: str, kota: str, tagline: str) -> str:
+    template = rng.choice(TEMPLATE_POSTING)
+    return template.format(minat=minat, kota=kota, tagline=tagline)
+
+
+# ============================================================
+# KELAS GENERATOR UTAMA
+# ============================================================
+
+class GeneratorDataSintetis:
+    def __init__(self, seed: int = 42):
         self.seed = seed
         self.rng = random.Random(seed)
-        self.faker = Faker("id_ID")
-        self.faker.seed_instance(seed)
-        self.openai_model = openai_model or HARDCODED_OPENAI_MODEL or os.getenv("OPENAI_MODEL", DEFAULT_OPENAI_MODEL)
-        api_key = (HARDCODED_OPENAI_API_KEY or os.getenv("OPENAI_API_KEY", "")).strip()
-        self.openai_client = OpenAI(api_key=api_key) if api_key and OpenAI is not None else None
+        self.gen_nama = GeneratorNamaIndonesia(self.rng)
 
-    @property
-    def can_use_openai(self) -> bool:
-        return self.openai_client is not None
+    def bangun_bundle_profil(self, jumlah: int, dir_output: str, dengan_gambar: bool = False) -> BundleData:
+        path_output = Path(dir_output)
+        pastikan_direktori(path_output)
 
-    def _openai_json(self, system_prompt: str, user_prompt: str, fallback: dict) -> dict:
-        if not self.can_use_openai:
-            return fallback
-        try:
-            response = self.openai_client.responses.create( # pyright: ignore[reportOptionalMemberAccess]
-                model=self.openai_model,
-                reasoning={"effort": "minimal"},
-                input=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-            )
-            text = (response.output_text or "").strip()
-            if text.startswith("```"):
-                text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text, flags=re.DOTALL).strip()
-            if not text:
-                return fallback
-            return json.loads(text)
-        except Exception:
-            return fallback
+        daftar_profil = []
+        daftar_akun = []
+        daftar_kontak = []
+        daftar_preferensi = []
+        daftar_foto = []
+        daftar_postingan = []
+        daftar_pertemanan = []
+        daftar_jaringan = []
+        daftar_lokasi = []
 
-    def build_profiles_bundle(self, count: int, out_dir: str, with_images: bool = False) -> Bundle:
-        out_path = Path(out_dir)
-        ensure_dirs(out_path)
+        titik_pertemuan = self._bangun_titik_pertemuan()
+        keanggotaan_klaster = self._tetapkan_klaster_sosial(jumlah)
+        klaster_per_profil = {idx: [] for idx in range(jumlah)}
+        for klaster in keanggotaan_klaster["klaster"]:
+            for idx in klaster["indeks_anggota"]:
+                klaster_per_profil[idx].append(klaster["id_klaster"])
+        for jembatan in keanggotaan_klaster["jembatan"]:
+            klaster_per_profil[jembatan["indeks"]].extend(jembatan["id_klaster"])
 
-        profiles = []
-        accounts = []
-        contacts = []
-        preferences = []
-        photos = []
-        posts = []
-        friends = []
-        network = []
-        locations = []
+        akun_per_profil: dict[str, list] = {}
+        foto_per_profil: dict[str, list] = {}
+        posting_per_profil: dict[str, list] = {}
 
-        meeting_points = self._build_meeting_points()
-        cluster_membership = self._assign_social_clusters(count)
-        profile_cluster_ids = {idx: [] for idx in range(count)}
-        for cluster in cluster_membership["clusters"]:
-            for idx in cluster["member_indices"]:
-                profile_cluster_ids[idx].append(cluster["cluster_id"])
-        for bridge in cluster_membership["bridges"]:
-            profile_cluster_ids[bridge["index"]].extend(bridge["cluster_ids"])
+        sekarang = datetime.now(ZONA_INDONESIA)
 
-        account_by_profile: dict[str, list] = {}
-        photo_by_profile: dict[str, list] = {}
-        post_by_profile: dict[str, list] = {}
+        for idx in range(jumlah):
+            klaster = self.rng.choices(KLASTER_KOTA, weights=BOBOT_KLASTER, k=1)[0]
+            lat, lon = titik_acak(self.rng, klaster["lat"], klaster["lon"], klaster["radius_km"])
+            jenis_kelamin = self.rng.choice(["male", "female"])
+            nama_lengkap = self.gen_nama.nama_pria() if jenis_kelamin == "male" else self.gen_nama.nama_wanita()
+            tahun_lahir_mulai = self.rng.randint(1982, 2003)
+            rentang_lahir = f"{tahun_lahir_mulai}-{tahun_lahir_mulai + self.rng.randint(0, 2)}"
+            minat_profil = self.rng.sample(GRUP_MINAT, k=self.rng.randint(2, 5))
 
-        now = datetime.now(INDONESIA_TZ)
-        for idx in range(count):
-            cluster = self.rng.choices(CITY_CLUSTERS, weights=CLUSTER_WEIGHTS, k=1)[0]
-            lat, lon = random_point(self.rng, cluster["lat"], cluster["lon"], cluster["radius_km"])
-            gender = self.rng.choice(["male", "female"])
-            full_name = self.faker.name_male() if gender == "male" else self.faker.name_female()
-            birth_start = self.rng.randint(1984, 2002)
-            birth_range = f"{birth_start}-{birth_start + self.rng.randint(0, 2)}"
-            interests = self.rng.sample(INTEREST_GROUPS, k=self.rng.randint(2, 4))
-            persona_copy = self._persona_copy(full_name, cluster["city"], cluster["province"], interests, birth_range)
-            display_name = persona_copy.get("display_name") or (full_name.split()[0] if self.rng.random() < 0.5 else full_name)
-            bio = persona_copy.get("bio") or self.rng.choice(BIO_TEMPLATES).format(
-                interest=self.rng.choice(interests),
-                city=cluster["city"],
-            )
-            profile_id = rand_id("prof")
-            local_phone, e164_phone = build_phone_number(self.rng)
-            email = build_email(self.rng, full_name)
-            avatar_url = avatar_url_for(profile_id)
-            avatar_local = None
-            if with_images:
-                local_path = out_path / "images" / f"{profile_id}.jpg"
-                if maybe_download_avatar(avatar_url, local_path):
-                    avatar_local = f"images/{profile_id}.jpg"
+            nama_tampil = self._buat_nama_tampil(nama_lengkap)
+            bio = pilih_template_bio(self.rng, self.rng.choice(minat_profil), klaster["kota"])
 
-            created_at = now - timedelta(days=self.rng.randint(150, 1800))
-            profile = {
-                "profile_id": profile_id,
-                "full_name": full_name,
-                "display_name": display_name,
-                "gender": gender,
-                "birth_year_range": birth_range,
+            id_profil = id_acak("prof")
+            telepon_lokal, telepon_e164 = buat_nomor_telepon(self.rng)
+            email = buat_email(self.rng, nama_lengkap)
+            url_ava = url_avatar(id_profil)
+            avatar_lokal = None
+
+            if dengan_gambar:
+                path_lokal = path_output / "gambar" / f"{id_profil}.jpg"
+                if unduh_avatar(url_ava, path_lokal):
+                    avatar_lokal = f"gambar/{id_profil}.jpg"
+
+            dibuat_pada = sekarang - timedelta(days=self.rng.randint(150, 1800))
+
+            profil = {
+                "id_profil": id_profil,
+                "nama_lengkap": nama_lengkap,
+                "nama_tampil": nama_tampil,
+                "jenis_kelamin": jenis_kelamin,
+                "rentang_tahun_lahir": rentang_lahir,
                 "bio": bio,
-                "avatar_url": avatar_url,
-                "avatar_local": avatar_local,
-                "avatar_source": AVATAR_SOURCE,
-                "country_code": "ID",
-                "city": cluster["city"],
-                "province": cluster["province"],
+                "url_avatar": url_ava,
+                "avatar_lokal": avatar_lokal,
+                "sumber_avatar": SUMBER_AVATAR,
+                "kode_negara": "ID",
+                "kota": klaster["kota"],
+                "provinsi": klaster["provinsi"],
                 "latitude": lat,
                 "longitude": lon,
-                "languages": self.rng.choice(LANGUAGE_SETS),
-                "generated_at": now_iso(),
-                "created_at": dt_to_iso(created_at),
-                "cluster_ids": sorted(set(profile_cluster_ids[idx])),
-                "risk_tags": [],
-                "case_links": [],
+                "bahasa": self.rng.choice(SET_BAHASA),
+                "dibuat_pada": dt_ke_iso(dibuat_pada),
+                "digenerate_pada": sekarang_iso(),
+                "id_klaster": sorted(set(klaster_per_profil[idx])),
+                "tag_risiko": [],
+                "tautan_kasus": [],
             }
-            profiles.append(profile)
+            daftar_profil.append(profil)
 
-            contact = {
-                "contact_id": rand_id("ctc"),
-                "profile_id": profile_id,
+            kontak = {
+                "id_kontak": id_acak("ktk"),
+                "id_profil": id_profil,
                 "email": email,
-                "phone_local": local_phone,
-                "phone_e164": e164_phone,
-                "city": cluster["city"],
-                "province": cluster["province"],
-                "is_primary": True,
+                "telepon_lokal": telepon_lokal,
+                "telepon_e164": telepon_e164,
+                "kota": klaster["kota"],
+                "provinsi": klaster["provinsi"],
+                "adalah_utama": True,
             }
-            contacts.append(contact)
+            daftar_kontak.append(kontak)
 
-            preference_entry = {
-                "preference_id": rand_id("pref"),
-                "profile_id": profile_id,
-                "interests": interests,
-                "activity_window": self.rng.choice(["pagi", "siang", "malam", "campuran"]),
-                "device_usage": self.rng.choice(["android", "android+desktop", "ios", "android+tablet"]),
-                "mobility_level": self.rng.choice(["rendah", "menengah", "tinggi"]),
-                "copy_seed": persona_copy,
+            entri_preferensi = {
+                "id_preferensi": id_acak("pref"),
+                "id_profil": id_profil,
+                "minat": minat_profil,
+                "jendela_aktivitas": self.rng.choice(["pagi", "siang", "malam", "campuran"]),
+                "penggunaan_perangkat": self.rng.choice(["android", "android+desktop", "ios", "android+tablet"]),
+                "tingkat_mobilitas": self.rng.choice(["rendah", "menengah", "tinggi"]),
             }
-            preferences.append(preference_entry)
+            daftar_preferensi.append(entri_preferensi)
 
-            profile_locations = self._build_profile_locations(profile, cluster, meeting_points)
-            locations.extend(profile_locations)
+            lokasi_profil = self._bangun_lokasi_profil(profil, klaster, titik_pertemuan)
+            daftar_lokasi.extend(lokasi_profil)
 
-            accounts_for_profile = self._build_accounts(profile, interests)
-            accounts.extend(accounts_for_profile)
-            account_by_profile[profile_id] = accounts_for_profile
+            akun_profil = self._bangun_akun(profil, minat_profil)
+            daftar_akun.extend(akun_profil)
+            akun_per_profil[id_profil] = akun_profil
 
-            photos_for_profile = self._build_photos(profile, cluster)
-            photos.extend(photos_for_profile)
-            photo_by_profile[profile_id] = photos_for_profile
+            foto_profil = self._bangun_foto(profil, klaster)
+            daftar_foto.extend(foto_profil)
+            foto_per_profil[id_profil] = foto_profil
 
-        friends, network = self._build_social_graph(profiles, cluster_membership)
-        posts = self._build_baseline_posts(profiles, account_by_profile, preferences)
+            if idx % 500 == 0 and idx > 0:
+                print(f"  [PROGRES] {idx}/{jumlah} profil dibuat...")
 
-        for post in posts:
-            post_by_profile.setdefault(post["profile_id"], []).append(post)
+        print(f"  [SELESAI] {jumlah} profil dibuat. Membangun graf sosial...")
+        daftar_pertemanan, daftar_jaringan = self._bangun_graf_sosial(daftar_profil, keanggotaan_klaster)
 
-        for profile in profiles:
-            profile["extracted_profile"] = self._build_extracted_profile(
-                profile=profile,
-                contacts=next(item for item in contacts if item["profile_id"] == profile["profile_id"]),
-                preferences=next(item for item in preferences if item["profile_id"] == profile["profile_id"]),
-                accounts=account_by_profile.get(profile["profile_id"], []),
-                friends=friends,
-                photos=photo_by_profile.get(profile["profile_id"], []),
-                posts=post_by_profile.get(profile["profile_id"], []),
-                locations=locations,
+        print(f"  [PROGRES] Membangun postingan dasar...")
+        daftar_postingan = self._bangun_postingan_dasar(daftar_profil, akun_per_profil, daftar_preferensi)
+
+        for posting in daftar_postingan:
+            posting_per_profil.setdefault(posting["id_profil"], []).append(posting)
+
+        print(f"  [PROGRES] Membangun profil terekstrak...")
+        for profil in daftar_profil:
+            pid = profil["id_profil"]
+            kontak_profil = next(k for k in daftar_kontak if k["id_profil"] == pid)
+            pref_profil = next(p for p in daftar_preferensi if p["id_profil"] == pid)
+            profil["profil_terekstrak"] = self._bangun_profil_terekstrak(
+                profil=profil,
+                kontak=kontak_profil,
+                preferensi=pref_profil,
+                akun=akun_per_profil.get(pid, []),
+                pertemanan=daftar_pertemanan,
+                foto=foto_per_profil.get(pid, []),
+                postingan=posting_per_profil.get(pid, []),
+                lokasi=daftar_lokasi,
             )
 
-        return Bundle(
-            profiles=profiles,
-            accounts=accounts,
-            contacts=contacts,
-            preferences=preferences,
-            photos=photos,
-            posts=posts,
-            friends=friends,
-            network=network,
-            locations=locations,
-            cases=[],
-            transactions=[],
-            funding_alerts=[],
-            campaigns=[],
-            message_clusters=[],
+        return BundleData(
+            profil=daftar_profil,
+            akun=daftar_akun,
+            kontak=daftar_kontak,
+            preferensi=daftar_preferensi,
+            foto=daftar_foto,
+            postingan=daftar_postingan,
+            pertemanan=daftar_pertemanan,
+            jaringan=daftar_jaringan,
+            lokasi=daftar_lokasi,
+            kasus=[],
+            transaksi=[],
+            peringatan_dana=[],
+            kampanye=[],
+            klaster_pesan=[],
             crawling=[],
-            entities=[],
-            alerts=[],
-            risk_scores=[],
-            reports=[],
+            entitas=[],
+            peringatan=[],
+            skor_risiko=[],
+            laporan=[],
         )
 
-    def augment_bundle_with_cases(self, bundle: Bundle, case_names: list[str] | None = None) -> Bundle:
-        requested = case_names or list(CASE_CONFIG.keys())
-        requested = [name for name in requested if name in CASE_CONFIG]
-        if not requested:
+    def augmentasi_bundle_dengan_kasus(self, bundle: BundleData, nama_kasus: list[str] | None = None) -> BundleData:
+        diminta = nama_kasus or list(KONFIGURASI_KASUS.keys())
+        diminta = [nama for nama in diminta if nama in KONFIGURASI_KASUS]
+        if not diminta:
             return bundle
 
-        self._reset_case_outputs(bundle)
+        self._reset_output_kasus(bundle)
 
-        profiles_by_id = {profile["profile_id"]: profile for profile in bundle.profiles}
-        accounts_by_profile: dict[str, list] = {}
-        for account in bundle.accounts:
-            accounts_by_profile.setdefault(account["profile_id"], []).append(account)
+        profil_per_id = {profil["id_profil"]: profil for profil in bundle.profil}
+        akun_per_profil: dict[str, list] = {}
+        for akun in bundle.akun:
+            akun_per_profil.setdefault(akun["id_profil"], []).append(akun)
 
-        social_clusters = self._group_profiles_by_cluster(bundle.profiles)
-        shared_case_profiles = self._pick_case_actors(bundle.profiles, social_clusters)
-        meeting_points = self._build_meeting_points()
+        klaster_sosial = self._kelompokkan_profil_per_klaster(bundle.profil)
+        pool_aktor_kasus = self._pilih_aktor_kasus(bundle.profil, klaster_sosial)
+        titik_pertemuan = self._bangun_titik_pertemuan()
 
-        for case_name in requested:
-            case_config = CASE_CONFIG[case_name]
-            if case_name == "warehouse_fire":
-                case_result = self._build_warehouse_fire_case(
+        for nama_kasus in diminta:
+            config_kasus = KONFIGURASI_KASUS[nama_kasus]
+            print(f"  [KASUS] Membangun kasus: {nama_kasus}...")
+
+            if nama_kasus == "kebakaran_gudang":
+                hasil = self._bangun_kasus_kebakaran_gudang(
                     bundle=bundle,
-                    case_config=case_config,
-                    accounts_by_profile=accounts_by_profile,
-                    actor_pool=shared_case_profiles,
-                    meeting_points=meeting_points,
+                    config_kasus=config_kasus,
+                    akun_per_profil=akun_per_profil,
+                    pool_aktor=pool_aktor_kasus,
+                    titik_pertemuan=titik_pertemuan,
                 )
-            elif case_name == "suspicious_funding":
-                case_result = self._build_funding_case(
-                    case_config=case_config,
-                    accounts_by_profile=accounts_by_profile,
-                    actor_pool=shared_case_profiles,
-                    meeting_points=meeting_points,
+            elif nama_kasus == "pendanaan_mencurigakan":
+                hasil = self._bangun_kasus_pendanaan(
+                    config_kasus=config_kasus,
+                    akun_per_profil=akun_per_profil,
+                    pool_aktor=pool_aktor_kasus,
+                    titik_pertemuan=titik_pertemuan,
                 )
             else:
-                case_result = self._build_propaganda_case(
-                    case_config=case_config,
-                    accounts_by_profile=accounts_by_profile,
-                    actor_pool=shared_case_profiles,
-                    meeting_points=meeting_points,
+                hasil = self._bangun_kasus_propaganda(
+                    config_kasus=config_kasus,
+                    akun_per_profil=akun_per_profil,
+                    pool_aktor=pool_aktor_kasus,
+                    titik_pertemuan=titik_pertemuan,
                 )
 
-            bundle.cases.append(case_result["case"])
-            bundle.posts.extend(case_result["posts"])
-            bundle.locations.extend(case_result["locations"])
-            bundle.network.extend(case_result["network"])
-            bundle.crawling.extend(case_result["crawling"])
-            bundle.entities.extend(case_result["entities"])
-            bundle.alerts.extend(case_result["alerts"])
-            bundle.risk_scores.append(case_result["risk_score"])
-            bundle.reports.append(case_result["report"])
-            bundle.transactions.extend(case_result.get("transactions", []))
-            bundle.funding_alerts.extend(case_result.get("funding_alerts", []))
-            bundle.campaigns.extend(case_result.get("campaigns", []))
-            bundle.message_clusters.extend(case_result.get("message_clusters", []))
+            bundle.kasus.append(hasil["kasus"])
+            bundle.postingan.extend(hasil["postingan"])
+            bundle.lokasi.extend(hasil["lokasi"])
+            bundle.jaringan.extend(hasil["jaringan"])
+            bundle.crawling.extend(hasil["crawling"])
+            bundle.entitas.extend(hasil["entitas"])
+            bundle.peringatan.extend(hasil["peringatan"])
+            bundle.skor_risiko.append(hasil["skor_risiko"])
+            bundle.laporan.append(hasil["laporan"])
+            bundle.transaksi.extend(hasil.get("transaksi", []))
+            bundle.peringatan_dana.extend(hasil.get("peringatan_dana", []))
+            bundle.kampanye.extend(hasil.get("kampanye", []))
+            bundle.klaster_pesan.extend(hasil.get("klaster_pesan", []))
 
-            for link in case_result["case_links"]:
-                profile = profiles_by_id[link["profile_id"]]
-                profile["case_links"].append(link)
-                if link["signal"] not in profile["risk_tags"]:
-                    profile["risk_tags"].append(link["signal"])
+            for tautan in hasil["tautan_kasus"]:
+                profil = profil_per_id[tautan["id_profil"]]
+                profil["tautan_kasus"].append(tautan)
+                if tautan["sinyal"] not in profil["tag_risiko"]:
+                    profil["tag_risiko"].append(tautan["sinyal"])
 
-        self._refresh_profile_extractions(bundle)
+        self._perbarui_ekstraksi_profil(bundle)
         return bundle
 
-    def write_bundle(self, bundle: Bundle, out_dir: str) -> None:
-        out_path = Path(out_dir)
-        ensure_dirs(out_path)
-        file_map = {
-            "profiles.json": bundle.profiles,
-            "accounts.json": bundle.accounts,
-            "contacts.json": bundle.contacts,
-            "preferences.json": bundle.preferences,
-            "photos.json": bundle.photos,
-            "posts.json": bundle.posts,
-            "friends.json": bundle.friends,
-            "network.json": bundle.network,
-            "locations.json": bundle.locations,
-            "cases.json": bundle.cases,
-            "transactions.json": bundle.transactions,
-            "funding_alerts.json": bundle.funding_alerts,
-            "campaigns.json": bundle.campaigns,
-            "message_clusters.json": bundle.message_clusters,
+    def tulis_bundle(self, bundle: BundleData, dir_output: str) -> None:
+        path_output = Path(dir_output)
+        pastikan_direktori(path_output)
+        peta_file = {
+            "profil.json": bundle.profil,
+            "akun.json": bundle.akun,
+            "kontak.json": bundle.kontak,
+            "preferensi.json": bundle.preferensi,
+            "foto.json": bundle.foto,
+            "postingan.json": bundle.postingan,
+            "pertemanan.json": bundle.pertemanan,
+            "jaringan.json": bundle.jaringan,
+            "lokasi.json": bundle.lokasi,
+            "kasus.json": bundle.kasus,
+            "transaksi.json": bundle.transaksi,
+            "peringatan_dana.json": bundle.peringatan_dana,
+            "kampanye.json": bundle.kampanye,
+            "klaster_pesan.json": bundle.klaster_pesan,
             "crawling.json": bundle.crawling,
-            "entities.json": bundle.entities,
-            "alerts.json": bundle.alerts,
-            "risk_scores.json": bundle.risk_scores,
-            "reports.json": bundle.reports,
+            "entitas.json": bundle.entitas,
+            "peringatan.json": bundle.peringatan,
+            "skor_risiko.json": bundle.skor_risiko,
+            "laporan.json": bundle.laporan,
         }
-        for file_name, payload in file_map.items():
-            dump_json(out_path / file_name, payload)
+        for nama_file, data in peta_file.items():
+            simpan_json(path_output / nama_file, data)
+            print(f"  [SIMPAN] {nama_file} — {len(data) if isinstance(data, list) else 1} entri")
 
-    def load_bundle(self, out_dir: str) -> Bundle:
-        out_path = Path(out_dir)
-        return Bundle(
-            profiles=load_json(out_path / "profiles.json", []),
-            accounts=load_json(out_path / "accounts.json", []),
-            contacts=load_json(out_path / "contacts.json", []),
-            preferences=load_json(out_path / "preferences.json", []),
-            photos=load_json(out_path / "photos.json", []),
-            posts=load_json(out_path / "posts.json", []),
-            friends=load_json(out_path / "friends.json", []),
-            network=load_json(out_path / "network.json", []),
-            locations=load_json(out_path / "locations.json", []),
-            cases=load_json(out_path / "cases.json", []),
-            transactions=load_json(out_path / "transactions.json", []),
-            funding_alerts=load_json(out_path / "funding_alerts.json", []),
-            campaigns=load_json(out_path / "campaigns.json", []),
-            message_clusters=load_json(out_path / "message_clusters.json", []),
-            crawling=load_json(out_path / "crawling.json", []),
-            entities=load_json(out_path / "entities.json", []),
-            alerts=load_json(out_path / "alerts.json", []),
-            risk_scores=load_json(out_path / "risk_scores.json", []),
-            reports=load_json(out_path / "reports.json", []),
+    def muat_bundle(self, dir_output: str) -> BundleData:
+        path_output = Path(dir_output)
+        return BundleData(
+            profil=muat_json(path_output / "profil.json", []),
+            akun=muat_json(path_output / "akun.json", []),
+            kontak=muat_json(path_output / "kontak.json", []),
+            preferensi=muat_json(path_output / "preferensi.json", []),
+            foto=muat_json(path_output / "foto.json", []),
+            postingan=muat_json(path_output / "postingan.json", []),
+            pertemanan=muat_json(path_output / "pertemanan.json", []),
+            jaringan=muat_json(path_output / "jaringan.json", []),
+            lokasi=muat_json(path_output / "lokasi.json", []),
+            kasus=muat_json(path_output / "kasus.json", []),
+            transaksi=muat_json(path_output / "transaksi.json", []),
+            peringatan_dana=muat_json(path_output / "peringatan_dana.json", []),
+            kampanye=muat_json(path_output / "kampanye.json", []),
+            klaster_pesan=muat_json(path_output / "klaster_pesan.json", []),
+            crawling=muat_json(path_output / "crawling.json", []),
+            entitas=muat_json(path_output / "entitas.json", []),
+            peringatan=muat_json(path_output / "peringatan.json", []),
+            skor_risiko=muat_json(path_output / "skor_risiko.json", []),
+            laporan=muat_json(path_output / "laporan.json", []),
         )
 
-    def _build_meeting_points(self) -> list[dict]:
-        points = []
-        for cluster in CITY_CLUSTERS:
-            for point_type in MEETING_POINT_TYPES:
-                lat, lon = random_point(self.rng, cluster["lat"], cluster["lon"], min(cluster["radius_km"], 3.0))
-                point_id = f"meet-{slugify(cluster['city'])}-{point_type}"
-                points.append(
-                    {
-                        "meeting_point_id": point_id,
-                        "city": cluster["city"],
-                        "province": cluster["province"],
-                        "type": point_type,
-                        "label": f"{cluster['city']} {point_type.replace('_', ' ')}",
-                        "latitude": lat,
-                        "longitude": lon,
-                    }
-                )
-        return points
+    # ============================================================
+    # METODE PRIVAT — BUILDER
+    # ============================================================
 
-    def _persona_copy(self, full_name: str, city: str, province: str, interests: list[str], birth_range: str) -> dict:
-        fallback = {
-            "display_name": full_name.split()[0],
-            "bio": self.rng.choice(BIO_TEMPLATES).format(interest=self.rng.choice(interests), city=city),
-            "search_results": self.rng.sample(SEARCH_RESULT_SNIPPETS, k=3),
-            "post_samples": [
-                self.rng.choice(POST_TEMPLATES).format(city=city, interest=self.rng.choice(interests), tagline="#catatan"),
-                self.rng.choice(POST_TEMPLATES).format(city=city, interest=self.rng.choice(interests), tagline="#update"),
-                self.rng.choice(POST_TEMPLATES).format(city=city, interest=self.rng.choice(interests), tagline="#komunitas"),
-            ],
-        }
-        return self._openai_json(
-            system_prompt=(
-                "You create realistic Indonesian persona copy for product testing. "
-                "Return compact JSON with keys display_name, bio, search_results, post_samples. "
-                "Do not mention testing, synthetic, simulation, mock, or fictional framing."
-            ),
-            user_prompt=(
-                f"Name: {full_name}\n"
-                f"City: {city}\nProvince: {province}\n"
-                f"Interest tags: {', '.join(interests)}\n"
-                f"Birth year range: {birth_range}\n"
-                "Write natural everyday Indonesian. search_results and post_samples should each contain 3 short strings."
-            ),
-            fallback=fallback,
-        )
+    def _buat_nama_tampil(self, nama_lengkap: str) -> str:
+        token = nama_lengkap.split()
+        if self.rng.random() < 0.5:
+            return token[0]
+        elif self.rng.random() < 0.3:
+            return " ".join(token[:2])
+        return nama_lengkap
 
-    def _case_copy(self, case_key: str, city: str, province: str) -> dict:
-        fallback_map = {
-            "warehouse_fire": {
-                "summary": "Data lapangan memperlihatkan ledakan awal, narasi seragam, dan sinyal kehadiran bersama sebelum kejadian.",
-                "analysis": "Pola ini masih indikatif, tetapi cukup kuat untuk diuji sebagai koordinasi terorganisir.",
-                "recommendations": [
-                    "Bandingkan check-in lokasi dengan data posting.",
-                    "Uji ulang akun penghubung dan pola waktu posting.",
-                    "Kelompokkan saksi, narasi, dan edge jaringan per window waktu.",
-                ],
-            },
-            "suspicious_funding": {
-                "summary": "Transaksi kecil berulang, overlap perangkat, dan pertemuan terbatas memberi sinyal koordinasi finansial.",
-                "analysis": "Belum konklusif, namun pola transfer dan lokasi mengarah pada hubungan yang perlu diprioritaskan.",
-                "recommendations": [
-                    "Uji graf transfer terhadap graf pertemanan.",
-                    "Bandingkan device overlap dengan meeting point.",
-                    "Prioritaskan akun yang muncul lintas kasus.",
-                ],
-            },
-            "propaganda": {
-                "summary": "Satu sumber narasi diikuti amplifikasi cepat dari sejumlah akun dengan wording berdekatan.",
-                "analysis": "Pola waktu dan kemiripan pesan mengindikasikan koordinasi narasi, meski belum bersifat final.",
-                "recommendations": [
-                    "Kelompokkan posting berdasarkan similarity dan timestamp.",
-                    "Pisahkan akun baru dan akun lama.",
-                    "Bandingkan overlap dengan sinyal pendanaan dan lokasi.",
-                ],
-            },
-        }
-        fallback = fallback_map[case_key]
-        return self._openai_json(
-            system_prompt=(
-                "You write concise Indonesian intelligence-style summaries for an internal analytics product. "
-                "Return JSON with keys summary, analysis, recommendations. "
-                "Do not mention synthetic, mock, simulation, fictional, or testing."
-            ),
-            user_prompt=(
-                f"Case: {case_key}\nCity: {city}\nProvince: {province}\n"
-                "Tone: cautious, analytical, non-final. recommendations must contain 3 short Indonesian strings."
-            ),
-            fallback=fallback,
-        )
-
-    def _assign_social_clusters(self, count: int) -> dict:
-        indices = list(range(count))
-        self.rng.shuffle(indices)
-        cluster_count = 3 if count < 150 else 4
-        cursor = 0
-        clusters = []
-        for cluster_idx in range(cluster_count):
-            size = min(max(6, count // 18), 12)
-            if cursor + size > len(indices):
-                size = max(4, len(indices) - cursor)
-            if size <= 0:
-                break
-            members = indices[cursor : cursor + size]
-            cursor += size
-            clusters.append({"cluster_id": f"cluster-{cluster_idx + 1}", "member_indices": members})
-        bridges = []
-        if len(clusters) >= 2 and cursor < len(indices):
-            bridge_count = min(2, len(indices) - cursor)
-            for bridge_idx in range(bridge_count):
-                index = indices[cursor + bridge_idx]
-                linked = self.rng.sample([cluster["cluster_id"] for cluster in clusters], k=2)
-                bridges.append({"index": index, "cluster_ids": linked})
-        return {"clusters": clusters, "bridges": bridges}
-
-    def _build_profile_locations(self, profile: dict, cluster: dict, meeting_points: list[dict]) -> list[dict]:
-        entries = [
-            {
-                "location_id": rand_id("loc"),
-                "profile_id": profile["profile_id"],
-                "location_type": "home_base",
-                "label": f"Area tinggal {cluster['city']}",
-                "city": cluster["city"],
-                "province": cluster["province"],
-                "latitude": profile["latitude"],
-                "longitude": profile["longitude"],
-                "observed_at": profile["created_at"],
-                "confidence": 0.88,
-            }
-        ]
-        matching_points = [point for point in meeting_points if point["city"] == cluster["city"]]
-        self.rng.shuffle(matching_points)
-        for point in matching_points[: self.rng.randint(1, 2)]:
-            entries.append(
-                {
-                    "location_id": rand_id("loc"),
-                    "profile_id": profile["profile_id"],
-                    "location_type": "frequent_spot",
-                    "meeting_point_id": point["meeting_point_id"],
-                    "label": point["label"],
-                    "city": point["city"],
-                    "province": point["province"],
-                    "latitude": point["latitude"],
-                    "longitude": point["longitude"],
-                    "observed_at": profile["generated_at"],
-                    "confidence": round(self.rng.uniform(0.55, 0.83), 2),
-                }
-            )
-        return entries
-
-    def _build_accounts(self, profile: dict, interests: list[str]) -> list[dict]:
-        now = datetime.now(INDONESIA_TZ)
-        account_count = self.rng.randint(2, 4)
-        selected_platforms = self.rng.sample(PLATFORMS, k=account_count)
-        accounts = []
-        for platform in selected_platforms:
-            username = build_username(self.rng, profile["full_name"])
-            created_at = now - timedelta(days=self.rng.randint(7, 1600))
-            accounts.append(
-                {
-                    "account_id": rand_id("acct"),
-                    "profile_id": profile["profile_id"],
-                    "platform": platform,
-                    "username": username,
-                    "profile_url": f"https://social.local/{platform}/{username}",
-                    "created_at": dt_to_iso(created_at),
-                    "followers_count": self.rng.randint(20, 8500),
-                    "following_count": self.rng.randint(15, 2200),
-                    "post_count": self.rng.randint(8, 420),
-                    "verified_status": self.rng.random() < 0.03,
-                    "last_active_at": dt_to_iso(now - timedelta(hours=self.rng.randint(1, 240))),
-                    "interest_hint": self.rng.choice(interests),
-                }
-            )
-        return accounts
-
-    def _build_photos(self, profile: dict, cluster: dict) -> list[dict]:
-        photos = []
-        for _ in range(self.rng.randint(1, 3)):
-            lat, lon = random_point(self.rng, profile["latitude"], profile["longitude"], 2.0)
-            photos.append(
-                {
-                    "photo_id": rand_id("photo"),
-                    "profile_id": profile["profile_id"],
-                    "caption": self.rng.choice(
-                        [
-                            f"Sudut lain dari {cluster['city']}.",
-                            "Dokumentasi kegiatan harian.",
-                            "Lagi keliling sebentar sambil cek suasana.",
-                            "Arsip foto kegiatan.",
-                        ]
-                    ),
-                    "taken_at": dt_to_iso(datetime.now(INDONESIA_TZ) - timedelta(days=self.rng.randint(1, 600))),
-                    "city": cluster["city"],
-                    "province": cluster["province"],
+    def _bangun_titik_pertemuan(self) -> list[dict]:
+        titik = []
+        for klaster in KLASTER_KOTA:
+            for tipe in TIPE_TITIK_PERTEMUAN:
+                lat, lon = titik_acak(self.rng, klaster["lat"], klaster["lon"], min(klaster["radius_km"], 3.0))
+                id_titik = f"pertemuan-{slugify(klaster['kota'])}-{tipe}"
+                titik.append({
+                    "id_titik_pertemuan": id_titik,
+                    "kota": klaster["kota"],
+                    "provinsi": klaster["provinsi"],
+                    "tipe": tipe,
+                    "label": f"{klaster['kota']} {tipe.replace('_', ' ')}",
                     "latitude": lat,
                     "longitude": lon,
-                    "content_type": self.rng.choice(["street", "selfie", "group", "food", "event"]),
-                }
-            )
-        return photos
+                })
+        return titik
 
-    def _build_social_graph(self, profiles: list[dict], cluster_membership: dict) -> tuple[list, list]:
-        friends = []
-        network = []
-        profiles_by_index = {idx: profile for idx, profile in enumerate(profiles)}
-        existing_pairs = set()
-
-        for cluster in cluster_membership["clusters"]:
-            members = [profiles_by_index[idx] for idx in cluster["member_indices"]]
-            for i, left in enumerate(members):
-                for right in members[i + 1 :]:
-                    if self.rng.random() > 0.42:
-                        continue
-                    pair = tuple(sorted((left["profile_id"], right["profile_id"])))
-                    if pair in existing_pairs:
-                        continue
-                    existing_pairs.add(pair)
-                    since = dt_to_iso(datetime.now(INDONESIA_TZ) - timedelta(days=self.rng.randint(90, 1200)))
-                    friends.append(
-                        {
-                            "friendship_id": rand_id("fr"),
-                            "profile_a": pair[0],
-                            "profile_b": pair[1],
-                            "strength": round(self.rng.uniform(0.52, 0.94), 2),
-                            "cluster_id": cluster["cluster_id"],
-                            "since": since,
-                        }
-                    )
-                    network.append(
-                        {
-                            "edge_id": rand_id("edge"),
-                            "source_profile_id": pair[0],
-                            "target_profile_id": pair[1],
-                            "edge_type": "social_connection",
-                            "weight": round(self.rng.uniform(0.5, 0.95), 2),
-                            "cluster_id": cluster["cluster_id"],
-                        }
-                    )
-
-        for bridge in cluster_membership["bridges"]:
-            bridge_profile = profiles_by_index[bridge["index"]]
-            for cluster_id in bridge["cluster_ids"]:
-                cluster = next(item for item in cluster_membership["clusters"] if item["cluster_id"] == cluster_id)
-                members = [profiles_by_index[idx] for idx in cluster["member_indices"]]
-                for target in self.rng.sample(members, k=min(4, len(members))):
-                    pair = tuple(sorted((bridge_profile["profile_id"], target["profile_id"])))
-                    if pair in existing_pairs:
-                        continue
-                    existing_pairs.add(pair)
-                    friends.append(
-                        {
-                            "friendship_id": rand_id("fr"),
-                            "profile_a": pair[0],
-                            "profile_b": pair[1],
-                            "strength": round(self.rng.uniform(0.61, 0.97), 2),
-                            "cluster_id": cluster_id,
-                            "since": dt_to_iso(datetime.now(INDONESIA_TZ) - timedelta(days=self.rng.randint(60, 800))),
-                            "is_bridge": True,
-                        }
-                    )
-                    network.append(
-                        {
-                            "edge_id": rand_id("edge"),
-                            "source_profile_id": bridge_profile["profile_id"],
-                            "target_profile_id": target["profile_id"],
-                            "edge_type": "bridge_connection",
-                            "weight": round(self.rng.uniform(0.62, 0.98), 2),
-                            "cluster_id": cluster_id,
-                        }
-                    )
-
-        non_cluster_profiles = [p for p in profiles if not p["cluster_ids"]]
-        for _ in range(max(3, len(profiles) // 35)):
-            if len(non_cluster_profiles) < 2:
+    def _tetapkan_klaster_sosial(self, jumlah: int) -> dict:
+        indeks = list(range(jumlah))
+        self.rng.shuffle(indeks)
+        jumlah_klaster = 3 if jumlah < 150 else (5 if jumlah < 500 else 8)
+        kursor = 0
+        klaster = []
+        for i_klaster in range(jumlah_klaster):
+            ukuran = min(max(6, jumlah // 20), 15)
+            if kursor + ukuran > len(indeks):
+                ukuran = max(4, len(indeks) - kursor)
+            if ukuran <= 0:
                 break
-            left, right = self.rng.sample(non_cluster_profiles, 2)
-            if left["city"] != right["city"] and self.rng.random() < 0.7:
-                continue
-            pair = tuple(sorted((left["profile_id"], right["profile_id"])))
-            if pair in existing_pairs:
-                continue
-            existing_pairs.add(pair)
-            friends.append(
-                {
-                    "friendship_id": rand_id("fr"),
-                    "profile_a": pair[0],
-                    "profile_b": pair[1],
-                    "strength": round(self.rng.uniform(0.22, 0.55), 2),
-                    "cluster_id": None,
-                    "since": dt_to_iso(datetime.now(INDONESIA_TZ) - timedelta(days=self.rng.randint(30, 500))),
-                }
-            )
-            network.append(
-                {
-                    "edge_id": rand_id("edge"),
-                    "source_profile_id": pair[0],
-                    "target_profile_id": pair[1],
-                    "edge_type": "light_connection",
-                    "weight": round(self.rng.uniform(0.2, 0.45), 2),
-                }
-            )
-        return friends, network
+            anggota = indeks[kursor : kursor + ukuran]
+            kursor += ukuran
+            klaster.append({"id_klaster": f"klaster-{i_klaster + 1}", "indeks_anggota": anggota})
+        jembatan = []
+        if len(klaster) >= 2 and kursor < len(indeks):
+            jumlah_jembatan = min(3, len(indeks) - kursor)
+            for i_jembatan in range(jumlah_jembatan):
+                indeks_j = indeks[kursor + i_jembatan]
+                terhubung = self.rng.sample([k["id_klaster"] for k in klaster], k=2)
+                jembatan.append({"indeks": indeks_j, "id_klaster": terhubung})
+        return {"klaster": klaster, "jembatan": jembatan}
 
-    def _build_baseline_posts(self, profiles: list[dict], accounts_by_profile: dict[str, list], preferences: list[dict]) -> list[dict]:
-        pref_map = {item["profile_id"]: item for item in preferences}
-        posts = []
-        now = datetime.now(INDONESIA_TZ)
-        for profile in profiles:
-            accounts = accounts_by_profile.get(profile["profile_id"], [])
-            if not accounts:
-                continue
-            pref = pref_map[profile["profile_id"]]
-            seeded_posts = pref.get("copy_seed", {}).get("post_samples", [])
-            count = self.rng.randint(5, 12)
-            for idx in range(count):
-                account = self.rng.choice(accounts)
-                created_at = random_time_between(self.rng, now - timedelta(days=365), now - timedelta(hours=4))
-                interest = self.rng.choice(pref["interests"])
-                content = seeded_posts[idx % len(seeded_posts)] if seeded_posts else self.rng.choice(POST_TEMPLATES).format(
-                    city=profile["city"],
-                    interest=interest,
-                    tagline=self.rng.choice(["#catatan", "#harian", "#komunitas", "#update", "#local"]),
-                )
-                posts.append(
-                    {
-                        "post_id": rand_id("post"),
-                        "profile_id": profile["profile_id"],
-                        "account_id": account["account_id"],
-                        "platform": account["platform"],
-                        "content": content,
-                        "timestamp": dt_to_iso(created_at),
-                        "city": profile["city"],
-                        "province": profile["province"],
-                        "latitude": profile["latitude"],
-                        "longitude": profile["longitude"],
-                        "content_type": self.rng.choice(["text", "image", "comment", "repost"]),
-                        "engagement": {
-                            "likes": self.rng.randint(0, 250),
-                            "comments": self.rng.randint(0, 80),
-                            "shares": self.rng.randint(0, 45),
-                        },
-                        "hashtags": self.rng.sample(
-                            ["#lokal", "#malam", "#jalan", "#update", "#komunitas", "#fokus"],
-                            k=self.rng.randint(1, 3),
-                        ),
-                        "keywords": self.rng.sample(pref["interests"], k=min(2, len(pref["interests"]))),
-                        "mention_refs": [],
-                        "reply_to_post_id": None,
-                        "repost_of_post_id": None,
-                        "source_type": "organic",
-                        "scenario_refs": [],
-                    }
-                )
-        return posts
+    def _bangun_lokasi_profil(self, profil: dict, klaster: dict, titik_pertemuan: list[dict]) -> list[dict]:
+        entri = [{
+            "id_lokasi": id_acak("lok"),
+            "id_profil": profil["id_profil"],
+            "tipe_lokasi": "basis_rumah",
+            "label": f"Area tinggal {klaster['kota']}",
+            "kota": klaster["kota"],
+            "provinsi": klaster["provinsi"],
+            "latitude": profil["latitude"],
+            "longitude": profil["longitude"],
+            "diamati_pada": profil["dibuat_pada"],
+            "kepercayaan": 0.88,
+        }]
+        titik_cocok = [t for t in titik_pertemuan if t["kota"] == klaster["kota"]]
+        self.rng.shuffle(titik_cocok)
+        for titik in titik_cocok[: self.rng.randint(1, 3)]:
+            entri.append({
+                "id_lokasi": id_acak("lok"),
+                "id_profil": profil["id_profil"],
+                "tipe_lokasi": "spot_sering",
+                "id_titik_pertemuan": titik["id_titik_pertemuan"],
+                "label": titik["label"],
+                "kota": titik["kota"],
+                "provinsi": titik["provinsi"],
+                "latitude": titik["latitude"],
+                "longitude": titik["longitude"],
+                "diamati_pada": profil["digenerate_pada"],
+                "kepercayaan": round(self.rng.uniform(0.55, 0.83), 2),
+            })
+        return entri
 
-    def _build_extracted_profile(
+    def _bangun_akun(self, profil: dict, minat: list[str]) -> list[dict]:
+        sekarang = datetime.now(ZONA_INDONESIA)
+        jumlah_akun = self.rng.randint(2, 5)
+        platform_dipilih = self.rng.sample(PLATFORM_SOSIAL, k=min(jumlah_akun, len(PLATFORM_SOSIAL)))
+        akun = []
+        for platform in platform_dipilih:
+            username = buat_username(self.rng, profil["nama_lengkap"])
+            dibuat = sekarang - timedelta(days=self.rng.randint(7, 1800))
+            akun.append({
+                "id_akun": id_acak("akun"),
+                "id_profil": profil["id_profil"],
+                "platform": platform,
+                "username": username,
+                "url_profil": f"https://social.local/{platform}/{username}",
+                "dibuat_pada": dt_ke_iso(dibuat),
+                "jumlah_pengikut": self.rng.randint(20, 12000),
+                "jumlah_mengikuti": self.rng.randint(15, 3000),
+                "jumlah_posting": self.rng.randint(5, 600),
+                "status_terverifikasi": self.rng.random() < 0.03,
+                "terakhir_aktif_pada": dt_ke_iso(sekarang - timedelta(hours=self.rng.randint(1, 360))),
+                "petunjuk_minat": self.rng.choice(minat),
+            })
+        return akun
+
+    def _bangun_foto(self, profil: dict, klaster: dict) -> list[dict]:
+        foto = []
+        for _ in range(self.rng.randint(1, 5)):
+            lat, lon = titik_acak(self.rng, profil["latitude"], profil["longitude"], 2.0)
+            foto.append({
+                "id_foto": id_acak("foto"),
+                "id_profil": profil["id_profil"],
+                "keterangan": self.rng.choice([
+                    f"Sudut lain dari {klaster['kota']}.",
+                    "Dokumentasi kegiatan harian.",
+                    "Lagi keliling sebentar sambil cek suasana.",
+                    "Arsip foto kegiatan.",
+                    f"Momen sore di sekitar {klaster['kota']}.",
+                    "Kegiatan komunitas kemarin.",
+                    "Ngumpul bareng teman-teman.",
+                    "Spot baru yang baru ditemukan.",
+                ]),
+                "diambil_pada": dt_ke_iso(datetime.now(ZONA_INDONESIA) - timedelta(days=self.rng.randint(1, 800))),
+                "kota": klaster["kota"],
+                "provinsi": klaster["provinsi"],
+                "latitude": lat,
+                "longitude": lon,
+                "tipe_konten": self.rng.choice(["jalanan", "selfie", "kelompok", "makanan", "acara", "panorama"]),
+            })
+        return foto
+
+    def _bangun_graf_sosial(self, profil: list[dict], keanggotaan_klaster: dict) -> tuple[list, list]:
+        pertemanan = []
+        jaringan = []
+        profil_per_indeks = {idx: profil for idx, profil in enumerate(profil)}
+        pasangan_ada = set()
+
+        for klaster in keanggotaan_klaster["klaster"]:
+            anggota = [profil_per_indeks[idx] for idx in klaster["indeks_anggota"]]
+            for i, kiri in enumerate(anggota):
+                for kanan in anggota[i + 1:]:
+                    if self.rng.random() > 0.45:
+                        continue
+                    pasangan = tuple(sorted((kiri["id_profil"], kanan["id_profil"])))
+                    if pasangan in pasangan_ada:
+                        continue
+                    pasangan_ada.add(pasangan)
+                    sejak = dt_ke_iso(datetime.now(ZONA_INDONESIA) - timedelta(days=self.rng.randint(90, 1500)))
+                    pertemanan.append({
+                        "id_pertemanan": id_acak("pert"),
+                        "profil_a": pasangan[0],
+                        "profil_b": pasangan[1],
+                        "kekuatan": round(self.rng.uniform(0.52, 0.94), 2),
+                        "id_klaster": klaster["id_klaster"],
+                        "sejak": sejak,
+                    })
+                    jaringan.append({
+                        "id_edge": id_acak("edge"),
+                        "id_profil_sumber": pasangan[0],
+                        "id_profil_tujuan": pasangan[1],
+                        "tipe_edge": "koneksi_sosial",
+                        "bobot": round(self.rng.uniform(0.5, 0.95), 2),
+                        "id_klaster": klaster["id_klaster"],
+                    })
+
+        for jembatan in keanggotaan_klaster["jembatan"]:
+            profil_jembatan = profil_per_indeks[jembatan["indeks"]]
+            for id_klaster in jembatan["id_klaster"]:
+                klaster = next(k for k in keanggotaan_klaster["klaster"] if k["id_klaster"] == id_klaster)
+                anggota = [profil_per_indeks[idx] for idx in klaster["indeks_anggota"]]
+                for target in self.rng.sample(anggota, k=min(5, len(anggota))):
+                    pasangan = tuple(sorted((profil_jembatan["id_profil"], target["id_profil"])))
+                    if pasangan in pasangan_ada:
+                        continue
+                    pasangan_ada.add(pasangan)
+                    pertemanan.append({
+                        "id_pertemanan": id_acak("pert"),
+                        "profil_a": pasangan[0],
+                        "profil_b": pasangan[1],
+                        "kekuatan": round(self.rng.uniform(0.61, 0.97), 2),
+                        "id_klaster": id_klaster,
+                        "sejak": dt_ke_iso(datetime.now(ZONA_INDONESIA) - timedelta(days=self.rng.randint(60, 900))),
+                        "adalah_jembatan": True,
+                    })
+                    jaringan.append({
+                        "id_edge": id_acak("edge"),
+                        "id_profil_sumber": profil_jembatan["id_profil"],
+                        "id_profil_tujuan": target["id_profil"],
+                        "tipe_edge": "koneksi_jembatan",
+                        "bobot": round(self.rng.uniform(0.62, 0.98), 2),
+                        "id_klaster": id_klaster,
+                    })
+
+        profil_non_klaster = [p for p in profil if not p["id_klaster"]]
+        for _ in range(max(3, len(profil) // 30)):
+            if len(profil_non_klaster) < 2:
+                break
+            kiri, kanan = self.rng.sample(profil_non_klaster, 2)
+            if kiri["kota"] != kanan["kota"] and self.rng.random() < 0.7:
+                continue
+            pasangan = tuple(sorted((kiri["id_profil"], kanan["id_profil"])))
+            if pasangan in pasangan_ada:
+                continue
+            pasangan_ada.add(pasangan)
+            pertemanan.append({
+                "id_pertemanan": id_acak("pert"),
+                "profil_a": pasangan[0],
+                "profil_b": pasangan[1],
+                "kekuatan": round(self.rng.uniform(0.22, 0.55), 2),
+                "id_klaster": None,
+                "sejak": dt_ke_iso(datetime.now(ZONA_INDONESIA) - timedelta(days=self.rng.randint(30, 600))),
+            })
+            jaringan.append({
+                "id_edge": id_acak("edge"),
+                "id_profil_sumber": pasangan[0],
+                "id_profil_tujuan": pasangan[1],
+                "tipe_edge": "koneksi_ringan",
+                "bobot": round(self.rng.uniform(0.2, 0.45), 2),
+            })
+
+        return pertemanan, jaringan
+
+    def _bangun_postingan_dasar(
         self,
-        profile: dict,
-        contacts: dict,
-        preferences: dict,
-        accounts: list[dict],
-        friends: list[dict],
-        photos: list[dict],
-        posts: list[dict],
-        locations: list[dict],
-    ) -> dict:
-        related_locations = [item for item in locations if item["profile_id"] == profile["profile_id"]][:5]
-        related_friends = [
-            item for item in friends if profile["profile_id"] in (item["profile_a"], item["profile_b"])
-        ][:8]
-        search_results = []
-        for idx in range(self.rng.randint(2, 4)):
-            search_results.append(
-                {
-                    "rank": idx + 1,
-                    "source": self.rng.choice(["search", "forum", "social"]),
-                    "title": f"Hasil pencarian untuk {profile['display_name']}",
-                    "snippet": self.rng.choice(preferences.get("copy_seed", {}).get("search_results", SEARCH_RESULT_SNIPPETS)),
-                }
-            )
-        return {
-            "personal_information": {
-                "full_name": profile["full_name"],
-                "display_name": profile["display_name"],
-                "gender": profile["gender"],
-                "birth_year_range": profile["birth_year_range"],
-                "country_code": profile["country_code"],
-            },
-            "locations": related_locations,
-            "accounts": [
-                {
-                    "platform": account["platform"],
-                    "username": account["username"],
-                    "created_at": account["created_at"],
-                    "last_active_at": account["last_active_at"],
-                }
-                for account in accounts
-            ],
-            "statistics": {
-                "account_count": len(accounts),
-                "friend_count": len(related_friends),
-                "photo_count": len(photos),
-                "post_count": len(posts),
-            },
-            "friends": related_friends,
-            "photos": photos[:6],
-            "posts": posts[:10],
-            "web_search_results": search_results,
-            "preferences": preferences,
-            "contact_info": contacts,
-            "synopsis": f"{profile['display_name']} berbasis di {profile['city']} dengan minat utama {', '.join(preferences['interests'][:2])}.",
-            "case_links": profile.get("case_links", []),
-        }
-
-    def _group_profiles_by_cluster(self, profiles: list[dict]) -> dict[str, list[str]]:
-        grouped: dict[str, list[str]] = {}
-        for profile in profiles:
-            for cluster_id in profile["cluster_ids"]:
-                grouped.setdefault(cluster_id, []).append(profile["profile_id"])
-        return grouped
-
-    def _pick_case_actors(self, profiles: list[dict], social_clusters: dict[str, list[str]]) -> dict[str, list[str]]:
-        all_profile_ids = [profile["profile_id"] for profile in profiles]
-        cluster_ids = sorted(social_clusters)
-        actor_pool = {
-            "overlap": self.rng.sample(all_profile_ids, k=min(5, len(all_profile_ids))),
-            "isolated_noise": [profile["profile_id"] for profile in profiles if not profile["cluster_ids"]][: max(8, len(profiles) // 15)],
-        }
-        if cluster_ids:
-            actor_pool["cluster_a"] = social_clusters[cluster_ids[0]][:]
-            actor_pool["cluster_b"] = social_clusters[cluster_ids[1]][:] if len(cluster_ids) > 1 else social_clusters[cluster_ids[0]][:]
-            actor_pool["cluster_c"] = social_clusters[cluster_ids[2]][:] if len(cluster_ids) > 2 else social_clusters[cluster_ids[0]][:]
-        else:
-            actor_pool["cluster_a"] = self.rng.sample(all_profile_ids, k=min(8, len(all_profile_ids)))
-            actor_pool["cluster_b"] = self.rng.sample(all_profile_ids, k=min(8, len(all_profile_ids)))
-            actor_pool["cluster_c"] = self.rng.sample(all_profile_ids, k=min(8, len(all_profile_ids)))
-        return actor_pool
-
-    def _pick_meeting_point(self, meeting_points: list[dict], city: str, point_type: str) -> dict:
-        matches = [item for item in meeting_points if item["city"] == city and item["type"] == point_type]
-        return self.rng.choice(matches)
-
-    def _append_case_checkins(
-        self,
-        profile_ids: list[str],
-        meeting_point: dict,
-        incident_at: datetime,
-        case_id: str,
-    ) -> tuple[list, list]:
-        location_entries = []
-        network_entries = []
-        for profile_id in profile_ids:
-            observed_at = incident_at - timedelta(hours=self.rng.randint(4, 56), minutes=self.rng.randint(0, 55))
-            location_entries.append(
-                {
-                    "location_id": rand_id("loc"),
-                    "profile_id": profile_id,
-                    "location_type": "case_checkin",
-                    "meeting_point_id": meeting_point["meeting_point_id"],
-                    "label": meeting_point["label"],
-                    "city": meeting_point["city"],
-                    "province": meeting_point["province"],
-                    "latitude": meeting_point["latitude"],
-                    "longitude": meeting_point["longitude"],
-                    "observed_at": dt_to_iso(observed_at),
-                    "confidence": round(self.rng.uniform(0.64, 0.94), 2),
-                    "case_id": case_id,
-                }
-            )
-        for idx, left in enumerate(profile_ids):
-            for right in profile_ids[idx + 1 :]:
-                if self.rng.random() > 0.33:
-                    continue
-                network_entries.append(
-                    {
-                        "edge_id": rand_id("edge"),
-                        "source_profile_id": left,
-                        "target_profile_id": right,
-                        "edge_type": "shared_meeting_point",
-                        "weight": round(self.rng.uniform(0.55, 0.9), 2),
-                        "meeting_point_id": meeting_point["meeting_point_id"],
-                        "case_id": case_id,
-                    }
+        profil: list[dict],
+        akun_per_profil: dict[str, list],
+        preferensi: list[dict],
+    ) -> list[dict]:
+        pref_map = {item["id_profil"]: item for item in preferensi}
+        postingan = []
+        sekarang = datetime.now(ZONA_INDONESIA)
+        daftar_tagline = [
+            "#catatan", "#harian", "#komunitas", "#update", "#lokal",
+            "#berbagi", "#santai", "#ngobrol", "#info", "#share",
+        ]
+        for profil_item in profil:
+            akun = akun_per_profil.get(profil_item["id_profil"], [])
+            if not akun:
+                continue
+            pref = pref_map[profil_item["id_profil"]]
+            jumlah = self.rng.randint(6, 18)
+            for _ in range(jumlah):
+                akun_dipilih = self.rng.choice(akun)
+                dibuat = waktu_acak_antara(self.rng, sekarang - timedelta(days=365), sekarang - timedelta(hours=4))
+                minat = self.rng.choice(pref["minat"])
+                konten = pilih_template_posting(
+                    self.rng,
+                    minat,
+                    profil_item["kota"],
+                    self.rng.choice(daftar_tagline),
                 )
-        return location_entries, network_entries
-
-    def _build_warehouse_fire_case(self, bundle: Bundle, case_config: dict, accounts_by_profile: dict, actor_pool: dict, meeting_points: list[dict]) -> dict:
-        case_id = case_config["case_id"]
-        incident_at = case_config["incident_at"]
-        cluster_members = actor_pool["cluster_a"][:]
-        bridge_candidates = [profile["profile_id"] for profile in bundle.profiles if len(profile["cluster_ids"]) > 1]
-        self.rng.shuffle(cluster_members)
-        actors = list(dict.fromkeys(cluster_members[:8] + bridge_candidates[:2] + actor_pool["overlap"][:2]))
-        meeting_point = self._pick_meeting_point(meeting_points, case_config["city"], case_config["meeting_type"])
-
-        posts = []
-        for idx, profile_id in enumerate(actors[:10]):
-            account = self.rng.choice(accounts_by_profile[profile_id])
-            if idx == 0:
-                content = "Akan ada kejutan besar di kawasan industri itu. #pengingat"
-                timestamp = incident_at - timedelta(days=2, hours=1)
-            elif idx < 4:
-                content = self.rng.choice(
-                    [
-                        "Baru aja denger ledakan sebelum api gede naik. #bekasi #malam",
-                        "Ini bukan kebakaran biasa, tadi ada bunyi keras duluan.",
-                        "Asap hitamnya tebal banget, kayak ada bahan lain ikut kebakar.",
-                    ]
-                )
-                timestamp = incident_at + timedelta(minutes=self.rng.randint(5, 80))
-            else:
-                content = self.rng.choice(
-                    [
-                        "Info awal katanya korsleting, tapi saksi pada beda cerita.",
-                        "Motor sempat keluar dari area sebelum api membesar.",
-                        "Timeline rame, banyak yang bilang ada bau bahan kimia.",
-                    ]
-                )
-                timestamp = incident_at + timedelta(minutes=self.rng.randint(20, 240))
-            posts.append(
-                {
-                    "post_id": rand_id("post"),
-                    "profile_id": profile_id,
-                    "account_id": account["account_id"],
-                    "platform": account["platform"],
-                    "content": content,
-                    "timestamp": dt_to_iso(timestamp),
-                    "city": case_config["city"],
-                    "province": case_config["province"],
-                    "latitude": meeting_point["latitude"],
-                    "longitude": meeting_point["longitude"],
-                    "content_type": self.rng.choice(["text", "image", "video", "comment"]),
+                postingan.append({
+                    "id_posting": id_acak("post"),
+                    "id_profil": profil_item["id_profil"],
+                    "id_akun": akun_dipilih["id_akun"],
+                    "platform": akun_dipilih["platform"],
+                    "konten": konten,
+                    "timestamp": dt_ke_iso(dibuat),
+                    "kota": profil_item["kota"],
+                    "provinsi": profil_item["provinsi"],
+                    "latitude": profil_item["latitude"],
+                    "longitude": profil_item["longitude"],
+                    "tipe_konten": self.rng.choice(["teks", "gambar", "komentar", "repost", "video_pendek"]),
                     "engagement": {
-                        "likes": self.rng.randint(4, 460),
-                        "comments": self.rng.randint(0, 140),
-                        "shares": self.rng.randint(0, 120),
+                        "suka": self.rng.randint(0, 350),
+                        "komentar": self.rng.randint(0, 100),
+                        "bagikan": self.rng.randint(0, 60),
                     },
-                    "hashtags": ["#gudang", "#kebakaran", "#industri"],
-                    "keywords": ["ledakan", "bau_kimia", "motor_mencurigakan"],
-                    "mention_refs": [],
-                    "reply_to_post_id": None,
-                    "repost_of_post_id": None,
-                    "source_type": "case_signal",
-                    "scenario_refs": [case_id],
-                }
-            )
+                    "hashtag": self.rng.sample(
+                        ["#lokal", "#malam", "#jalan", "#update", "#komunitas", "#fokus", "#santai", "#info"],
+                        k=self.rng.randint(1, 4),
+                    ),
+                    "kata_kunci": self.rng.sample(pref["minat"], k=min(2, len(pref["minat"]))),
+                    "referensi_mention": [],
+                    "balas_ke_id_posting": None,
+                    "repost_dari_id_posting": None,
+                    "tipe_sumber": "organik",
+                    "referensi_skenario": [],
+                })
+        return postingan
 
-        locations, meeting_network = self._append_case_checkins(actors[:7], meeting_point, incident_at, case_id)
-        entities = [
-            {"case_id": case_id, "entity_type": "location", "value": "kawasan industri Bekasi", "count": 132},
-            {"case_id": case_id, "entity_type": "keyword", "value": "ledakan", "count": 188},
-            {"case_id": case_id, "entity_type": "keyword", "value": "bau kimia", "count": 87},
-            {"case_id": case_id, "entity_type": "keyword", "value": "motor mencurigakan", "count": 53},
-            {"case_id": case_id, "entity_type": "time_anchor", "value": "02:30 WIB", "count": 241},
-        ]
-        alerts = [
-            {
-                "alert_id": rand_id("alert"),
-                "case_id": case_id,
-                "severity": "high",
-                "signal_type": "pre_event_post",
-                "description": "Terdapat post 2 hari sebelum kejadian yang menyebut kejutan besar di kawasan industri.",
-                "confidence": 0.82,
+    def _bangun_profil_terekstrak(
+        self,
+        profil: dict,
+        kontak: dict,
+        preferensi: dict,
+        akun: list[dict],
+        pertemanan: list[dict],
+        foto: list[dict],
+        postingan: list[dict],
+        lokasi: list[dict],
+    ) -> dict:
+        lokasi_terkait = [item for item in lokasi if item["id_profil"] == profil["id_profil"]][:5]
+        pertemanan_terkait = [
+            item for item in pertemanan
+            if profil["id_profil"] in (item["profil_a"], item["profil_b"])
+        ][:10]
+        hasil_pencarian = []
+        for idx in range(self.rng.randint(2, 5)):
+            hasil_pencarian.append({
+                "peringkat": idx + 1,
+                "sumber": self.rng.choice(["pencarian", "forum", "sosial_media"]),
+                "judul": f"Hasil untuk {profil['nama_tampil']}",
+                "cuplikan": self.rng.choice(TEMPLATE_PENCARIAN),
+            })
+        return {
+            "informasi_pribadi": {
+                "nama_lengkap": profil["nama_lengkap"],
+                "nama_tampil": profil["nama_tampil"],
+                "jenis_kelamin": profil["jenis_kelamin"],
+                "rentang_tahun_lahir": profil["rentang_tahun_lahir"],
+                "kode_negara": profil["kode_negara"],
             },
-            {
-                "alert_id": rand_id("alert"),
-                "case_id": case_id,
-                "severity": "medium",
-                "signal_type": "copy_paste_narrative",
-                "description": "Sekelompok akun menyebarkan wording mirip soal ledakan dan bau kimia dalam rentang waktu sempit.",
-                "confidence": 0.79,
+            "lokasi": lokasi_terkait,
+            "akun": [
+                {
+                    "platform": a["platform"],
+                    "username": a["username"],
+                    "dibuat_pada": a["dibuat_pada"],
+                    "terakhir_aktif_pada": a["terakhir_aktif_pada"],
+                }
+                for a in akun
+            ],
+            "statistik": {
+                "jumlah_akun": len(akun),
+                "jumlah_teman": len(pertemanan_terkait),
+                "jumlah_foto": len(foto),
+                "jumlah_posting": len(postingan),
             },
-            {
-                "alert_id": rand_id("alert"),
-                "case_id": case_id,
-                "severity": "medium",
-                "signal_type": "co_location",
-                "description": "Beberapa profil terlihat check-in di titik logistik yang sama sebelum insiden.",
-                "confidence": 0.74,
-            },
-        ]
-        risk_score = {
-            "case_id": case_id,
-            "risk_label": "high",
-            "risk_score": 78,
-            "accident_probability": 0.58,
-            "organized_sabotage_probability": 0.42,
-            "drivers": ["ledakan_awal", "akun_sinkron", "pre_event_post", "co_location_signal"],
-            "disclaimer": "Penilaian ini indikatif dan bukan atribusi final.",
+            "pertemanan": pertemanan_terkait,
+            "foto": foto[:8],
+            "postingan": postingan[:12],
+            "hasil_pencarian_web": hasil_pencarian,
+            "preferensi": preferensi,
+            "info_kontak": kontak,
+            "sinopsis": (
+                f"{profil['nama_tampil']} berbasis di {profil['kota']} "
+                f"dengan minat utama {', '.join(preferensi['minat'][:2])}."
+            ),
+            "tautan_kasus": profil.get("tautan_kasus", []),
         }
-        report = {
-            "report_id": rand_id("rpt"),
-            "case_id": case_id,
-            "title": case_config["title"],
-            "summary": "Data crawling menunjukkan indikasi ledakan awal, narasi seragam, dan sinyal kehadiran bersama sebelum kejadian.",
-            "findings": [
+
+    # ============================================================
+    # METODE PRIVAT — KASUS
+    # ============================================================
+
+    def _kelompokkan_profil_per_klaster(self, profil: list[dict]) -> dict[str, list[str]]:
+        dikelompokkan: dict[str, list[str]] = {}
+        for p in profil:
+            for id_klaster in p["id_klaster"]:
+                dikelompokkan.setdefault(id_klaster, []).append(p["id_profil"])
+        return dikelompokkan
+
+    def _pilih_aktor_kasus(self, profil: list[dict], klaster_sosial: dict[str, list[str]]) -> dict[str, list[str]]:
+        semua_id = [p["id_profil"] for p in profil]
+        id_klaster = sorted(klaster_sosial)
+        pool = {
+            "overlap": self.rng.sample(semua_id, k=min(8, len(semua_id))),
+            "terisolasi_noise": [p["id_profil"] for p in profil if not p["id_klaster"]][: max(10, len(profil) // 12)],
+        }
+        for i, nama_pool in enumerate(["klaster_a", "klaster_b", "klaster_c"]):
+            if i < len(id_klaster):
+                pool[nama_pool] = klaster_sosial[id_klaster[i]][:]
+            else:
+                pool[nama_pool] = self.rng.sample(semua_id, k=min(10, len(semua_id)))
+        return pool
+
+    def _pilih_titik_pertemuan(self, titik_pertemuan: list[dict], kota: str, tipe: str) -> dict:
+        cocok = [t for t in titik_pertemuan if t["kota"] == kota and t["tipe"] == tipe]
+        if not cocok:
+            cocok = [t for t in titik_pertemuan if t["kota"] == kota]
+        return self.rng.choice(cocok)
+
+    def _tambah_checkin_kasus(
+        self,
+        id_profil: list[str],
+        titik_pertemuan: dict,
+        waktu_insiden: datetime,
+        id_kasus: str,
+    ) -> tuple[list, list]:
+        entri_lokasi = []
+        entri_jaringan = []
+        for pid in id_profil:
+            diamati = waktu_insiden - timedelta(hours=self.rng.randint(4, 60), minutes=self.rng.randint(0, 55))
+            entri_lokasi.append({
+                "id_lokasi": id_acak("lok"),
+                "id_profil": pid,
+                "tipe_lokasi": "checkin_kasus",
+                "id_titik_pertemuan": titik_pertemuan["id_titik_pertemuan"],
+                "label": titik_pertemuan["label"],
+                "kota": titik_pertemuan["kota"],
+                "provinsi": titik_pertemuan["provinsi"],
+                "latitude": titik_pertemuan["latitude"],
+                "longitude": titik_pertemuan["longitude"],
+                "diamati_pada": dt_ke_iso(diamati),
+                "kepercayaan": round(self.rng.uniform(0.64, 0.94), 2),
+                "id_kasus": id_kasus,
+            })
+        for i, kiri in enumerate(id_profil):
+            for kanan in id_profil[i + 1:]:
+                if self.rng.random() > 0.35:
+                    continue
+                entri_jaringan.append({
+                    "id_edge": id_acak("edge"),
+                    "id_profil_sumber": kiri,
+                    "id_profil_tujuan": kanan,
+                    "tipe_edge": "titik_pertemuan_bersama",
+                    "bobot": round(self.rng.uniform(0.55, 0.9), 2),
+                    "id_titik_pertemuan": titik_pertemuan["id_titik_pertemuan"],
+                    "id_kasus": id_kasus,
+                })
+        return entri_lokasi, entri_jaringan
+
+    def _bangun_kasus_kebakaran_gudang(
+        self, bundle: BundleData, config_kasus: dict,
+        akun_per_profil: dict, pool_aktor: dict, titik_pertemuan: list[dict]
+    ) -> dict:
+        id_kasus = config_kasus["id_kasus"]
+        waktu_insiden = config_kasus["waktu_insiden"]
+        anggota_klaster = pool_aktor["klaster_a"][:]
+        kandidat_jembatan = [p["id_profil"] for p in bundle.profil if len(p["id_klaster"]) > 1]
+        self.rng.shuffle(anggota_klaster)
+        aktor = list(dict.fromkeys(anggota_klaster[:10] + kandidat_jembatan[:3] + pool_aktor["overlap"][:3]))
+        titik = self._pilih_titik_pertemuan(titik_pertemuan, config_kasus["kota"], config_kasus["tipe_pertemuan"])
+
+        konten_posting_kasus = [
+            ("pra", "Akan ada kejutan besar di kawasan industri itu. #pengingat", -2 * 24 * 60),
+            ("pra", "Situasi logistik area industri berubah cepat malam ini.", -36 * 60),
+            ("saat", "Baru aja denger ledakan sebelum api gede naik. #bekasi #malam", 10),
+            ("saat", "Ini bukan kebakaran biasa, tadi ada bunyi keras duluan.", 18),
+            ("saat", "Asap hitamnya tebal banget, kayak ada bahan lain ikut kebakar.", 25),
+            ("saat", "Orang-orang panik, jalur keluar udah macet semua.", 40),
+            ("pasca", "Info awal katanya korsleting, tapi saksi pada beda cerita.", 60),
+            ("pasca", "Motor sempat keluar dari area sebelum api membesar.", 90),
+            ("pasca", "Timeline rame, banyak yang bilang ada bau bahan kimia.", 120),
+            ("pasca", "Beberapa saksi menyebut hal yang sama soal ledakan awal.", 150),
+            ("pasca", "Petugas masih olah TKP, belum ada keterangan resmi.", 200),
+            ("pasca", "Gudang berisi bahan-bahan yang belum jelas statusnya.", 240),
+        ]
+
+        postingan = []
+        for idx, (tipe_posting, konten, delta_menit) in enumerate(konten_posting_kasus[:len(aktor)]):
+            if idx >= len(aktor):
+                break
+            pid = aktor[idx]
+            akun = self.rng.choice(akun_per_profil[pid])
+            timestamp = waktu_insiden + timedelta(minutes=delta_menit)
+            postingan.append({
+                "id_posting": id_acak("post"),
+                "id_profil": pid,
+                "id_akun": akun["id_akun"],
+                "platform": akun["platform"],
+                "konten": konten,
+                "timestamp": dt_ke_iso(timestamp),
+                "kota": config_kasus["kota"],
+                "provinsi": config_kasus["provinsi"],
+                "latitude": titik["latitude"],
+                "longitude": titik["longitude"],
+                "tipe_konten": self.rng.choice(["teks", "gambar", "video", "komentar"]),
+                "engagement": {
+                    "suka": self.rng.randint(4, 600),
+                    "komentar": self.rng.randint(0, 180),
+                    "bagikan": self.rng.randint(0, 150),
+                },
+                "hashtag": ["#gudang", "#kebakaran", "#industri", "#bekasi"],
+                "kata_kunci": ["ledakan", "bau_kimia", "motor_mencurigakan"],
+                "referensi_mention": [],
+                "balas_ke_id_posting": None,
+                "repost_dari_id_posting": None,
+                "tipe_sumber": "sinyal_kasus",
+                "referensi_skenario": [id_kasus],
+            })
+
+        lokasi, jaringan_pertemuan = self._tambah_checkin_kasus(aktor[:9], titik, waktu_insiden, id_kasus)
+        entitas = [
+            {"id_kasus": id_kasus, "tipe_entitas": "lokasi", "nilai": "kawasan industri Bekasi", "jumlah": 132},
+            {"id_kasus": id_kasus, "tipe_entitas": "kata_kunci", "nilai": "ledakan", "jumlah": 188},
+            {"id_kasus": id_kasus, "tipe_entitas": "kata_kunci", "nilai": "bau kimia", "jumlah": 87},
+            {"id_kasus": id_kasus, "tipe_entitas": "kata_kunci", "nilai": "motor mencurigakan", "jumlah": 53},
+            {"id_kasus": id_kasus, "tipe_entitas": "jangkar_waktu", "nilai": "02:30 WIB", "jumlah": 241},
+        ]
+        peringatan = [
+            {"id_peringatan": id_acak("alert"), "id_kasus": id_kasus, "tingkat_keparahan": "tinggi", "tipe_sinyal": "posting_pra_kejadian", "deskripsi": "Post 2 hari sebelum kejadian menyebut kejutan besar di kawasan industri.", "kepercayaan": 0.82},
+            {"id_peringatan": id_acak("alert"), "id_kasus": id_kasus, "tingkat_keparahan": "menengah", "tipe_sinyal": "narasi_copy_paste", "deskripsi": "Sekelompok akun menyebarkan wording mirip soal ledakan dan bau kimia dalam rentang waktu sempit.", "kepercayaan": 0.79},
+            {"id_peringatan": id_acak("alert"), "id_kasus": id_kasus, "tingkat_keparahan": "menengah", "tipe_sinyal": "co_lokasi", "deskripsi": "Beberapa profil terlihat check-in di titik logistik yang sama sebelum insiden.", "kepercayaan": 0.74},
+        ]
+        skor_risiko = {
+            "id_kasus": id_kasus,
+            "label_risiko": "tinggi",
+            "skor_risiko": 78,
+            "probabilitas_kecelakaan": 0.58,
+            "probabilitas_sabotase_terorganisir": 0.42,
+            "pendorong": ["ledakan_awal", "akun_sinkron", "posting_pra_kejadian", "sinyal_co_lokasi"],
+            "penafian": "Penilaian ini indikatif dan bukan atribusi final.",
+        }
+        laporan = {
+            "id_laporan": id_acak("laporan"),
+            "id_kasus": id_kasus,
+            "judul": config_kasus["judul"],
+            "ringkasan": "Data crawling menunjukkan indikasi ledakan awal, narasi seragam, dan sinyal kehadiran bersama sebelum kejadian.",
+            "temuan": [
                 "Sekitar 30% mention menyebut ledakan sebelum api besar.",
                 "Sebagian akun menyebarkan narasi seragam dalam waktu hampir bersamaan.",
-                "Terdapat post pra-insiden dan sinyal shared meeting point.",
+                "Terdapat posting pra-insiden dan sinyal shared meeting point.",
             ],
-            "analysis": "Belum cukup dasar untuk atribusi final, namun pola konsisten dengan sabotase terorganisir atau koordinasi narasi pasca-insiden.",
-            "recommendations": [
+            "analisis": "Belum cukup dasar untuk atribusi final, namun pola konsisten dengan sabotase terorganisir atau koordinasi narasi pasca-insiden.",
+            "rekomendasi": [
                 "Monitor akun dan bridge account yang overlap dengan kasus lain.",
                 "Bandingkan check-in lokasi dengan data posting dan edge jaringan.",
                 "Uji kembali wording copy-paste dan kedekatan timestamp.",
             ],
-            "generated_at": now_iso(),
-            "disclaimer": "Laporan ini bersifat indikatif untuk kebutuhan analisis internal.",
+            "digenerate_pada": sekarang_iso(),
+            "penafian": "Laporan ini bersifat indikatif untuk kebutuhan analisis internal.",
         }
-        case_links = [
-            {"case_id": case_id, "profile_id": profile_id, "role": "observed_actor" if idx < 7 else "signal_account", "signal": "warehouse_fire_signal"}
-            for idx, profile_id in enumerate(actors[:10])
+        tautan_kasus = [
+            {"id_kasus": id_kasus, "id_profil": pid, "peran": "aktor_teramati" if i < 8 else "akun_sinyal", "sinyal": "sinyal_kebakaran_gudang"}
+            for i, pid in enumerate(aktor[:12])
         ]
-        case = {
-            "case_id": case_id,
-            "case_type": "warehouse_fire",
-            "title": case_config["title"],
-            "city": case_config["city"],
-            "province": case_config["province"],
-            "incident_at": dt_to_iso(incident_at),
-            "meeting_point_id": meeting_point["meeting_point_id"],
-            "actor_count": len(actors[:10]),
+        kasus = {
+            "id_kasus": id_kasus,
+            "tipe_kasus": "kebakaran_gudang",
+            "judul": config_kasus["judul"],
+            "kota": config_kasus["kota"],
+            "provinsi": config_kasus["provinsi"],
+            "waktu_insiden": dt_ke_iso(waktu_insiden),
+            "id_titik_pertemuan": titik["id_titik_pertemuan"],
+            "jumlah_aktor": len(aktor[:12]),
             "status": "monitoring",
         }
         return {
-            "case": case,
-            "posts": posts,
-            "locations": locations,
-            "network": meeting_network,
-            "crawling": self._build_warehouse_crawling(case_id, case_config, actors),
-            "entities": entities,
-            "alerts": alerts,
-            "risk_score": risk_score,
-            "report": report,
-            "case_links": case_links,
+            "kasus": kasus,
+            "postingan": postingan,
+            "lokasi": lokasi,
+            "jaringan": jaringan_pertemuan,
+            "crawling": self._bangun_crawling_kebakaran_gudang(id_kasus, config_kasus, aktor),
+            "entitas": entitas,
+            "peringatan": peringatan,
+            "skor_risiko": skor_risiko,
+            "laporan": laporan,
+            "tautan_kasus": tautan_kasus,
         }
 
-    def _build_funding_case(self, case_config: dict, accounts_by_profile: dict, actor_pool: dict, meeting_points: list[dict]) -> dict:
-        case_id = case_config["case_id"]
-        incident_at = case_config["incident_at"]
-        actors = list(dict.fromkeys(actor_pool["cluster_b"][:7] + actor_pool["overlap"][:3]))
-        meeting_point = self._pick_meeting_point(meeting_points, case_config["city"], case_config["meeting_type"])
+    def _bangun_crawling_kebakaran_gudang(self, id_kasus: str, config_kasus: dict, aktor: list[str]) -> list[dict]:
+        waktu_insiden = config_kasus["waktu_insiden"]
+        pool_konten = [
+            ("sosial_media", "twitter", "Baru aja denger ledakan sebelum kebakaran."),
+            ("sosial_media", "instagram", "Video api gede, orang-orang panik di lokasi."),
+            ("sosial_media", "tiktok", "Asap hitam tebal kelihatan dari arah gudang."),
+            ("forum", "forum", "Ini bukan kebakaran biasa, ada bau bahan kimia."),
+            ("forum", "forum", "Katanya sempat ada ancaman sebelumnya."),
+            ("berita", "portal", "Gudang terbakar, dugaan awal korsleting listrik."),
+            ("berita", "portal", "Saksi menyebut ada ledakan sebelum api membesar."),
+            ("sensor", "cuaca", "Cuaca normal, tidak ada petir di area sekitar."),
+            ("cctv", "cctv", "Terlihat motor keluar beberapa menit sebelum api besar."),
+            ("sosial_media", "facebook", "Warga sekitar sebut ada bau aneh sebelum api."),
+            ("forum", "forum", "Thread panjang soal dugaan sabotase, masih spekulasi."),
+            ("berita", "portal", "Pemadam kebakaran butuh waktu lama padamkan api."),
+        ]
+        crawling = []
+        for idx in range(600):
+            tipe_sumber, platform, konten_dasar = self.rng.choice(pool_konten)
+            varian = konten_dasar
+            if idx % 11 == 0:
+                varian = "Info masih simpang siur, bisa jadi cuma korsleting biasa."
+            elif idx % 13 == 0:
+                varian = "Posting ini copy-paste dari akun lain, konteks belum jelas."
+            elif idx % 17 == 0:
+                varian = "Ada laporan tidak resmi soal aktivitas mencurigakan sebelum insiden."
+            crawling.append({
+                "id_titik_data": id_acak("crawl"),
+                "id_kasus": id_kasus,
+                "tipe_sumber": tipe_sumber,
+                "platform": platform,
+                "referensi_profil": self.rng.choice(aktor) if self.rng.random() < 0.48 else None,
+                "konten": varian,
+                "timestamp": dt_ke_iso(waktu_insiden + timedelta(minutes=self.rng.randint(-180, 700))),
+                "kota": config_kasus["kota"],
+                "provinsi": config_kasus["provinsi"],
+                "latitude": dibulatkan(-6.24 + self.rng.uniform(-0.05, 0.05)),
+                "longitude": dibulatkan(107.0 + self.rng.uniform(-0.07, 0.07)),
+                "tag_sinyal": self.rng.sample(["ledakan", "api", "bau_kimia", "motor", "noise", "korsleting"], k=2),
+                "reliabilitas": round(self.rng.uniform(0.18, 0.91), 2),
+            })
+        return crawling
 
-        transactions = []
-        network = []
-        posts = []
-        for idx in range(max(8, len(actors) - 1)):
-            source, target = self.rng.sample(actors, 2)
-            amount = self.rng.randint(350000, 2900000)
-            ts = incident_at - timedelta(days=self.rng.randint(1, 18), hours=self.rng.randint(0, 10))
-            transactions.append(
-                {
-                    "transaction_id": rand_id("txn"),
-                    "case_id": case_id,
-                    "source_profile_id": source,
-                    "target_profile_id": target,
-                    "amount_idr": amount,
-                    "timestamp": dt_to_iso(ts),
-                    "channel": self.rng.choice(["bank_transfer", "ewallet", "cash_note"]),
-                    "reference": f"REF-{self.rng.randint(100000, 999999)}",
-                    "purpose_hint": self.rng.choice(FUNDING_PURPOSES),
-                    "shared_device_id": f"DEV-{self.rng.randint(1000, 9999)}" if idx < 4 else None,
-                    "shared_ip": f"10.42.{self.rng.randint(1, 200)}.{self.rng.randint(2, 220)}" if idx < 5 else None,
-                }
-            )
-            network.append(
-                {
-                    "edge_id": rand_id("edge"),
-                    "source_profile_id": source,
-                    "target_profile_id": target,
-                    "edge_type": "financial_transfer",
-                    "weight": round(min(amount / 3000000, 0.99), 2),
-                    "case_id": case_id,
-                }
-            )
+    def _bangun_kasus_pendanaan(
+        self, config_kasus: dict, akun_per_profil: dict,
+        pool_aktor: dict, titik_pertemuan: list[dict]
+    ) -> dict:
+        id_kasus = config_kasus["id_kasus"]
+        waktu_insiden = config_kasus["waktu_insiden"]
+        aktor = list(dict.fromkeys(pool_aktor["klaster_b"][:9] + pool_aktor["overlap"][:4]))
+        titik = self._pilih_titik_pertemuan(titik_pertemuan, config_kasus["kota"], config_kasus["tipe_pertemuan"])
 
-        for profile_id in actors[:6]:
-            account = self.rng.choice(accounts_by_profile[profile_id])
-            posts.append(
-                {
-                    "post_id": rand_id("post"),
-                    "profile_id": profile_id,
-                    "account_id": account["account_id"],
-                    "platform": account["platform"],
-                    "content": self.rng.choice(
-                        [
-                            "Siapkan dana operasional kecil-kecilan dulu, nanti disesuaikan.",
-                            "Drop dulu yang urgent. Rincian menyusul di jalur aman.",
-                            "Kebutuhan minggu ini jangan sampai telat, sisanya nanti dibahas.",
-                        ]
-                    ),
-                    "timestamp": dt_to_iso(incident_at - timedelta(days=self.rng.randint(2, 11))),
-                    "city": case_config["city"],
-                    "province": case_config["province"],
-                    "latitude": meeting_point["latitude"],
-                    "longitude": meeting_point["longitude"],
-                    "content_type": "text",
-                    "engagement": {"likes": self.rng.randint(0, 48), "comments": self.rng.randint(0, 18), "shares": self.rng.randint(0, 6)},
-                    "hashtags": ["#support", "#koordinasi"],
-                    "keywords": ["transfer", "operasional", "drop"],
-                    "mention_refs": [],
-                    "reply_to_post_id": None,
-                    "repost_of_post_id": None,
-                    "source_type": "case_signal",
-                    "scenario_refs": [case_id],
-                }
-            )
+        transaksi = []
+        jaringan = []
+        postingan = []
+        for idx in range(max(12, len(aktor) - 1)):
+            sumber, tujuan = self.rng.sample(aktor, 2)
+            jumlah = self.rng.randint(300000, 3500000)
+            ts = waktu_insiden - timedelta(days=self.rng.randint(1, 21), hours=self.rng.randint(0, 12))
+            transaksi.append({
+                "id_transaksi": id_acak("txn"),
+                "id_kasus": id_kasus,
+                "id_profil_sumber": sumber,
+                "id_profil_tujuan": tujuan,
+                "jumlah_idr": jumlah,
+                "timestamp": dt_ke_iso(ts),
+                "kanal": self.rng.choice(["transfer_bank", "dompet_digital", "tunai"]),
+                "referensi": f"REF-{self.rng.randint(100000, 999999)}",
+                "petunjuk_tujuan": self.rng.choice(TUJUAN_PENDANAAN),
+                "id_perangkat_bersama": f"DEV-{self.rng.randint(1000, 9999)}" if idx < 5 else None,
+                "ip_bersama": f"10.42.{self.rng.randint(1, 200)}.{self.rng.randint(2, 220)}" if idx < 6 else None,
+            })
+            jaringan.append({
+                "id_edge": id_acak("edge"),
+                "id_profil_sumber": sumber,
+                "id_profil_tujuan": tujuan,
+                "tipe_edge": "transfer_finansial",
+                "bobot": round(min(jumlah / 3500000, 0.99), 2),
+                "id_kasus": id_kasus,
+            })
+
+        for pid in aktor[:8]:
+            akun = self.rng.choice(akun_per_profil[pid])
+            postingan.append({
+                "id_posting": id_acak("post"),
+                "id_profil": pid,
+                "id_akun": akun["id_akun"],
+                "platform": akun["platform"],
+                "konten": self.rng.choice([
+                    "Siapkan dana operasional kecil-kecilan dulu, nanti disesuaikan.",
+                    "Drop dulu yang urgent. Rincian menyusul di jalur aman.",
+                    "Kebutuhan minggu ini jangan sampai telat, sisanya nanti dibahas.",
+                    "Transfer sudah konfirm, tunggu kabar selanjutnya.",
+                    "Dana awal sudah siap. Koordinasi lanjut seperti biasa.",
+                ]),
+                "timestamp": dt_ke_iso(waktu_insiden - timedelta(days=self.rng.randint(2, 14))),
+                "kota": config_kasus["kota"],
+                "provinsi": config_kasus["provinsi"],
+                "latitude": titik["latitude"],
+                "longitude": titik["longitude"],
+                "tipe_konten": "teks",
+                "engagement": {"suka": self.rng.randint(0, 50), "komentar": self.rng.randint(0, 20), "bagikan": self.rng.randint(0, 8)},
+                "hashtag": ["#support", "#koordinasi"],
+                "kata_kunci": ["transfer", "operasional", "drop"],
+                "referensi_mention": [],
+                "balas_ke_id_posting": None,
+                "repost_dari_id_posting": None,
+                "tipe_sumber": "sinyal_kasus",
+                "referensi_skenario": [id_kasus],
+            })
 
         crawling = []
-        for _ in range(220):
-            crawling.append(
-                {
-                    "data_point_id": rand_id("crawl"),
-                    "case_id": case_id,
-                    "source_type": self.rng.choice(["forum", "chat", "transaction_note", "social_media"]),
-                    "platform": self.rng.choice(["telegram", "forum", "twitter", "bank_log"]),
-                    "profile_ref": self.rng.choice(actors) if self.rng.random() < 0.55 else None,
-                    "content": self.rng.choice(
-                        [
-                            "Transfer kecil berulang muncul pada rentang waktu berdekatan.",
-                            "Akun forum membahas iuran logistik tanpa rincian jelas.",
-                            "Komentar komunitas menyebut pengumpulan dana mendadak.",
-                            "Ada catatan tentang rekening perantara dan pertemuan singkat.",
-                            "Sebagian sinyal bisa saja sekadar iuran komunitas biasa.",
-                        ]
-                    ),
-                    "timestamp": dt_to_iso(incident_at - timedelta(days=self.rng.randint(1, 20), hours=self.rng.randint(0, 23))),
-                    "city": case_config["city"],
-                    "province": case_config["province"],
-                    "latitude": meeting_point["latitude"],
-                    "longitude": meeting_point["longitude"],
-                    "signal_tags": self.rng.sample(["transfer", "iuran", "meeting", "wallet", "noise"], k=2),
-                    "reliability": round(self.rng.uniform(0.22, 0.89), 2),
-                }
-            )
+        for _ in range(250):
+            crawling.append({
+                "id_titik_data": id_acak("crawl"),
+                "id_kasus": id_kasus,
+                "tipe_sumber": self.rng.choice(["forum", "obrolan", "catatan_transaksi", "sosial_media"]),
+                "platform": self.rng.choice(["telegram", "forum", "twitter", "log_bank"]),
+                "referensi_profil": self.rng.choice(aktor) if self.rng.random() < 0.55 else None,
+                "konten": self.rng.choice([
+                    "Transfer kecil berulang muncul pada rentang waktu berdekatan.",
+                    "Akun forum membahas iuran logistik tanpa rincian jelas.",
+                    "Komentar komunitas menyebut pengumpulan dana mendadak.",
+                    "Ada catatan tentang rekening perantara dan pertemuan singkat.",
+                    "Sebagian sinyal bisa saja sekadar iuran komunitas biasa.",
+                    "Pola transfer memperlihatkan distribusi ke beberapa penerima berbeda.",
+                    "Tidak ada keterangan resmi, informasi masih berdasarkan laporan awal.",
+                ]),
+                "timestamp": dt_ke_iso(waktu_insiden - timedelta(days=self.rng.randint(1, 25), hours=self.rng.randint(0, 23))),
+                "kota": config_kasus["kota"],
+                "provinsi": config_kasus["provinsi"],
+                "latitude": titik["latitude"],
+                "longitude": titik["longitude"],
+                "tag_sinyal": self.rng.sample(["transfer", "iuran", "pertemuan", "dompet", "noise"], k=2),
+                "reliabilitas": round(self.rng.uniform(0.22, 0.89), 2),
+            })
 
-        locations, meeting_network = self._append_case_checkins(actors[:6], meeting_point, incident_at, case_id)
-        entities = [
-            {"case_id": case_id, "entity_type": "keyword", "value": "transfer kecil berulang", "count": 78},
-            {"case_id": case_id, "entity_type": "location", "value": meeting_point["label"], "count": 34},
-            {"case_id": case_id, "entity_type": "keyword", "value": "shared_device", "count": 12},
+        lokasi, jaringan_pertemuan = self._tambah_checkin_kasus(aktor[:7], titik, waktu_insiden, id_kasus)
+        entitas = [
+            {"id_kasus": id_kasus, "tipe_entitas": "kata_kunci", "nilai": "transfer kecil berulang", "jumlah": 78},
+            {"id_kasus": id_kasus, "tipe_entitas": "lokasi", "nilai": titik["label"], "jumlah": 34},
+            {"id_kasus": id_kasus, "tipe_entitas": "kata_kunci", "nilai": "perangkat_bersama", "jumlah": 12},
         ]
-        alerts = [
-            {
-                "alert_id": rand_id("alert"),
-                "case_id": case_id,
-                "severity": "medium",
-                "signal_type": "financial_pattern",
-                "description": "Pola transfer menunjukkan distribusi dana kecil berulang ke cluster terbatas.",
-                "confidence": 0.76,
-            }
-        ]
-        risk_score = {
-            "case_id": case_id,
-            "risk_label": "medium",
-            "risk_score": 67,
-            "routine_support_probability": 0.54,
-            "coordinated_funding_probability": 0.46,
-            "drivers": ["repeated_transfer", "shared_device", "co_location"],
-            "disclaimer": "Penilaian ini indikatif dan bukan atribusi final.",
+        peringatan = [{
+            "id_peringatan": id_acak("alert"),
+            "id_kasus": id_kasus,
+            "tingkat_keparahan": "menengah",
+            "tipe_sinyal": "pola_finansial",
+            "deskripsi": "Pola transfer menunjukkan distribusi dana kecil berulang ke cluster terbatas.",
+            "kepercayaan": 0.76,
+        }]
+        skor_risiko = {
+            "id_kasus": id_kasus,
+            "label_risiko": "menengah",
+            "skor_risiko": 67,
+            "probabilitas_dukungan_rutin": 0.54,
+            "probabilitas_pendanaan_terkoordinasi": 0.46,
+            "pendorong": ["transfer_berulang", "perangkat_bersama", "co_lokasi"],
+            "penafian": "Penilaian ini indikatif dan bukan atribusi final.",
         }
-        report = {
-            "report_id": rand_id("rpt"),
-            "case_id": case_id,
-            "title": case_config["title"],
-            "summary": "Data memperlihatkan transaksi kecil berulang, kedekatan lokasi antar aktor, dan penggunaan device/IP yang tumpang tindih.",
-            "findings": [
+        laporan = {
+            "id_laporan": id_acak("laporan"),
+            "id_kasus": id_kasus,
+            "judul": config_kasus["judul"],
+            "ringkasan": "Data memperlihatkan transaksi kecil berulang, kedekatan lokasi antar aktor, dan penggunaan perangkat/IP yang tumpang tindih.",
+            "temuan": [
                 "Transfer tersebar muncul menjelang aktivitas lapangan tertentu.",
-                "Beberapa profil yang sama juga terlihat pada cluster propaganda atau warehouse fire.",
-                "Shared meeting point memperkuat sinyal korelasi lintas kasus.",
+                "Beberapa profil yang sama juga terlihat pada klaster propaganda atau kasus kebakaran gudang.",
+                "Titik pertemuan bersama memperkuat sinyal korelasi lintas kasus.",
             ],
-            "analysis": "Pola dapat dibaca sebagai koordinasi finansial, namun masih butuh validasi lintas sumber.",
-            "recommendations": [
+            "analisis": "Pola dapat dibaca sebagai koordinasi finansial, namun masih butuh validasi lintas sumber.",
+            "rekomendasi": [
                 "Uji graf transfer versus graf sosial.",
-                "Periksa device/IP overlap dan titik temu lokasi bersama.",
+                "Periksa overlap perangkat/IP dan titik temu lokasi bersama.",
                 "Prioritaskan bridge account yang muncul lintas kasus.",
             ],
-            "generated_at": now_iso(),
-            "disclaimer": "Laporan ini bersifat indikatif untuk kebutuhan analisis internal.",
+            "digenerate_pada": sekarang_iso(),
+            "penafian": "Laporan ini bersifat indikatif untuk kebutuhan analisis internal.",
         }
-        case_links = [{"case_id": case_id, "profile_id": profile_id, "role": "funding_actor", "signal": "funding_signal"} for profile_id in actors]
-        case = {
-            "case_id": case_id,
-            "case_type": "suspicious_funding",
-            "title": case_config["title"],
-            "city": case_config["city"],
-            "province": case_config["province"],
-            "incident_at": dt_to_iso(incident_at),
-            "meeting_point_id": meeting_point["meeting_point_id"],
-            "actor_count": len(actors),
-            "status": "analysis",
+        tautan_kasus = [{"id_kasus": id_kasus, "id_profil": pid, "peran": "aktor_pendanaan", "sinyal": "sinyal_pendanaan"} for pid in aktor]
+        kasus = {
+            "id_kasus": id_kasus,
+            "tipe_kasus": "pendanaan_mencurigakan",
+            "judul": config_kasus["judul"],
+            "kota": config_kasus["kota"],
+            "provinsi": config_kasus["provinsi"],
+            "waktu_insiden": dt_ke_iso(waktu_insiden),
+            "id_titik_pertemuan": titik["id_titik_pertemuan"],
+            "jumlah_aktor": len(aktor),
+            "status": "analisis",
         }
         return {
-            "case": case,
-            "posts": posts,
-            "locations": locations,
-            "network": network + meeting_network,
+            "kasus": kasus,
+            "postingan": postingan,
+            "lokasi": lokasi,
+            "jaringan": jaringan + jaringan_pertemuan,
             "crawling": crawling,
-            "entities": entities,
-            "alerts": alerts,
-            "risk_score": risk_score,
-            "report": report,
-            "transactions": transactions,
-            "funding_alerts": [
-                {
-                    "funding_alert_id": rand_id("falert"),
-                    "case_id": case_id,
-                    "severity": "medium",
-                    "description": "Sejumlah transfer kecil berulang mengarah ke penerima yang sama dalam jendela waktu sempit.",
-                    "confidence": 0.77,
-                },
-                {
-                    "funding_alert_id": rand_id("falert"),
-                    "case_id": case_id,
-                    "severity": "medium",
-                    "description": "Sebagian transaksi berbagi device atau IP yang sama.",
-                    "confidence": 0.71,
-                },
+            "entitas": entitas,
+            "peringatan": peringatan,
+            "skor_risiko": skor_risiko,
+            "laporan": laporan,
+            "transaksi": transaksi,
+            "peringatan_dana": [
+                {"id_peringatan_dana": id_acak("palert"), "id_kasus": id_kasus, "tingkat_keparahan": "menengah", "deskripsi": "Sejumlah transfer kecil berulang mengarah ke penerima yang sama dalam jendela waktu sempit.", "kepercayaan": 0.77},
+                {"id_peringatan_dana": id_acak("palert"), "id_kasus": id_kasus, "tingkat_keparahan": "menengah", "deskripsi": "Sebagian transaksi berbagi perangkat atau IP yang sama.", "kepercayaan": 0.71},
             ],
-            "case_links": case_links,
+            "tautan_kasus": tautan_kasus,
         }
 
-    def _build_propaganda_case(self, case_config: dict, accounts_by_profile: dict, actor_pool: dict, meeting_points: list[dict]) -> dict:
-        case_id = case_config["case_id"]
-        incident_at = case_config["incident_at"]
-        actors = list(dict.fromkeys(actor_pool["cluster_c"][:10] + actor_pool["overlap"][:2]))
-        meeting_point = self._pick_meeting_point(meeting_points, case_config["city"], case_config["meeting_type"])
-        central = actors[0]
-        variants = [
+    def _bangun_kasus_propaganda(
+        self, config_kasus: dict, akun_per_profil: dict,
+        pool_aktor: dict, titik_pertemuan: list[dict]
+    ) -> dict:
+        id_kasus = config_kasus["id_kasus"]
+        waktu_insiden = config_kasus["waktu_insiden"]
+        aktor = list(dict.fromkeys(pool_aktor["klaster_c"][:12] + pool_aktor["overlap"][:3]))
+        titik = self._pilih_titik_pertemuan(titik_pertemuan, config_kasus["kota"], config_kasus["tipe_pertemuan"])
+        pusat = aktor[0]
+        varian_narasi = [
             "disrupsi supply chain bikin pihak tertentu kelabakan malam ini",
             "gangguan rantai pasok bikin situasi cepat berubah malam ini",
             "jalur distribusi lagi terganggu, efeknya bakal terasa cepat",
             "supply chain yang terguncang bisa bikin respons mereka terlambat",
+            "kondisi logistik memburuk, beberapa pihak mulai kelimpungan",
+            "situasi rantai pasokan yang tidak stabil bikin banyak yang was-was",
         ]
 
-        posts = []
-        message_clusters = []
-        campaigns = [
-            {
-                "campaign_id": rand_id("camp"),
-                "case_id": case_id,
-                "central_profile_id": central,
-                "objective": "amplifikasi narasi terkait gangguan distribusi",
-                "start_at": dt_to_iso(incident_at - timedelta(hours=8)),
-            }
-        ]
-        base_post_id = None
-        for idx, profile_id in enumerate(actors[:12]):
-            account = self.rng.choice(accounts_by_profile[profile_id])
-            post_id = rand_id("post")
+        postingan = []
+        klaster_pesan = []
+        kampanye = [{
+            "id_kampanye": id_acak("kamp"),
+            "id_kasus": id_kasus,
+            "id_profil_pusat": pusat,
+            "tujuan": "amplifikasi narasi terkait gangguan distribusi",
+            "mulai_pada": dt_ke_iso(waktu_insiden - timedelta(hours=8)),
+        }]
+        id_posting_dasar = None
+        for idx, pid in enumerate(aktor[:14]):
+            akun = self.rng.choice(akun_per_profil[pid])
+            id_posting = id_acak("post")
             if idx == 0:
-                base_post_id = post_id
-            posts.append(
-                {
-                    "post_id": post_id,
-                    "profile_id": profile_id,
-                    "account_id": account["account_id"],
-                    "platform": account["platform"],
-                    "content": variants[0] if idx == 0 else self.rng.choice(variants),
-                    "timestamp": dt_to_iso(incident_at - timedelta(minutes=self.rng.randint(2, 70))),
-                    "city": case_config["city"],
-                    "province": case_config["province"],
-                    "latitude": meeting_point["latitude"],
-                    "longitude": meeting_point["longitude"],
-                    "content_type": "text",
-                    "engagement": {
-                        "likes": self.rng.randint(5, 220),
-                        "comments": self.rng.randint(0, 44),
-                        "shares": self.rng.randint(0, 90),
-                    },
-                    "hashtags": ["#supplychain", "#update", "#situasi"],
-                    "keywords": ["disrupsi", "rantai_pasok", "sinkron"],
-                    "mention_refs": [central] if idx > 0 and self.rng.random() < 0.45 else [],
-                    "reply_to_post_id": None,
-                    "repost_of_post_id": base_post_id if idx > 0 and self.rng.random() < 0.55 else None,
-                    "source_type": "coordinated" if idx > 0 else "organic_seed",
-                    "scenario_refs": [case_id],
-                }
-            )
-        for cluster_idx, phrase in enumerate(variants[:3]):
-            message_clusters.append(
-                {
-                    "message_cluster_id": rand_id("msg"),
-                    "case_id": case_id,
-                    "canonical_phrase": phrase,
-                    "profile_ids": actors[cluster_idx * 3 : cluster_idx * 3 + 4],
-                    "post_count": self.rng.randint(4, 10),
-                    "copy_similarity": round(self.rng.uniform(0.74, 0.96), 2),
-                }
-            )
+                id_posting_dasar = id_posting
+            postingan.append({
+                "id_posting": id_posting,
+                "id_profil": pid,
+                "id_akun": akun["id_akun"],
+                "platform": akun["platform"],
+                "konten": varian_narasi[0] if idx == 0 else self.rng.choice(varian_narasi),
+                "timestamp": dt_ke_iso(waktu_insiden - timedelta(minutes=self.rng.randint(2, 80))),
+                "kota": config_kasus["kota"],
+                "provinsi": config_kasus["provinsi"],
+                "latitude": titik["latitude"],
+                "longitude": titik["longitude"],
+                "tipe_konten": "teks",
+                "engagement": {"suka": self.rng.randint(5, 280), "komentar": self.rng.randint(0, 55), "bagikan": self.rng.randint(0, 110)},
+                "hashtag": ["#supplychain", "#update", "#situasi", "#logistik"],
+                "kata_kunci": ["disrupsi", "rantai_pasok", "sinkron"],
+                "referensi_mention": [pusat] if idx > 0 and self.rng.random() < 0.45 else [],
+                "balas_ke_id_posting": None,
+                "repost_dari_id_posting": id_posting_dasar if idx > 0 and self.rng.random() < 0.55 else None,
+                "tipe_sumber": "terkoordinasi" if idx > 0 else "benih_organik",
+                "referensi_skenario": [id_kasus],
+            })
+        for i_klaster, frasa in enumerate(varian_narasi[:4]):
+            klaster_pesan.append({
+                "id_klaster_pesan": id_acak("kpst"),
+                "id_kasus": id_kasus,
+                "frasa_kanonik": frasa,
+                "id_profil": aktor[i_klaster * 3 : i_klaster * 3 + 4],
+                "jumlah_posting": self.rng.randint(4, 12),
+                "kemiripan_copy": round(self.rng.uniform(0.74, 0.96), 2),
+            })
 
-        locations, meeting_network = self._append_case_checkins(actors[:5], meeting_point, incident_at, case_id)
-        network = meeting_network
-        for profile_id in actors[1:10]:
-            network.append(
-                {
-                    "edge_id": rand_id("edge"),
-                    "source_profile_id": central,
-                    "target_profile_id": profile_id,
-                    "edge_type": "message_amplification",
-                    "weight": round(self.rng.uniform(0.61, 0.96), 2),
-                    "case_id": case_id,
-                }
-            )
+        lokasi, jaringan_pertemuan = self._tambah_checkin_kasus(aktor[:6], titik, waktu_insiden, id_kasus)
+        jaringan = list(jaringan_pertemuan)
+        for pid in aktor[1:12]:
+            jaringan.append({
+                "id_edge": id_acak("edge"),
+                "id_profil_sumber": pusat,
+                "id_profil_tujuan": pid,
+                "tipe_edge": "amplifikasi_pesan",
+                "bobot": round(self.rng.uniform(0.61, 0.96), 2),
+                "id_kasus": id_kasus,
+            })
 
         crawling = []
-        for _ in range(260):
-            crawling.append(
-                {
-                    "data_point_id": rand_id("crawl"),
-                    "case_id": case_id,
-                    "source_type": self.rng.choice(["social_media", "forum", "news_comment", "community_note"]),
-                    "platform": self.rng.choice(["twitter", "instagram", "forum", "tiktok"]),
-                    "profile_ref": self.rng.choice(actors) if self.rng.random() < 0.65 else None,
-                    "content": self.rng.choice(
-                        [
-                            "Sekelompok akun baru membagikan narasi yang sangat mirip.",
-                            "Posting serempak muncul dalam rentang menit yang sempit.",
-                            "Ada akun yang hanya aktif untuk satu topik lalu diam lagi.",
-                            "Sebagian posting bisa dianggap opini biasa, tidak semua terkoordinasi.",
-                            "Komentar forum menyebut pola copy-paste dan akun yang baru dibuat.",
-                        ]
-                    ),
-                    "timestamp": dt_to_iso(incident_at - timedelta(hours=self.rng.randint(0, 24), minutes=self.rng.randint(0, 59))),
-                    "city": case_config["city"],
-                    "province": case_config["province"],
-                    "latitude": meeting_point["latitude"],
-                    "longitude": meeting_point["longitude"],
-                    "signal_tags": self.rng.sample(["copy_paste", "new_account", "narrative", "sync", "noise"], k=2),
-                    "reliability": round(self.rng.uniform(0.21, 0.86), 2),
-                }
-            )
+        for _ in range(300):
+            crawling.append({
+                "id_titik_data": id_acak("crawl"),
+                "id_kasus": id_kasus,
+                "tipe_sumber": self.rng.choice(["sosial_media", "forum", "komentar_berita", "catatan_komunitas"]),
+                "platform": self.rng.choice(["twitter", "instagram", "forum", "tiktok"]),
+                "referensi_profil": self.rng.choice(aktor) if self.rng.random() < 0.65 else None,
+                "konten": self.rng.choice([
+                    "Sekelompok akun baru membagikan narasi yang sangat mirip.",
+                    "Posting serempak muncul dalam rentang menit yang sempit.",
+                    "Ada akun yang hanya aktif untuk satu topik lalu diam lagi.",
+                    "Sebagian posting bisa dianggap opini biasa, tidak semua terkoordinasi.",
+                    "Komentar forum menyebut pola copy-paste dan akun yang baru dibuat.",
+                    "Pola wording nyaris identik di beberapa akun berbeda.",
+                    "Akun lama tiba-tiba aktif lagi dengan topik yang sama.",
+                    "Ada jeda waktu sangat pendek antara satu posting dan pengulangan berikutnya.",
+                ]),
+                "timestamp": dt_ke_iso(waktu_insiden - timedelta(hours=self.rng.randint(0, 28), minutes=self.rng.randint(0, 59))),
+                "kota": config_kasus["kota"],
+                "provinsi": config_kasus["provinsi"],
+                "latitude": titik["latitude"],
+                "longitude": titik["longitude"],
+                "tag_sinyal": self.rng.sample(["copy_paste", "akun_baru", "narasi", "sinkron", "noise"], k=2),
+                "reliabilitas": round(self.rng.uniform(0.21, 0.86), 2),
+            })
 
-        entities = [
-            {"case_id": case_id, "entity_type": "keyword", "value": "disrupsi supply chain", "count": 49},
-            {"case_id": case_id, "entity_type": "keyword", "value": "copy-paste wording", "count": 26},
-            {"case_id": case_id, "entity_type": "account_cluster", "value": "12 akun sinkron", "count": 1},
+        entitas = [
+            {"id_kasus": id_kasus, "tipe_entitas": "kata_kunci", "nilai": "disrupsi supply chain", "jumlah": 49},
+            {"id_kasus": id_kasus, "tipe_entitas": "kata_kunci", "nilai": "copy-paste wording", "jumlah": 26},
+            {"id_kasus": id_kasus, "tipe_entitas": "klaster_akun", "nilai": "14 akun sinkron", "jumlah": 1},
         ]
-        alerts = [
-            {
-                "alert_id": rand_id("alert"),
-                "case_id": case_id,
-                "severity": "high",
-                "signal_type": "synchronized_posting",
-                "description": "Terdapat klaster akun dengan pola posting hampir serentak dan wording serupa.",
-                "confidence": 0.84,
-            },
-            {
-                "alert_id": rand_id("alert"),
-                "case_id": case_id,
-                "severity": "medium",
-                "signal_type": "bridge_overlap",
-                "description": "Sebagian akun juga muncul dalam sinyal funding atau warehouse fire.",
-                "confidence": 0.72,
-            },
+        peringatan = [
+            {"id_peringatan": id_acak("alert"), "id_kasus": id_kasus, "tingkat_keparahan": "tinggi", "tipe_sinyal": "posting_tersinkronisasi", "deskripsi": "Terdapat klaster akun dengan pola posting hampir serentak dan wording serupa.", "kepercayaan": 0.84},
+            {"id_peringatan": id_acak("alert"), "id_kasus": id_kasus, "tingkat_keparahan": "menengah", "tipe_sinyal": "overlap_jembatan", "deskripsi": "Sebagian akun juga muncul dalam sinyal pendanaan atau kebakaran gudang.", "kepercayaan": 0.72},
         ]
-        risk_score = {
-            "case_id": case_id,
-            "risk_label": "high",
-            "risk_score": 74,
-            "organic_discourse_probability": 0.49,
-            "coordinated_propagation_probability": 0.51,
-            "drivers": ["copy_paste", "timing_sync", "bridge_overlap"],
-            "disclaimer": "Penilaian ini indikatif dan bukan atribusi final.",
+        skor_risiko = {
+            "id_kasus": id_kasus,
+            "label_risiko": "tinggi",
+            "skor_risiko": 74,
+            "probabilitas_diskursus_organik": 0.49,
+            "probabilitas_propagasi_terkoordinasi": 0.51,
+            "pendorong": ["copy_paste", "sinkronisasi_waktu", "overlap_jembatan"],
+            "penafian": "Penilaian ini indikatif dan bukan atribusi final.",
         }
-        report = {
-            "report_id": rand_id("rpt"),
-            "case_id": case_id,
-            "title": case_config["title"],
-            "summary": "Narasi beredar melalui akun pusat dan akun amplifikasi dengan jeda waktu pendek, termasuk akun yang juga muncul di kasus lain.",
-            "findings": [
+        laporan = {
+            "id_laporan": id_acak("laporan"),
+            "id_kasus": id_kasus,
+            "judul": config_kasus["judul"],
+            "ringkasan": "Narasi beredar melalui akun pusat dan akun amplifikasi dengan jeda waktu pendek, termasuk akun yang juga muncul di kasus lain.",
+            "temuan": [
                 "Pola posting serempak menguat pada window kurang dari satu jam.",
-                "Message clusters menunjukkan kemiripan frasa yang tinggi.",
+                "Klaster pesan menunjukkan kemiripan frasa yang tinggi.",
                 "Bridge account memperluas korelasi lintas kasus.",
             ],
-            "analysis": "Sinyal konsisten dengan koordinasi narasi, namun masih bersifat indikatif.",
-            "recommendations": [
+            "analisis": "Sinyal konsisten dengan koordinasi narasi, namun masih bersifat indikatif.",
+            "rekomendasi": [
                 "Kelompokkan akun berdasarkan copy similarity dan waktu posting.",
                 "Bandingkan overlap dengan edge transfer serta meeting point.",
                 "Pisahkan akun baru dari akun lama untuk menguji pola bootstrap.",
             ],
-            "generated_at": now_iso(),
-            "disclaimer": "Laporan ini bersifat indikatif untuk kebutuhan analisis internal.",
+            "digenerate_pada": sekarang_iso(),
+            "penafian": "Laporan ini bersifat indikatif untuk kebutuhan analisis internal.",
         }
-        case_links = [
-            {"case_id": case_id, "profile_id": profile_id, "role": "amplifier" if profile_id != central else "seed_account", "signal": "propaganda_signal"}
-            for profile_id in actors[:12]
+        tautan_kasus = [
+            {"id_kasus": id_kasus, "id_profil": pid, "peran": "amplifier" if pid != pusat else "akun_benih", "sinyal": "sinyal_propaganda"}
+            for pid in aktor[:14]
         ]
-        case = {
-            "case_id": case_id,
-            "case_type": "propaganda",
-            "title": case_config["title"],
-            "city": case_config["city"],
-            "province": case_config["province"],
-            "incident_at": dt_to_iso(incident_at),
-            "meeting_point_id": meeting_point["meeting_point_id"],
-            "actor_count": len(actors[:12]),
+        kasus = {
+            "id_kasus": id_kasus,
+            "tipe_kasus": "propaganda",
+            "judul": config_kasus["judul"],
+            "kota": config_kasus["kota"],
+            "provinsi": config_kasus["provinsi"],
+            "waktu_insiden": dt_ke_iso(waktu_insiden),
+            "id_titik_pertemuan": titik["id_titik_pertemuan"],
+            "jumlah_aktor": len(aktor[:14]),
             "status": "monitoring",
         }
         return {
-            "case": case,
-            "posts": posts,
-            "locations": locations,
-            "network": network,
+            "kasus": kasus,
+            "postingan": postingan,
+            "lokasi": lokasi,
+            "jaringan": jaringan,
             "crawling": crawling,
-            "entities": entities,
-            "alerts": alerts,
-            "risk_score": risk_score,
-            "report": report,
-            "campaigns": campaigns,
-            "message_clusters": message_clusters,
-            "case_links": case_links,
+            "entitas": entitas,
+            "peringatan": peringatan,
+            "skor_risiko": skor_risiko,
+            "laporan": laporan,
+            "kampanye": kampanye,
+            "klaster_pesan": klaster_pesan,
+            "tautan_kasus": tautan_kasus,
         }
 
-    def _build_warehouse_crawling(self, case_id: str, case_config: dict, actors: list[str]) -> list[dict]:
-        incident_at = case_config["incident_at"]
-        content_pool = [
-            ("social_media", "twitter", "Baru aja denger ledakan sebelum kebakaran."),
-            ("social_media", "instagram", "Video api gede, orang-orang panik di lokasi."),
-            ("social_media", "tiktok", "Asap hitam tebal kelihatan dari arah gudang."),
-            ("forum", "forum", "Ini bukan kebakaran biasa, ada bau bahan kimia."),
-            ("forum", "forum", "Katanya sempat ada ancaman sebelumnya."),
-            ("news", "portal", "Gudang terbakar, dugaan awal korsleting listrik."),
-            ("news", "portal", "Saksi menyebut ada ledakan sebelum api membesar."),
-            ("sensor", "weather", "Cuaca normal, tidak ada petir di area sekitar."),
-            ("cctv", "cctv", "Terlihat motor keluar beberapa menit sebelum api besar."),
-        ]
-        crawling = []
-        for idx in range(520):
-            source_type, platform, seed_content = self.rng.choice(content_pool)
-            noisy_variant = seed_content
-            if idx % 11 == 0:
-                noisy_variant = "Info masih simpang siur, bisa jadi cuma korsleting biasa."
-            elif idx % 13 == 0:
-                noisy_variant = "Posting ini copy-paste dari akun lain, konteks belum jelas."
-            crawling.append(
-                {
-                    "data_point_id": rand_id("crawl"),
-                    "case_id": case_id,
-                    "source_type": source_type,
-                    "platform": platform,
-                    "profile_ref": self.rng.choice(actors) if self.rng.random() < 0.48 else None,
-                    "content": noisy_variant,
-                    "timestamp": dt_to_iso(incident_at + timedelta(minutes=self.rng.randint(-150, 600))),
-                    "city": case_config["city"],
-                    "province": case_config["province"],
-                    "latitude": rounded(-6.24 + self.rng.uniform(-0.05, 0.05)),
-                    "longitude": rounded(107.0 + self.rng.uniform(-0.07, 0.07)),
-                    "signal_tags": self.rng.sample(["ledakan", "api", "bau_kimia", "motor", "noise", "korsleting"], k=2),
-                    "reliability": round(self.rng.uniform(0.18, 0.91), 2),
-                }
-            )
-        return crawling
-
-    def _reset_case_outputs(self, bundle: Bundle) -> None:
-        bundle.cases = []
-        bundle.transactions = []
-        bundle.funding_alerts = []
-        bundle.campaigns = []
-        bundle.message_clusters = []
+    def _reset_output_kasus(self, bundle: BundleData) -> None:
+        bundle.kasus = []
+        bundle.transaksi = []
+        bundle.peringatan_dana = []
+        bundle.kampanye = []
+        bundle.klaster_pesan = []
         bundle.crawling = []
-        bundle.entities = []
-        bundle.alerts = []
-        bundle.risk_scores = []
-        bundle.reports = []
-        bundle.posts = [item for item in bundle.posts if not item.get("scenario_refs")]
-        bundle.locations = [item for item in bundle.locations if not item.get("case_id")]
-        bundle.network = [item for item in bundle.network if not item.get("case_id")]
-        for profile in bundle.profiles:
-            profile["case_links"] = []
-            profile["risk_tags"] = []
+        bundle.entitas = []
+        bundle.peringatan = []
+        bundle.skor_risiko = []
+        bundle.laporan = []
+        bundle.postingan = [item for item in bundle.postingan if not item.get("referensi_skenario")]
+        bundle.lokasi = [item for item in bundle.lokasi if not item.get("id_kasus")]
+        bundle.jaringan = [item for item in bundle.jaringan if not item.get("id_kasus")]
+        for profil in bundle.profil:
+            profil["tautan_kasus"] = []
+            profil["tag_risiko"] = []
 
-    def _refresh_profile_extractions(self, bundle: Bundle) -> None:
-        contacts_by_profile = {item["profile_id"]: item for item in bundle.contacts}
-        preferences_by_profile = {item["profile_id"]: item for item in bundle.preferences}
-        accounts_by_profile: dict[str, list] = {}
-        photos_by_profile: dict[str, list] = {}
-        posts_by_profile: dict[str, list] = {}
-        for item in bundle.accounts:
-            accounts_by_profile.setdefault(item["profile_id"], []).append(item)
-        for item in bundle.photos:
-            photos_by_profile.setdefault(item["profile_id"], []).append(item)
-        for item in bundle.posts:
-            posts_by_profile.setdefault(item["profile_id"], []).append(item)
+    def _perbarui_ekstraksi_profil(self, bundle: BundleData) -> None:
+        kontak_per_profil = {item["id_profil"]: item for item in bundle.kontak}
+        pref_per_profil = {item["id_profil"]: item for item in bundle.preferensi}
+        akun_per_profil: dict[str, list] = {}
+        foto_per_profil: dict[str, list] = {}
+        posting_per_profil: dict[str, list] = {}
+        for item in bundle.akun:
+            akun_per_profil.setdefault(item["id_profil"], []).append(item)
+        for item in bundle.foto:
+            foto_per_profil.setdefault(item["id_profil"], []).append(item)
+        for item in bundle.postingan:
+            posting_per_profil.setdefault(item["id_profil"], []).append(item)
 
-        for profile in bundle.profiles:
-            profile["extracted_profile"] = self._build_extracted_profile(
-                profile=profile,
-                contacts=contacts_by_profile[profile["profile_id"]],
-                preferences=preferences_by_profile[profile["profile_id"]],
-                accounts=accounts_by_profile.get(profile["profile_id"], []),
-                friends=bundle.friends,
-                photos=photos_by_profile.get(profile["profile_id"], []),
-                posts=sorted(posts_by_profile.get(profile["profile_id"], []), key=lambda item: item["timestamp"], reverse=True),
-                locations=bundle.locations,
+        for profil in bundle.profil:
+            pid = profil["id_profil"]
+            profil["profil_terekstrak"] = self._bangun_profil_terekstrak(
+                profil=profil,
+                kontak=kontak_per_profil[pid],
+                preferensi=pref_per_profil[pid],
+                akun=akun_per_profil.get(pid, []),
+                pertemanan=bundle.pertemanan,
+                foto=foto_per_profil.get(pid, []),
+                postingan=sorted(posting_per_profil.get(pid, []), key=lambda x: x["timestamp"], reverse=True),
+                lokasi=bundle.lokasi,
             )
 
 
-def build_profiles_dataset(count: int, out_dir: str, seed: int = 42, with_images: bool = False) -> Bundle:
-    generator = SyntheticDatasetGenerator(seed=seed)
-    return generator.build_profiles_bundle(count=count, out_dir=out_dir, with_images=with_images)
+# ============================================================
+# FUNGSI UTAMA PUBLIK
+# ============================================================
+
+def bangun_dataset_profil(jumlah: int, dir_output: str, seed: int = 42, dengan_gambar: bool = False) -> BundleData:
+    """Buat dataset profil sintetis sebanyak `jumlah` entri."""
+    generator = GeneratorDataSintetis(seed=seed)
+    return generator.bangun_bundle_profil(jumlah=jumlah, dir_output=dir_output, dengan_gambar=dengan_gambar)
 
 
-def build_case_dataset(out_dir: str, seed: int = 42, case_names: list[str] | None = None) -> Bundle:
-    generator = SyntheticDatasetGenerator(seed=seed)
-    bundle = generator.load_bundle(out_dir)
-    if not bundle.profiles:
-        raise ValueError("profiles.json tidak ditemukan atau kosong. Jalankan generate_profiles.py dulu.")
-    return generator.augment_bundle_with_cases(bundle=bundle, case_names=case_names)
+def bangun_dataset_kasus(dir_output: str, seed: int = 42, nama_kasus: list[str] | None = None) -> BundleData:
+    """Augmentasi bundle yang sudah ada dengan data kasus."""
+    generator = GeneratorDataSintetis(seed=seed)
+    bundle = generator.muat_bundle(dir_output)
+    if not bundle.profil:
+        raise ValueError("profil.json tidak ditemukan atau kosong. Jalankan bangun_dataset_profil() dulu.")
+    return generator.augmentasi_bundle_dengan_kasus(bundle=bundle, nama_kasus=nama_kasus)
 
 
-def build_full_dataset(count: int, out_dir: str, seed: int = 42, with_images: bool = False, case_names: list[str] | None = None) -> Bundle:
-    generator = SyntheticDatasetGenerator(seed=seed)
-    bundle = generator.build_profiles_bundle(count=count, out_dir=out_dir, with_images=with_images)
-    return generator.augment_bundle_with_cases(bundle=bundle, case_names=case_names)
+def bangun_dataset_lengkap(
+    jumlah: int,
+    dir_output: str,
+    seed: int = 42,
+    dengan_gambar: bool = False,
+    nama_kasus: list[str] | None = None,
+) -> BundleData:
+    """Buat dataset lengkap: profil + kasus dalam satu langkah."""
+    generator = GeneratorDataSintetis(seed=seed)
+    print(f"[MULAI] Membangun {jumlah} profil sintetis...")
+    bundle = generator.bangun_bundle_profil(jumlah=jumlah, dir_output=dir_output, dengan_gambar=dengan_gambar)
+    print(f"[KASUS] Menambahkan 3 kasus...")
+    bundle = generator.augmentasi_bundle_dengan_kasus(bundle=bundle, nama_kasus=nama_kasus)
+    print(f"[SIMPAN] Menyimpan ke {dir_output}...")
+    generator.tulis_bundle(bundle, dir_output)
+    print(f"[SELESAI] Dataset lengkap tersedia di: {dir_output}")
+    return bundle
+
+
+# ============================================================
+# CONTOH PENGGUNAAN
+# ============================================================
+
+if __name__ == "__main__":
+    import sys
+
+    jumlah = int(sys.argv[1]) if len(sys.argv) > 1 else 100
+    output = sys.argv[2] if len(sys.argv) > 2 else "./dataset"
+
+    print(f"Membangun dataset dengan {jumlah} profil → {output}")
+    bundle = bangun_dataset_lengkap(jumlah=jumlah, dir_output=output, seed=42)
+    print(f"\nRingkasan:")
+    print(f"  Profil      : {len(bundle.profil)}")
+    print(f"  Akun        : {len(bundle.akun)}")
+    print(f"  Postingan   : {len(bundle.postingan)}")
+    print(f"  Pertemanan  : {len(bundle.pertemanan)}")
+    print(f"  Jaringan    : {len(bundle.jaringan)}")
+    print(f"  Lokasi      : {len(bundle.lokasi)}")
+    print(f"  Kasus       : {len(bundle.kasus)}")
+    print(f"  Transaksi   : {len(bundle.transaksi)}")
+    print(f"  Crawling    : {len(bundle.crawling)}")
+    print(f"  Laporan     : {len(bundle.laporan)}")

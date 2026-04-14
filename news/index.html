@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Georgia',serif;background:#f4f4f4;color:#222}
+.navbar{background:#c0392b}
+.navbar-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
+.logo{color:#fff;font-size:1.5em;font-weight:900;text-decoration:none;font-family:Arial,sans-serif}
+.logo span{color:#ffcdd2;font-size:0.5em;font-weight:400;display:block}
+.nav-links a{color:#ffcdd2;text-decoration:none;font-size:0.85em;font-family:Arial,sans-serif;margin-left:18px}
+.nav-links a:hover{color:#fff}
+.breaking{background:#222;color:#ffeb3b;font-size:0.78em;padding:5px 20px;font-family:Arial}
+.container{max-width:1200px;margin:20px auto;padding:0 20px;display:grid;grid-template-columns:1fr 300px;gap:24px}
+.main{} .sidebar{}
+.card{background:#fff;border-radius:4px;margin-bottom:18px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.1);cursor:pointer}
+.card:hover{box-shadow:0 3px 10px rgba(0,0,0,.15)}
+.card img{width:100%;height:200px;object-fit:cover}
+.card-body{padding:14px}
+.cat{font-size:.72em;font-weight:700;text-transform:uppercase;color:#c0392b;letter-spacing:.5px;font-family:Arial;margin-bottom:5px}
+.title{font-size:1.1em;font-weight:700;line-height:1.35;margin-bottom:6px}
+.title a{color:#111;text-decoration:none}
+.title a:hover{color:#c0392b}
+.meta{font-size:.75em;color:#888;font-family:Arial;margin-bottom:6px}
+.summary{font-size:.88em;color:#555;line-height:1.6}
+.headline img{height:320px}
+.headline .title{font-size:1.4em}
+.badge{background:#c0392b;color:#fff;font-size:.65em;padding:2px 6px;border-radius:2px;font-family:Arial;font-weight:700;margin-right:5px}
+.sw{background:#fff;border-radius:4px;padding:14px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.sw-title{font-size:.82em;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid #c0392b;padding-bottom:7px;margin-bottom:12px;font-family:Arial}
+.si{padding:9px 0;border-bottom:1px solid #eee;font-size:.84em}
+.si:last-child{border-bottom:none}
+.si a{color:#222;text-decoration:none;line-height:1.4;display:block}
+.si a:hover{color:#c0392b}
+.si .sm{font-size:.74em;color:#999;margin-top:2px;font-family:Arial}
+.footer{background:#222;color:#aaa;text-align:center;padding:22px;font-size:.8em;font-family:Arial;margin-top:30px}
+/* Article page */
+.art-container{max-width:780px;margin:0 auto;padding:28px 20px}
+.art-cat{font-size:.75em;font-weight:700;text-transform:uppercase;color:#c0392b;letter-spacing:.5px;font-family:Arial;margin-bottom:8px}
+.art-title{font-size:1.85em;font-weight:700;line-height:1.25;margin-bottom:8px}
+.art-sub{font-size:1.05em;color:#555;line-height:1.5;margin-bottom:14px;font-style:italic}
+.art-meta{font-size:.78em;color:#888;font-family:Arial;display:flex;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.art-meta .author{color:#c0392b;font-weight:600}
+.hero{width:100%;border-radius:4px;margin-bottom:6px;max-height:460px;object-fit:cover}
+.caption{font-size:.78em;color:#888;font-family:Arial;margin-bottom:22px;font-style:italic}
+.art-body{font-size:1em;line-height:1.8;color:#333}
+.art-body p{margin-bottom:15px}
+.art-body blockquote{border-left:3px solid #c0392b;padding:10px 15px;margin:18px 0;background:#fff8f8;font-style:italic;color:#555}
+.related{margin-top:28px}
+.rel-title{font-size:.88em;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid #c0392b;padding-bottom:7px;margin-bottom:14px;font-family:Arial}
+.rel-item{padding:9px 0;border-bottom:1px solid #eee;font-size:.87em}
+.rel-item a{color:#222;text-decoration:none}
+.rel-item a:hover{color:#c0392b}
+.share{background:#fff;border:1px solid #eee;border-radius:4px;padding:14px;margin-top:22px;font-family:Arial;font-size:.84em}
+.share strong{display:block;margin-bottom:8px}
+.sbtn{display:inline-block;padding:5px 13px;border-radius:3px;color:#fff;font-size:.8em;margin-right:7px;border:none;cursor:pointer}
+.fb{background:#1877f2}.tw{background:#1da1f2}.wa{background:#25d366}
+@media(max-width:768px){.container{grid-template-columns:1fr}.sidebar{display:none}}
+</style></head><body>
+<nav class="navbar"><div class="navbar-inner">
+<a href="index.html" class="logo">Kabar Nusantara<span>Terpercaya, Cepat, Berimbang</span></a>
+<div class="nav-links"><a href="kategori/kriminal.html">Kriminal</a><a href="kategori/keamanan.html">Keamanan</a><a href="kategori/hukum.html">Hukum</a><a href="kategori/bencana.html">Bencana</a><a href="kategori/politik.html">Politik</a><a href="kategori/umum.html">Umum</a></div>
+</div></nav>
+<div class="breaking">TERKINI: Ikuti terus perkembangan berita dari seluruh Indonesia &nbsp;|&nbsp; Kirim info ke redaksi &nbsp;|&nbsp; Aktifkan notifikasi</div>
+<div class="container"><div class="main">
+<div class="card headline" onclick="location.href='berita/a3f501bf.html'">
+<img src="images/7afeee60.jpg" alt="Guru di Palembang Dianiaya Orang Tua Murid di Dalam Kelas" style="width:100%;height:320px;object-fit:cover">
+<div class="card-body">
+  <div class="cat"><span class="badge">TERBARU</span>Sosial</div>
+  <div class="title" style="font-size:1.4em"><a href="berita/a3f501bf.html">Guru di Palembang Dianiaya Orang Tua Murid di Dalam Kelas</a></div>
+  <div class="meta">Rahmawati Putri &bull; 13 April 2026, 11:49 WIB &bull; Palembang, Papua Barat</div>
+  <div class="summary">Peristiwa ini mengundang keprihatinan dari berbagai pihak, termasuk Dinas Pendidikan setempat.</div>
+</div></div>
+<div class="card" onclick="location.href='berita/94bc7039.html'">
+<img src="images/4559d609.jpg" alt="Sindikat Perdagangan Manusia Digerebek di Kota Administrasi Jakarta Timur" style="width:100%;height:200px;object-fit:cover">
+<div class="card-body">
+  <div class="cat">Hukum & Kriminal</div>
+  <div class="title"><a href="berita/94bc7039.html">Sindikat Perdagangan Manusia Digerebek di Kota Administrasi Jakarta Timur</a></div>
+  <div class="meta">Lestari Ningrum &bull; 11 April 2026, 05:04 WIB &bull; Kota Administrasi Jakarta Timur</div>
+  <div class="summary">Operasi tersebut menghasilkan penangkapan 10 tersangka dan penyelamatan 25 korban.</div>
+</div></div>
+<div class="card" onclick="location.href='berita/7af38eec.html'">
+<img src="images/0b86d3b7.jpg" alt="Jembatan di Binjai Ambruk Saat Dilintasi Kendaraan Berat" style="width:100%;height:200px;object-fit:cover">
+<div class="card-body">
+  <div class="cat">Daerah</div>
+  <div class="title"><a href="berita/7af38eec.html">Jembatan di Binjai Ambruk Saat Dilintasi Kendaraan Berat</a></div>
+  <div class="meta">Doni Setiawan &bull; 7 April 2026, 00:26 WIB &bull; Binjai</div>
+  <div class="summary">Kecelakaan ini menyebabkan satu orang terluka dan lalu lintas terhambat selama beberapa jam.</div>
+</div></div>
+<div class="card" onclick="location.href='berita/5c3c839d.html'">
+<img src="images/8bf41369.jpg" alt="Startup Teknologi Asal Payakumbuh Raih Pendanaan Seri A" style="width:100%;height:200px;object-fit:cover">
+<div class="card-body">
+  <div class="cat">Teknologi</div>
+  <div class="title"><a href="berita/5c3c839d.html">Startup Teknologi Asal Payakumbuh Raih Pendanaan Seri A</a></div>
+  <div class="meta">Sari Dewanti &bull; 31 Maret 2026, 03:02 WIB &bull; Payakumbuh</div>
+  <div class="summary">Inovasi Digital Mendorong Perkembangan Ekonomi Lokal</div>
+</div></div>
+<div class="card" onclick="location.href='berita/e3c73f7d.html'">
+<img src="images/7af38eec.jpg" alt="Konflik Suku di Jambi Meledak, Satu Desa Hangus Terbakar" style="width:100%;height:200px;object-fit:cover">
+<div class="card-body">
+  <div class="cat">Sosial</div>
+  <div class="title"><a href="berita/e3c73f7d.html">Konflik Suku di Jambi Meledak, Satu Desa Hangus Terbakar</a></div>
+  <div class="meta">Yuni Astuti &bull; 17 Maret 2026, 20:46 WIB &bull; Jambi</div>
+  <div class="summary">Kejadian ini terjadi pada Sabtu malam, 17 Maret 2026, akibat ketegangan antar kelompok masyarakat</div>
+</div></div>
+<div class="card" onclick="location.href='berita/07f3cb4d.html'">
+<img src="images/5c3c839d.jpg" alt="Sindikat Narkotika Jaringan Internasional Digerebek di Yogyakarta" style="width:100%;height:200px;object-fit:cover">
+<div class="card-body">
+  <div class="cat">Hukum & Kriminal</div>
+  <div class="title"><a href="berita/07f3cb4d.html">Sindikat Narkotika Jaringan Internasional Digerebek di Yogyakarta</a></div>
+  <div class="meta">Doni Setiawan &bull; 17 Maret 2026, 09:53 WIB &bull; Yogyakarta</div>
+  <div class="summary">Penangkapan ini melibatkan 10 tersangka dan menyita 250 kilogram narkotika jenis sabu-sabu</div>
+</div></div>
+<div class="card" onclick="location.href='berita/2c50d4a7.html'">
+<img src="images/a3f501bf.jpg" alt="Jembatan di Prabumulih Ambruk Saat Dilintasi Kendaraan Berat" style="width:100%;height:200px;object-fit:cover">
+<div class="card-body">
+  <div class="cat">Daerah</div>
+  <div class="title"><a href="berita/2c50d4a7.html">Jembatan di Prabumulih Ambruk Saat Dilintasi Kendaraan Berat</a></div>
+  <div class="meta">Mira Kusuma &bull; 16 Maret 2026, 16:56 WIB &bull; Prabumulih</div>
+  <div class="summary">Kecelakaan Akibat Struktur Jembatan yang Tidak Memadai</div>
+</div></div>
+<div class="card" onclick="location.href='berita/7afeee60.html'">
+<img src="images/82a4ef0a.jpg" alt="Penembakan di Kotamobagu, Satu Korban Tewas dan Beberapa Terluka" style="width:100%;height:200px;object-fit:cover">
+<div class="card-body">
+  <div class="cat">Hukum & Kriminal</div>
+  <div class="title"><a href="berita/7afeee60.html">Penembakan di Kotamobagu, Satu Korban Tewas dan Beberapa Terluka</a></div>
+  <div class="meta">Lestari Ningrum &bull; 14 Maret 2026, 00:38 WIB &bull; Kotamobagu</div>
+  <div class="summary">Kelompok bersenjata tidak dikenal menyerang warga di tengah kota, polisi masih menyelidiki kasus ini.</div>
+</div></div>
+</div><div class="sidebar">
+<div class="sw"><div class="sw-title">Terpopuler</div>
+<div class="si"><a href="berita/0d7cfe1c.html"><strong style="color:#c0392b;font-family:Arial">1.</strong> Investasi Asing Masuk ke Sawahlunto, Ribuan Lapangan Kerja Terbuka</a><div class="sm">Ekonomi &bull; Bengkulu</div></div>
+<div class="si"><a href="berita/f8eb4a7d.html"><strong style="color:#c0392b;font-family:Arial">2.</strong> Longsor di Batu Menimbun Pemukiman Warga, Dua Tewas</a><div class="sm">Daerah &bull; Kepulauan Riau</div></div>
+<div class="si"><a href="berita/02dc5983.html"><strong style="color:#c0392b;font-family:Arial">3.</strong> Jembatan di Palu Ambruk Saat Dilintasi Kendaraan Berat</a><div class="sm">Daerah &bull; Kalimantan Barat</div></div>
+<div class="si"><a href="berita/8bf41369.html"><strong style="color:#c0392b;font-family:Arial">4.</strong> Sindikat Perdagangan Manusia Digerebek di Cirebon, 10 Tersangka Ditangkap</a><div class="sm">Hukum & Kriminal &bull; Nusa Tenggara Barat</div></div>
+<div class="si"><a href="berita/f9c6d826.html"><strong style="color:#c0392b;font-family:Arial">5.</strong> Harga Gula Melonjak di Pasar Tebingtinggi, Warga Mengeluh</a><div class="sm">Ekonomi &bull; Sulawesi Tenggara</div></div>
+<div class="si"><a href="berita/a1dcf04b.html"><strong style="color:#c0392b;font-family:Arial">6.</strong> Harga Kedelai Melonjak di Madiun, Warga Keluhkan Lonjakan Biaya</a><div class="sm">Ekonomi &bull; DKI Jakarta</div></div>
+</div>
+<div class="sw"><div class="sw-title">Berita Daerah</div>
+<div class="si"><a href="berita/cb36e786.html">Demo Besar di Kendari Ricuh, Polisi Kerahkan Water Cannon</a><div class="sm">Maluku &bull; 3 Februari 2026, 02:37 WIB</div></div>
+<div class="si"><a href="berita/4559d609.html">Banjir Bandang Landa Bitung, Ribuan Warga Terpaksa Mengungsi</a><div class="sm">Jawa Timur &bull; 1 Februari 2026, 05:34 WIB</div></div>
+<div class="si"><a href="berita/e19829f4.html">Ancaman Bom Terima Pejabat Daerah Palopo</a><div class="sm">Bali &bull; 29 Januari 2026, 17:38 WIB</div></div>
+<div class="si"><a href="berita/7d3f430c.html">Sindikat Perdagangan Manusia Digerebek di Padangpanjang</a><div class="sm">Sulawesi Utara &bull; 27 Januari 2026, 16:17 WIB</div></div>
+<div class="si"><a href="berita/82a4ef0a.html">Kelompok Bersenjata Serang Warga Sipil di Pedalaman Ternate</a><div class="sm">Sumatera Selatan &bull; 23 Januari 2026, 22:04 WIB</div></div>
+<div class="si"><a href="berita/0b86d3b7.html">Anak Hilang di Purwokerto Ditemukan dalam Kondisi Mengenaskan</a><div class="sm">Banten &bull; 14 Januari 2026, 05:53 WIB</div></div>
+</div>
+</div></div>
+<div class="footer">&copy; 2026 Kabar Nusantara. Seluruh hak cipta dilindungi.<br>Redaksi | Iklan | Karir | Syarat & Ketentuan | Kebijakan Privasi</div></body></html>

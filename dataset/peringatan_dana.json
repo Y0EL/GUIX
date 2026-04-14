@@ -1,0 +1,16 @@
+[
+  {
+    "id_peringatan_dana": "palert-7f13b9b899",
+    "id_kasus": "kasus-pendanaan-mencurigakan",
+    "tingkat_keparahan": "menengah",
+    "deskripsi": "Sejumlah transfer kecil berulang mengarah ke penerima yang sama dalam jendela waktu sempit.",
+    "kepercayaan": 0.77
+  },
+  {
+    "id_peringatan_dana": "palert-6bf19739e7",
+    "id_kasus": "kasus-pendanaan-mencurigakan",
+    "tingkat_keparahan": "menengah",
+    "deskripsi": "Sebagian transaksi berbagi perangkat atau IP yang sama.",
+    "kepercayaan": 0.71
+  }
+]
