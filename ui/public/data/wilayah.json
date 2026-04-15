@@ -1,0 +1,132 @@
+[
+  {
+    "id_wilayah": "wil-bekasi",
+    "nama": "Bekasi",
+    "provinsi": "Jawa Barat",
+    "total_kasus": 1,
+    "alert_aktif": 3,
+    "skor_risiko_rata": 78,
+    "severity_tertinggi": "tinggi",
+    "koordinat_pusat": [
+      -6.227789,
+      106.994444
+    ]
+  },
+  {
+    "id_wilayah": "wil-cikarang",
+    "nama": "Cikarang",
+    "provinsi": "Jawa Barat",
+    "total_kasus": 1,
+    "alert_aktif": 2,
+    "skor_risiko_rata": 74,
+    "severity_tertinggi": "tinggi",
+    "koordinat_pusat": [
+      -6.255323,
+      107.149563
+    ]
+  },
+  {
+    "id_wilayah": "wil-jakarta",
+    "nama": "Jakarta",
+    "provinsi": "DKI Jakarta",
+    "total_kasus": 1,
+    "alert_aktif": 1,
+    "skor_risiko_rata": 67,
+    "severity_tertinggi": "menengah",
+    "koordinat_pusat": [
+      -6.214212,
+      106.847618
+    ]
+  },
+  {
+    "id_wilayah": "wil-bandung",
+    "nama": "Bandung",
+    "provinsi": "Jawa Barat",
+    "total_kasus": 0,
+    "alert_aktif": 0,
+    "skor_risiko_rata": 0.0,
+    "severity_tertinggi": "rendah",
+    "koordinat_pusat": [
+      -6.919691,
+      107.610954
+    ]
+  },
+  {
+    "id_wilayah": "wil-bogor",
+    "nama": "Bogor",
+    "provinsi": "Jawa Barat",
+    "total_kasus": 0,
+    "alert_aktif": 0,
+    "skor_risiko_rata": 0.0,
+    "severity_tertinggi": "rendah",
+    "koordinat_pusat": [
+      -6.597284,
+      106.815563
+    ]
+  },
+  {
+    "id_wilayah": "wil-cibinong",
+    "nama": "Cibinong",
+    "provinsi": "Jawa Barat",
+    "total_kasus": 0,
+    "alert_aktif": 0,
+    "skor_risiko_rata": 0.0,
+    "severity_tertinggi": "rendah",
+    "koordinat_pusat": [
+      -6.476424,
+      106.855818
+    ]
+  },
+  {
+    "id_wilayah": "wil-cikampek",
+    "nama": "Cikampek",
+    "provinsi": "Jawa Barat",
+    "total_kasus": 0,
+    "alert_aktif": 0,
+    "skor_risiko_rata": 0.0,
+    "severity_tertinggi": "rendah",
+    "koordinat_pusat": [
+      -6.405642,
+      107.460562
+    ]
+  },
+  {
+    "id_wilayah": "wil-depok",
+    "nama": "Depok",
+    "provinsi": "Jawa Barat",
+    "total_kasus": 0,
+    "alert_aktif": 0,
+    "skor_risiko_rata": 0.0,
+    "severity_tertinggi": "rendah",
+    "koordinat_pusat": [
+      -6.40474,
+      106.797799
+    ]
+  },
+  {
+    "id_wilayah": "wil-karawang",
+    "nama": "Karawang",
+    "provinsi": "Jawa Barat",
+    "total_kasus": 0,
+    "alert_aktif": 0,
+    "skor_risiko_rata": 0.0,
+    "severity_tertinggi": "rendah",
+    "koordinat_pusat": [
+      -6.308515,
+      107.30789
+    ]
+  },
+  {
+    "id_wilayah": "wil-tangerang",
+    "nama": "Tangerang",
+    "provinsi": "Banten",
+    "total_kasus": 0,
+    "alert_aktif": 0,
+    "skor_risiko_rata": 0.0,
+    "severity_tertinggi": "rendah",
+    "koordinat_pusat": [
+      -6.176898,
+      106.620504
+    ]
+  }
+]

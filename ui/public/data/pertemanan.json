@@ -1,0 +1,448 @@
+[
+  {
+    "id_pertemanan": "pert-ad013916d5",
+    "profil_a": "prof-1e0403e12f",
+    "profil_b": "prof-838dbed843",
+    "kekuatan": 0.94,
+    "id_klaster": "klaster-1",
+    "sejak": "2024-11-13T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-4bc9c22a29",
+    "profil_a": "prof-1e0403e12f",
+    "profil_b": "prof-2fa2e9ea7b",
+    "kekuatan": 0.58,
+    "id_klaster": "klaster-1",
+    "sejak": "2025-12-15T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-1de208fa91",
+    "profil_a": "prof-1e0403e12f",
+    "profil_b": "prof-62622dfbad",
+    "kekuatan": 0.71,
+    "id_klaster": "klaster-1",
+    "sejak": "2025-07-06T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-7edbf091a6",
+    "profil_a": "prof-1e0403e12f",
+    "profil_b": "prof-46835d8ea6",
+    "kekuatan": 0.64,
+    "id_klaster": "klaster-1",
+    "sejak": "2025-08-28T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-a6ae32b938",
+    "profil_a": "prof-1e0403e12f",
+    "profil_b": "prof-2960544ab8",
+    "kekuatan": 0.82,
+    "id_klaster": "klaster-1",
+    "sejak": "2025-01-13T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-3af8a9c57f",
+    "profil_a": "prof-044e991493",
+    "profil_b": "prof-5d42267c65",
+    "kekuatan": 0.91,
+    "id_klaster": "klaster-2",
+    "sejak": "2025-04-02T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-886b550890",
+    "profil_a": "prof-044e991493",
+    "profil_b": "prof-739dafdf3b",
+    "kekuatan": 0.69,
+    "id_klaster": "klaster-2",
+    "sejak": "2024-06-06T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-db267b8421",
+    "profil_a": "prof-044e991493",
+    "profil_b": "prof-c1bd6e64bd",
+    "kekuatan": 0.74,
+    "id_klaster": "klaster-2",
+    "sejak": "2023-12-25T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-33debbd878",
+    "profil_a": "prof-5d42267c65",
+    "profil_b": "prof-6c0beb297b",
+    "kekuatan": 0.81,
+    "id_klaster": "klaster-2",
+    "sejak": "2025-07-28T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-6e7c3aafa9",
+    "profil_a": "prof-5d42267c65",
+    "profil_b": "prof-739dafdf3b",
+    "kekuatan": 0.54,
+    "id_klaster": "klaster-2",
+    "sejak": "2022-03-19T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-f3446f3675",
+    "profil_a": "prof-5d42267c65",
+    "profil_b": "prof-7e364ba897",
+    "kekuatan": 0.81,
+    "id_klaster": "klaster-2",
+    "sejak": "2024-08-31T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-d617899b4d",
+    "profil_a": "prof-5d42267c65",
+    "profil_b": "prof-c1bd6e64bd",
+    "kekuatan": 0.64,
+    "id_klaster": "klaster-2",
+    "sejak": "2025-06-13T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-8d6ac0a419",
+    "profil_a": "prof-6c0beb297b",
+    "profil_b": "prof-739dafdf3b",
+    "kekuatan": 0.61,
+    "id_klaster": "klaster-2",
+    "sejak": "2025-08-18T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-bea64bbb9d",
+    "profil_a": "prof-6c0beb297b",
+    "profil_b": "prof-c1bd6e64bd",
+    "kekuatan": 0.79,
+    "id_klaster": "klaster-2",
+    "sejak": "2023-05-31T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-b67b06158e",
+    "profil_a": "prof-739dafdf3b",
+    "profil_b": "prof-c1bd6e64bd",
+    "kekuatan": 0.91,
+    "id_klaster": "klaster-2",
+    "sejak": "2025-06-07T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-46742c8409",
+    "profil_a": "prof-4d69ca4db8",
+    "profil_b": "prof-ed3530b0d1",
+    "kekuatan": 0.55,
+    "id_klaster": "klaster-3",
+    "sejak": "2024-03-12T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-6ab94a6d3e",
+    "profil_a": "prof-4d69ca4db8",
+    "profil_b": "prof-6c2741bdfe",
+    "kekuatan": 0.57,
+    "id_klaster": "klaster-3",
+    "sejak": "2023-05-15T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-7cc167f145",
+    "profil_a": "prof-d78adef44d",
+    "profil_b": "prof-ed3530b0d1",
+    "kekuatan": 0.65,
+    "id_klaster": "klaster-3",
+    "sejak": "2024-11-03T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-834c7b847f",
+    "profil_a": "prof-843b8bef88",
+    "profil_b": "prof-ed3530b0d1",
+    "kekuatan": 0.85,
+    "id_klaster": "klaster-3",
+    "sejak": "2024-01-05T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-22fa154c7d",
+    "profil_a": "prof-cb26309010",
+    "profil_b": "prof-ed3530b0d1",
+    "kekuatan": 0.88,
+    "id_klaster": "klaster-3",
+    "sejak": "2024-11-07T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-ccb5f1d1a6",
+    "profil_a": "prof-843b8bef88",
+    "profil_b": "prof-d78adef44d",
+    "kekuatan": 0.59,
+    "id_klaster": "klaster-3",
+    "sejak": "2022-06-23T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-c881f4ff51",
+    "profil_a": "prof-cb26309010",
+    "profil_b": "prof-d78adef44d",
+    "kekuatan": 0.65,
+    "id_klaster": "klaster-3",
+    "sejak": "2025-07-31T09:14:17+07:00"
+  },
+  {
+    "id_pertemanan": "pert-fbcaa720a9",
+    "profil_a": "prof-1e0403e12f",
+    "profil_b": "prof-2511183081",
+    "kekuatan": 0.73,
+    "id_klaster": "klaster-1",
+    "sejak": "2024-01-04T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-b724a077b9",
+    "profil_a": "prof-2511183081",
+    "profil_b": "prof-2fa2e9ea7b",
+    "kekuatan": 0.68,
+    "id_klaster": "klaster-1",
+    "sejak": "2024-12-11T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-7e754cba3d",
+    "profil_a": "prof-2511183081",
+    "profil_b": "prof-838dbed843",
+    "kekuatan": 0.8,
+    "id_klaster": "klaster-1",
+    "sejak": "2023-12-04T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-7676880f1a",
+    "profil_a": "prof-2511183081",
+    "profil_b": "prof-62622dfbad",
+    "kekuatan": 0.86,
+    "id_klaster": "klaster-1",
+    "sejak": "2025-02-15T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-dfb5b1c2c5",
+    "profil_a": "prof-2511183081",
+    "profil_b": "prof-46835d8ea6",
+    "kekuatan": 0.82,
+    "id_klaster": "klaster-1",
+    "sejak": "2026-02-03T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-8c02b4ec29",
+    "profil_a": "prof-2511183081",
+    "profil_b": "prof-843b8bef88",
+    "kekuatan": 0.73,
+    "id_klaster": "klaster-3",
+    "sejak": "2024-01-24T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-37f9e1654c",
+    "profil_a": "prof-2511183081",
+    "profil_b": "prof-ed3530b0d1",
+    "kekuatan": 0.88,
+    "id_klaster": "klaster-3",
+    "sejak": "2025-03-26T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-a557e3305f",
+    "profil_a": "prof-2511183081",
+    "profil_b": "prof-4d69ca4db8",
+    "kekuatan": 0.93,
+    "id_klaster": "klaster-3",
+    "sejak": "2025-09-15T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-993d94a536",
+    "profil_a": "prof-2511183081",
+    "profil_b": "prof-d78adef44d",
+    "kekuatan": 0.72,
+    "id_klaster": "klaster-3",
+    "sejak": "2023-11-25T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-e837734d40",
+    "profil_a": "prof-2511183081",
+    "profil_b": "prof-6c2741bdfe",
+    "kekuatan": 0.76,
+    "id_klaster": "klaster-3",
+    "sejak": "2024-08-29T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-1865f8bc2d",
+    "profil_a": "prof-2253494b01",
+    "profil_b": "prof-6c2741bdfe",
+    "kekuatan": 0.62,
+    "id_klaster": "klaster-3",
+    "sejak": "2024-01-12T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-a7235d7859",
+    "profil_a": "prof-2253494b01",
+    "profil_b": "prof-ed3530b0d1",
+    "kekuatan": 0.76,
+    "id_klaster": "klaster-3",
+    "sejak": "2024-08-03T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-677d697291",
+    "profil_a": "prof-2253494b01",
+    "profil_b": "prof-cb26309010",
+    "kekuatan": 0.83,
+    "id_klaster": "klaster-3",
+    "sejak": "2025-07-07T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-77b65ede33",
+    "profil_a": "prof-2253494b01",
+    "profil_b": "prof-d78adef44d",
+    "kekuatan": 0.95,
+    "id_klaster": "klaster-3",
+    "sejak": "2024-03-20T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-a080f99a89",
+    "profil_a": "prof-2253494b01",
+    "profil_b": "prof-4d69ca4db8",
+    "kekuatan": 0.62,
+    "id_klaster": "klaster-3",
+    "sejak": "2023-11-03T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-8e7fab6378",
+    "profil_a": "prof-1e0403e12f",
+    "profil_b": "prof-2253494b01",
+    "kekuatan": 0.84,
+    "id_klaster": "klaster-1",
+    "sejak": "2024-11-04T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-ac5a2e6923",
+    "profil_a": "prof-2253494b01",
+    "profil_b": "prof-2960544ab8",
+    "kekuatan": 0.74,
+    "id_klaster": "klaster-1",
+    "sejak": "2024-08-07T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-3ff368ae47",
+    "profil_a": "prof-2253494b01",
+    "profil_b": "prof-838dbed843",
+    "kekuatan": 0.96,
+    "id_klaster": "klaster-1",
+    "sejak": "2025-03-07T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-99e219ec50",
+    "profil_a": "prof-2253494b01",
+    "profil_b": "prof-46835d8ea6",
+    "kekuatan": 0.67,
+    "id_klaster": "klaster-1",
+    "sejak": "2024-12-02T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-e6caa780d2",
+    "profil_a": "prof-2253494b01",
+    "profil_b": "prof-2fa2e9ea7b",
+    "kekuatan": 0.81,
+    "id_klaster": "klaster-1",
+    "sejak": "2025-08-31T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-c0996b03ed",
+    "profil_a": "prof-739dafdf3b",
+    "profil_b": "prof-b52f349a0c",
+    "kekuatan": 0.86,
+    "id_klaster": "klaster-2",
+    "sejak": "2025-11-04T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-56d54659f9",
+    "profil_a": "prof-6c0beb297b",
+    "profil_b": "prof-b52f349a0c",
+    "kekuatan": 0.9,
+    "id_klaster": "klaster-2",
+    "sejak": "2025-10-30T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-4eea08d3ba",
+    "profil_a": "prof-b52f349a0c",
+    "profil_b": "prof-c1bd6e64bd",
+    "kekuatan": 0.62,
+    "id_klaster": "klaster-2",
+    "sejak": "2024-12-19T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-484a052024",
+    "profil_a": "prof-7e364ba897",
+    "profil_b": "prof-b52f349a0c",
+    "kekuatan": 0.88,
+    "id_klaster": "klaster-2",
+    "sejak": "2024-05-16T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-64119b5984",
+    "profil_a": "prof-5d42267c65",
+    "profil_b": "prof-b52f349a0c",
+    "kekuatan": 0.65,
+    "id_klaster": "klaster-2",
+    "sejak": "2024-11-16T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-d5b57324ca",
+    "profil_a": "prof-4d69ca4db8",
+    "profil_b": "prof-b52f349a0c",
+    "kekuatan": 0.89,
+    "id_klaster": "klaster-3",
+    "sejak": "2024-07-29T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-de469960a1",
+    "profil_a": "prof-b52f349a0c",
+    "profil_b": "prof-d78adef44d",
+    "kekuatan": 0.68,
+    "id_klaster": "klaster-3",
+    "sejak": "2024-10-21T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-57d64a2836",
+    "profil_a": "prof-6c2741bdfe",
+    "profil_b": "prof-b52f349a0c",
+    "kekuatan": 0.74,
+    "id_klaster": "klaster-3",
+    "sejak": "2023-11-24T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-0e777b2986",
+    "profil_a": "prof-b52f349a0c",
+    "profil_b": "prof-cb26309010",
+    "kekuatan": 0.76,
+    "id_klaster": "klaster-3",
+    "sejak": "2023-10-27T09:14:17+07:00",
+    "adalah_jembatan": true
+  },
+  {
+    "id_pertemanan": "pert-aff03f0fe7",
+    "profil_a": "prof-843b8bef88",
+    "profil_b": "prof-b52f349a0c",
+    "kekuatan": 0.89,
+    "id_klaster": "klaster-3",
+    "sejak": "2025-01-04T09:14:17+07:00",
+    "adalah_jembatan": true
+  }
+]

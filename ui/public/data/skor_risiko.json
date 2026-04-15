@@ -1,0 +1,42 @@
+[
+  {
+    "id_kasus": "kasus-kebakaran-gudang",
+    "label_risiko": "tinggi",
+    "skor_risiko": 78,
+    "probabilitas_kecelakaan": 0.58,
+    "probabilitas_sabotase_terorganisir": 0.42,
+    "pendorong": [
+      "ledakan_awal",
+      "akun_sinkron",
+      "posting_pra_kejadian",
+      "sinyal_co_lokasi"
+    ],
+    "penafian": "Penilaian ini indikatif dan bukan atribusi final."
+  },
+  {
+    "id_kasus": "kasus-pendanaan-mencurigakan",
+    "label_risiko": "menengah",
+    "skor_risiko": 67,
+    "probabilitas_dukungan_rutin": 0.54,
+    "probabilitas_pendanaan_terkoordinasi": 0.46,
+    "pendorong": [
+      "transfer_berulang",
+      "perangkat_bersama",
+      "co_lokasi"
+    ],
+    "penafian": "Penilaian ini indikatif dan bukan atribusi final."
+  },
+  {
+    "id_kasus": "kasus-propaganda-burst",
+    "label_risiko": "tinggi",
+    "skor_risiko": 74,
+    "probabilitas_diskursus_organik": 0.49,
+    "probabilitas_propagasi_terkoordinasi": 0.51,
+    "pendorong": [
+      "copy_paste",
+      "sinkronisasi_waktu",
+      "overlap_jembatan"
+    ],
+    "penafian": "Penilaian ini indikatif dan bukan atribusi final."
+  }
+]

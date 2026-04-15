@@ -1,0 +1,68 @@
+[
+  {
+    "id_kasus": "kasus-kebakaran-gudang",
+    "tipe_entitas": "lokasi",
+    "nilai": "kawasan industri Bekasi",
+    "jumlah": 132
+  },
+  {
+    "id_kasus": "kasus-kebakaran-gudang",
+    "tipe_entitas": "kata_kunci",
+    "nilai": "ledakan",
+    "jumlah": 188
+  },
+  {
+    "id_kasus": "kasus-kebakaran-gudang",
+    "tipe_entitas": "kata_kunci",
+    "nilai": "bau kimia",
+    "jumlah": 87
+  },
+  {
+    "id_kasus": "kasus-kebakaran-gudang",
+    "tipe_entitas": "kata_kunci",
+    "nilai": "motor mencurigakan",
+    "jumlah": 53
+  },
+  {
+    "id_kasus": "kasus-kebakaran-gudang",
+    "tipe_entitas": "jangkar_waktu",
+    "nilai": "02:30 WIB",
+    "jumlah": 241
+  },
+  {
+    "id_kasus": "kasus-pendanaan-mencurigakan",
+    "tipe_entitas": "kata_kunci",
+    "nilai": "transfer kecil berulang",
+    "jumlah": 78
+  },
+  {
+    "id_kasus": "kasus-pendanaan-mencurigakan",
+    "tipe_entitas": "lokasi",
+    "nilai": "Jakarta coworking space",
+    "jumlah": 34
+  },
+  {
+    "id_kasus": "kasus-pendanaan-mencurigakan",
+    "tipe_entitas": "kata_kunci",
+    "nilai": "perangkat_bersama",
+    "jumlah": 12
+  },
+  {
+    "id_kasus": "kasus-propaganda-burst",
+    "tipe_entitas": "kata_kunci",
+    "nilai": "disrupsi supply chain",
+    "jumlah": 49
+  },
+  {
+    "id_kasus": "kasus-propaganda-burst",
+    "tipe_entitas": "kata_kunci",
+    "nilai": "copy-paste wording",
+    "jumlah": 26
+  },
+  {
+    "id_kasus": "kasus-propaganda-burst",
+    "tipe_entitas": "klaster_akun",
+    "nilai": "14 akun sinkron",
+    "jumlah": 1
+  }
+]
