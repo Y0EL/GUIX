@@ -3700,6 +3700,12 @@ mark { background: rgba(229,40,42,.25); color: #F0F0F0; border-radius: 2px; padd
 .ki-topbar-btn-save { border-color: rgba(179,24,24,.2); color: rgba(243,234,234,.5); }
 .ki-topbar-btn-save:hover { background: rgba(179,24,24,.15); border-color: rgba(179,24,24,.4); color: rgba(243,234,234,.9); }
 .ki-topbar-btn-save.ki-saved { background: rgba(46,125,50,.2); border-color: rgba(46,125,50,.4); color: #4CAF50; }
+.ki-topbar-btn-mode { border-color: rgba(23,162,184,.2); color: rgba(23,162,184,.6); }
+.ki-topbar-btn-mode:hover { background: rgba(23,162,184,.1); border-color: rgba(23,162,184,.4); color: #17A2B8; }
+.ki-topbar-btn-mode.aktif { background: rgba(23,162,184,.18); border-color: rgba(23,162,184,.5); color: #17A2B8; }
+.ki-topbar-btn-hapus-sel { border-color: rgba(229,40,42,.35); color: #E5282A; background: rgba(229,40,42,.1); animation: ki-sel-pulse .6s ease infinite alternate; }
+.ki-topbar-btn-hapus-sel:hover { background: rgba(229,40,42,.22); border-color: rgba(229,40,42,.6); }
+@keyframes ki-sel-pulse { from { opacity: .8; } to { opacity: 1; } }
 
 /* Body layout */
 .ki-body {
@@ -3923,6 +3929,15 @@ mark { background: rgba(229,40,42,.25); color: #F0F0F0; border-radius: 2px; padd
   flex: 1; position: relative; overflow: hidden;
 }
 .wm-rf-wrap .react-flow { width: 100%; height: 100%; }
+.wm-rf-wrap .react-flow__controls {
+  background: #141414; border: 1px solid rgba(255,255,255,.08); border-radius: 6px; overflow: hidden; box-shadow: none;
+}
+.wm-rf-wrap .react-flow__controls button {
+  background: #141414; border: none; border-bottom: 1px solid rgba(255,255,255,.06);
+  color: rgba(243,234,234,.45); width: 26px; height: 26px;
+}
+.wm-rf-wrap .react-flow__controls button:hover { background: #1e1e1e; color: rgba(243,234,234,.85); }
+.wm-rf-wrap .react-flow__controls button:last-child { border-bottom: none; }
 .wm-canvas-empty {
   position: absolute; inset: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -4172,3 +4187,128 @@ mark { background: rgba(229,40,42,.25); color: #F0F0F0; border-radius: 2px; padd
 .ki-peta-wrap { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
 .ki-peta-map-container { height: 220px; flex-shrink: 0; border-bottom: 1px solid rgba(255,255,255,.07); }
 .ki-peta-map-container .imm-root { height: 100% !important; border-radius: 0; }
+
+/* ══════════════════════════════════════════════════════════════
+   H10 · Narasi & Tren  (prefix: nt-)
+══════════════════════════════════════════════════════════════ */
+.nt-root { display: flex; flex-direction: column; height: 100%; background: var(--warna-latar, #090909); overflow: hidden; }
+
+/* Topbar */
+.nt-topbar { display: flex; align-items: center; gap: 12px; height: 48px; padding: 0 16px;
+  border-bottom: 1px solid rgba(255,255,255,.07); flex-shrink: 0; }
+.nt-topbar-judul { font-size: 14px; font-weight: 700; color: rgba(243,234,234,.85); white-space: nowrap; }
+.nt-topbar-divider { width: 1px; height: 18px; background: rgba(255,255,255,.12); flex-shrink: 0; }
+.nt-topbar-stats { font-size: 10px; opacity: .3; white-space: nowrap; }
+.nt-kasus-pills { display: flex; align-items: center; gap: 6px; overflow-x: auto; flex: 1; }
+.nt-kasus-pills::-webkit-scrollbar { height: 0; }
+.nt-kasus-pill { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; border: 1px solid rgba(255,255,255,.1);
+  background: transparent; color: rgba(255,255,255,.4); cursor: pointer; white-space: nowrap; transition: all .12s; }
+.nt-kasus-pill:hover { border-color: rgba(255,255,255,.25); color: rgba(255,255,255,.7); }
+.nt-kasus-pill.aktif { border-color: rgba(214,40,40,.6); color: #FF6B6B; background: rgba(214,40,40,.1); }
+.nt-filter-kata-badge { display: flex; align-items: center; gap: 6px; font-size: 11px; white-space: nowrap;
+  background: rgba(229,40,42,.1); border: 1px solid rgba(229,40,42,.3); padding: 2px 10px;
+  border-radius: 4px; color: #E5282A; cursor: pointer; }
+.nt-filter-kata-badge:hover { background: rgba(229,40,42,.18); }
+
+/* Body layout */
+.nt-body { display: flex; flex: 1; overflow: hidden; }
+.nt-main { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 24px; }
+.nt-main::-webkit-scrollbar { width: 4px; }
+.nt-main::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 2px; }
+.nt-panel-kanan { width: 300px; flex-shrink: 0; border-left: 1px solid rgba(255,255,255,.07); overflow-y: auto; display: flex; flex-direction: column; }
+.nt-panel-kanan::-webkit-scrollbar { width: 4px; }
+.nt-panel-kanan::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 2px; }
+.nt-panel-kanan-judul { font-size: 10px; letter-spacing: 1.2px; padding: 12px 16px 10px;
+  border-bottom: 1px solid rgba(255,255,255,.07); opacity: .4; text-transform: uppercase; flex-shrink: 0; }
+
+/* Section cards */
+.nt-section { background: rgba(255,255,255,.025); border: 1px solid rgba(255,255,255,.06);
+  border-radius: 10px; padding: 16px; }
+.nt-section-title { display: flex; align-items: center; gap: 8px; font-size: 10px;
+  letter-spacing: 1.2px; text-transform: uppercase; opacity: .45; margin-bottom: 16px; }
+.nt-section-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.nt-section-sub { opacity: .3; font-weight: 400; text-transform: none; letter-spacing: 0; }
+
+/* Bar chart */
+.nt-barchart-wrap { width: 100%; padding: 4px 0; }
+.nt-barchart-svg { width: 100%; height: 160px; display: block; overflow: visible; }
+.nt-barchart-empty { font-size: 12px; opacity: .25; text-align: center; padding: 24px 0; }
+
+/* Word cloud */
+.nt-wordcloud-wrap { width: 100%; background: rgba(0,0,0,.2); border-radius: 6px; overflow: hidden; }
+.nt-wordcloud-svg { width: 100%; height: 220px; display: block; cursor: default; }
+
+/* Klaster grid */
+.nt-klaster-grid { display: flex; flex-direction: column; gap: 10px; }
+.nt-klaster-card { border: 1px solid; border-radius: 8px; padding: 14px 16px; }
+
+/* Baris 1: meta info */
+.nt-klaster-meta-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.nt-severity-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 800;
+  padding: 2px 7px; border-radius: 4px; border: 1px solid; letter-spacing: .7px;
+  background: rgba(0,0,0,.35); flex-shrink: 0; }
+.nt-klaster-kasus-label { font-size: 10px; font-weight: 600; opacity: .35; flex-shrink: 0; }
+.nt-klaster-stat-inline { font-size: 10px; opacity: .3; }
+.nt-klaster-stat-inline + .nt-klaster-stat-inline::before { content: '·'; margin-right: 4px; opacity: .4; }
+.nt-klaster-pct { font-weight: 700 !important; opacity: 1 !important; }
+
+/* Baris 2: frasa */
+.nt-klaster-frasa { font-size: 14px; font-weight: 700; color: rgba(243,234,234,.88); line-height: 1.45; display: block; }
+
+/* Progress bar */
+.nt-klaster-progress-track { height: 3px; background: rgba(255,255,255,.07); border-radius: 2px; overflow: hidden; }
+.nt-klaster-progress-fill { height: 100%; border-radius: 2px; transition: width .6s ease; }
+
+/* Footer: avatar + tombol aksi satu baris */
+.nt-klaster-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; gap: 12px; }
+.nt-klaster-profil-row { display: flex; align-items: center; gap: 4px; }
+.nt-klaster-avatar-btn { background: none; border: none; padding: 0; cursor: pointer; display: block; }
+.nt-klaster-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; display: block; }
+.nt-klaster-avatar-inisial { width: 28px; height: 28px; border-radius: 50%; background: #1e1e1e;
+  border: 1px solid rgba(255,255,255,.1); color: rgba(179,24,24,.9); display: flex;
+  align-items: center; justify-content: center; font-size: 9px; font-weight: 800; letter-spacing: .3px; }
+.nt-klaster-avatar-btn:hover .nt-klaster-avatar,
+.nt-klaster-avatar-btn:hover .nt-klaster-avatar-inisial { outline: 2px solid rgba(229,40,42,.5); }
+
+/* Berita feed */
+.nt-berita-list { display: flex; flex-direction: column; flex: 1; }
+.nt-berita-card { display: flex; flex-direction: column; text-decoration: none; padding: 12px 12px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.05); transition: background .1s; }
+.nt-berita-card:hover { background: rgba(255,255,255,.03); }
+.nt-berita-img-wrap { position: relative; aspect-ratio: 16/9; overflow: hidden; border-radius: 5px; background: #111; margin-bottom: 8px; }
+.nt-berita-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.nt-berita-img-placeholder { width: 100%; height: 100%; background: #1a1a1a; }
+.nt-berita-kategori-badge { position: absolute; top: 6px; left: 6px; font-size: 9px; font-weight: 700;
+  padding: 2px 6px; border-radius: 3px; color: #fff; text-transform: uppercase; letter-spacing: .5px; }
+.nt-berita-body { flex: 1; }
+.nt-berita-judul { font-size: 12px; line-height: 1.5; color: rgba(243,234,234,.85); font-weight: 600; }
+.nt-berita-meta { font-size: 10px; opacity: .3; margin-top: 5px; display: flex; gap: 8px; flex-wrap: wrap; }
+.nt-berita-link-icon { opacity: .18; margin-top: 6px; align-self: flex-end; }
+
+/* Loading / empty */
+.nt-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; opacity: .35; flex: 1; }
+.nt-empty-hint { display: flex; justify-content: center; gap: 8px; opacity: .22; font-size: 12px; padding: 24px; }
+
+/* ── Strip Ringkasan Intelijen ─────────────────── */
+.nt-intel-strip { display: flex; align-items: center; gap: 12px; padding: 8px 16px;
+  background: rgba(255,255,255,.02); border-bottom: 1px solid rgba(255,255,255,.06);
+  flex-shrink: 0; flex-wrap: wrap; }
+.nt-intel-stat { display: flex; align-items: center; gap: 6px; font-size: 11px; color: rgba(243,234,234,.5); }
+.nt-intel-stat strong { color: rgba(243,234,234,.85); }
+.nt-intel-stat-alert { color: #FF6B6B !important; }
+.nt-intel-stat-alert strong { color: #FF4444 !important; }
+.nt-intel-divider { width: 1px; height: 14px; background: rgba(255,255,255,.08); flex-shrink: 0; }
+.nt-intel-hint { font-size: 10px; opacity: .22; flex: 1; text-align: right; font-style: italic; }
+
+/* ── Action buttons di klaster card ──────────────── */
+.nt-klaster-badges { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.nt-severity-badge { display: flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 800;
+  padding: 3px 7px; border-radius: 4px; border: 1px solid; letter-spacing: .6px; }
+.nt-klaster-actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.06); }
+.nt-action-btn { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600;
+  padding: 6px 12px; border-radius: 6px; border: 1px solid; cursor: pointer; transition: background .12s; }
+.nt-action-kanvas { background: rgba(179,24,24,.12); border-color: rgba(179,24,24,.35); color: #FF6B6B; }
+.nt-action-kanvas:hover { background: rgba(179,24,24,.25); }
+.nt-action-kasus { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.12); color: rgba(243,234,234,.6); }
+.nt-action-kasus:hover { background: rgba(255,255,255,.09); color: rgba(243,234,234,.9); }

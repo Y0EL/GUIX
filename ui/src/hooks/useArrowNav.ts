@@ -9,6 +9,7 @@ const URUTAN: string[] = [
   '/map-intelligence',
   '/search',
   '/timeline',
+  '/narrative',
   '/canvas',
 ]
 

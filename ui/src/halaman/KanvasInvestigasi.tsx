@@ -23,7 +23,7 @@ import '@xyflow/react/dist/style.css'
 import {
   X, ChevronRight, Users, Activity, MapPin, Bell, Trash2, Save,
   Plus, RefreshCw, Search, Folder, FolderOpen, FileText,
-  Clock,
+  Clock, MousePointer2,
 } from 'lucide-react'
 import Fuse, { type FuseOptionKey } from 'fuse.js'
 import { muatJson } from '../utils'
@@ -871,6 +871,7 @@ export default function KanvasInvestigasi() {
   const [searchModal, setSearchModal] = useState<{ tipe: NodeTipe; dropPos: XYPosition } | null>(null)
   const [panelTab, setPanelTab] = useState<'detail' | 'timeline' | 'peta'>('detail')
   const [petaLokasiPanel, setPetaLokasiPanel] = useState<Lokasi | null>(null)
+  const [kanvasMode, setKanvasMode] = useState<'pan' | 'select'>('pan')
 
   // ── Context ──
   const removeKiNode = useCallback((id: string) => {
@@ -1202,6 +1203,12 @@ export default function KanvasInvestigasi() {
             onClick={()=>navigate('/timeline',{state: selTipe==='kasus'?{filterKasus:(dt as unknown as Kasus).id_kasus}:selTipe==='profil'?{filterProfil:(dt as unknown as Profil).id_profil}:{}})}>
             <ChevronRight size={11}/> Timeline
           </button>
+          {(selTipe === 'kasus' || selTipe === 'profil') && (
+            <button className="ki-expand-btn ki-expand-btn-nav"
+              onClick={()=>navigate('/narrative',{state: selTipe==='kasus'?{filterKasus:(dt as unknown as Kasus).id_kasus}:{filterProfil:(dt as unknown as Profil).id_profil}})}>
+              <ChevronRight size={11}/> Narasi & Tren
+            </button>
+          )}
         </div>
       </div>
     )
@@ -1284,6 +1291,13 @@ export default function KanvasInvestigasi() {
     )
   }
 
+  function hapusNodeTerpilih() {
+    const dipilihIds = new Set(nodes.filter(n => n.selected).map(n => n.id))
+    setNodes(nds => nds.filter(n => !dipilihIds.has(n.id)))
+    setEdges(eds => eds.filter(e => !dipilihIds.has(e.source) && !dipilihIds.has(e.target)))
+    setSelectedNodeId(null)
+  }
+
   const namaFolder = activeFolderIdx !== null ? workspace.folders[activeFolderIdx]?.nama ?? '—' : '—'
   const namaKanvas = (activeFolderIdx !== null && activeKanvasIdx !== null) ? workspace.folders[activeFolderIdx]?.kanvas[activeKanvasIdx]?.nama ?? '—' : '—'
   const existingNodeIds = new Set(nodes.map(n => n.id))
@@ -1316,6 +1330,18 @@ export default function KanvasInvestigasi() {
             <span>{nodes.length} node · {edges.length} edge</span>
           </div>
           <div style={{flex:1}}/>
+          <button
+            className={`ki-topbar-btn ki-topbar-btn-mode${kanvasMode === 'select' ? ' aktif' : ''}`}
+            onClick={() => setKanvasMode(m => m === 'pan' ? 'select' : 'pan')}
+            title={kanvasMode === 'pan' ? 'Aktifkan mode pilih (seret untuk seleksi banyak node)' : 'Kembali ke mode gerak'}
+          >
+            <MousePointer2 size={12}/> {kanvasMode === 'select' ? 'Mode Pilih' : 'Mode Gerak'}
+          </button>
+          {nodes.filter(n => n.selected).length > 1 && (
+            <button className="ki-topbar-btn ki-topbar-btn-hapus-sel" onClick={hapusNodeTerpilih}>
+              <Trash2 size={12}/> Hapus {nodes.filter(n => n.selected).length} node
+            </button>
+          )}
           <button className="ki-topbar-btn ki-topbar-btn-save" onClick={_simpanKanvas}>
             <Save size={12}/> {savedMsg ? 'Tersimpan!' : 'Simpan'}
           </button>
@@ -1358,6 +1384,10 @@ export default function KanvasInvestigasi() {
               onConnect={onConnect} nodeTypes={NODE_TYPES}
               onInit={setRfInstance} onNodeClick={onNodeClick} onPaneClick={onPaneClick}
               fitView minZoom={0.12} maxZoom={2.5}
+              panOnDrag={kanvasMode === 'pan' ? true : [2]}
+              selectionOnDrag={kanvasMode === 'select'}
+              selectionKeyCode="partial"
+              multiSelectionKeyCode="Control"
             >
               <Background variant={BackgroundVariant.Dots} gap={22} size={1} color="rgba(243,234,234,.05)"/>
               <Controls/>

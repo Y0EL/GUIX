@@ -1,5 +1,5 @@
 # Memori Proyek - Orkestrasi Intelijen
-Diperbarui: 2026-04-14 14:40
+Diperbarui: 2026-04-14 15:10
 
 ## Ringkasan Proyek
 Membangun backend orkestrasi agent TIA, NAA, dan PTA untuk analisis OSINT berbasis data uji internal dengan runtime nyata: OpenAI, LangChain, LangGraph, Kafka, Redis Streams, PostgreSQL, Neo4j, dan Celery.
@@ -50,6 +50,7 @@ Membangun backend orkestrasi agent TIA, NAA, dan PTA untuk analisis OSINT berbas
 - [x] Payload OpenAI untuk `analisis-kasus` dipadatkan agar `isi_json` profil yang sangat besar tidak dikirim ganda bersama `postingan` dan `lokasi`
 - [x] `analisis-kasus` sekarang memakai timeout khusus minimal 180 detik untuk dossier sindikat, tetapi panggilan lain tetap memakai timeout runtime biasa
 - [x] Generator `XLSX`, `DOCX`, dan `PDF` untuk `analisis-kasus` dimigrasikan ke layout bergaya dengan tema terang-oranye, heading 1-3, tabel, dan box konten
+- [x] Custom agent workspace ditambahkan untuk operasional coding: agen utama berbahasa Indonesia, `Auditor Ketat` untuk audit read-only, dan `Autocompacter Memori` untuk menjaga ringkasan sesi tetap utuh
 - [ ] Validasi runtime dengan API key dan service aktif
 - [ ] UI Flask atau React
 
@@ -63,6 +64,7 @@ Membangun backend orkestrasi agent TIA, NAA, dan PTA untuk analisis OSINT berbas
 | 2026-04-14 | UI utama diarahkan ke React command center dengan tema gelap operasional | Kebutuhan peta, graph, chart, sinkronisasi delapan layar, dan interaksi lintas panel lebih cocok daripada shell Flask murni |
 | 2026-04-14 | Payload dossier sindikat dipadatkan sebelum dikirim ke OpenAI | Bundel kasus mentah memuat duplikasi besar dari `profil.isi_json`, `postingan`, dan `lokasi` yang memicu timeout |
 | 2026-04-14 | Artefak office dipindahkan ke library dokumen nyata | Writer manual XML/PDF terlalu mentah dan tidak cukup human readable untuk konsumsi analis |
+| 2026-04-14 | Workflow agent dipisah menjadi agen operasional, auditor, dan autocompacter | Analisis, audit read-only, dan pemadatan memori perlu fokus tool dan peran yang berbeda agar konteks tidak buyar |
 
 ## Catatan Aktif
 - Isi `OPENAI_API_KEY` yang valid sebelum menjalankan worker.
@@ -81,6 +83,8 @@ Membangun backend orkestrasi agent TIA, NAA, dan PTA untuk analisis OSINT berbas
 - Artefak baru tervalidasi pada kasus `kasus-pendanaan-mencurigakan` dengan ukuran sekitar `12 KB` (`XLSX`), `40 KB` (`DOCX`), dan `50 KB` (`PDF`) setelah styling diterapkan.
 - README sekarang menjelaskan bahwa log `publish-osint` hanya berarti event terkirim ke Kafka, bukan bukti pipeline penuh selesai.
 - `scripts/jalankan-backend.js` sekarang lebih cocok untuk pembuktian runtime karena event baru diterbitkan setelah worker benar-benar hidup.
+- Folder `.github/agents/` sekarang memuat agen `asisten-operasional-indonesia`, `auditor-ketat`, dan `autocompacter-memori` untuk workflow coding, audit, dan compacting.
+- Arah identitas visual di layer agent/workflow sekarang mendukung dua mode, terang dan gelap, dengan basis warna merah-hitam sebagai identitas utama proyek.
 
 ## Bug & Workaround Diketahui
 | Bug | Workaround / Status |

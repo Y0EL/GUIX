@@ -364,6 +364,17 @@ export default function IncidentDetailPanel({
             : <><Bookmark size={14} /> Tandai untuk Briefing Komando</>}
         </button>
       </div>
+
+      {/* Navigasi lintas halaman */}
+      <div className="iq-action-section">
+        <div className="iq-action-section-label">Analisis Lanjutan</div>
+        <button className="iq-action-btn assign-quick" onClick={() => navigate('/narrative', { state: { filterKasus: incident.id_kasus } })}>
+          Narasi & Tren →
+        </button>
+        <button className="iq-action-btn assign-quick" onClick={() => navigate('/timeline', { state: { filterKasus: incident.id_kasus } })}>
+          Timeline →
+        </button>
+      </div>
     </div>
   )
 

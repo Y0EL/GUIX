@@ -7,6 +7,7 @@ import MapIntelligence from './halaman/MapIntelligence'
 import SearchDiscovery from './halaman/SearchDiscovery'
 import LinkAnalysis from './halaman/LinkAnalysis'
 import Timeline from './halaman/Timeline'
+import NarrativeTrend from './halaman/NarrativeTrend'
 import KanvasInvestigasi from './halaman/KanvasInvestigasi'
 
 const JUDUL_HALAMAN: Record<string, string> = {
@@ -16,6 +17,7 @@ const JUDUL_HALAMAN: Record<string, string> = {
   '/map-intelligence': 'Intelijen Peta — UIX',
   '/search':         'Pencarian & Penemuan — UIX',
   '/timeline':       'Timeline Kejadian — UIX',
+  '/narrative':      'Narasi & Tren — UIX',
   '/canvas':         'Kanvas Investigasi — UIX',
 }
 
@@ -39,6 +41,7 @@ export default function App() {
         <Route path="/search" element={<SearchDiscovery />} />
         <Route path="/link-analysis" element={<LinkAnalysis />} />
         <Route path="/timeline" element={<Timeline />} />
+        <Route path="/narrative" element={<NarrativeTrend />} />
         <Route path="/canvas" element={<KanvasInvestigasi />} />
       </Routes>
     </BrowserRouter>

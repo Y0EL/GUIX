@@ -1,0 +1,34 @@
+[
+  {
+    "id_klaster_pesan": "kpst-54f5e57ba5",
+    "id_kasus": "kasus-propaganda-burst",
+    "frasa_kanonik": "disrupsi supply chain bikin pihak tertentu kelabakan malam ini",
+    "id_profil": ["prof-6c2741bdfe", "prof-843b8bef88", "prof-b52f349a0c", "prof-2511183081"],
+    "jumlah_posting": 11,
+    "kemiripan_copy": 0.81
+  },
+  {
+    "id_klaster_pesan": "kpst-d66dcbbe3f",
+    "id_kasus": "kasus-propaganda-burst",
+    "frasa_kanonik": "gangguan rantai pasok bikin situasi cepat berubah malam ini",
+    "id_profil": ["prof-2511183081", "prof-d78adef44d", "prof-ed3530b0d1", "prof-cb26309010"],
+    "jumlah_posting": 12,
+    "kemiripan_copy": 0.84
+  },
+  {
+    "id_klaster_pesan": "kpst-a33d3af72d",
+    "id_kasus": "kasus-propaganda-burst",
+    "frasa_kanonik": "jalur distribusi lagi terganggu, efeknya bakal terasa cepat",
+    "id_profil": ["prof-cb26309010", "prof-4d69ca4db8", "prof-2253494b01", "prof-76862d2c17"],
+    "jumlah_posting": 6,
+    "kemiripan_copy": 0.75
+  },
+  {
+    "id_klaster_pesan": "kpst-05720c36d6",
+    "id_kasus": "kasus-propaganda-burst",
+    "frasa_kanonik": "supply chain yang terguncang bisa bikin respons mereka terlambat",
+    "id_profil": ["prof-76862d2c17", "prof-62622dfbad", "prof-3708908c68"],
+    "jumlah_posting": 11,
+    "kemiripan_copy": 0.81
+  }
+]

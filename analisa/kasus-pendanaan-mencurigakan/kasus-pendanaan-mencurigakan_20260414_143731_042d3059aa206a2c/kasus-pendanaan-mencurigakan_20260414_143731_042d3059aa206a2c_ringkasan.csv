@@ -1,7 +1,0 @@
-kunci,nilai
-id_kasus,kasus-pendanaan-mencurigakan
-judul_kasus,Pola Pendanaan Tersebar - Indikasi Koordinasi Finansial
-indikasi_sindikat,ya
-confidence,0.72
-fingerprint_sha256,042d3059aa206a2c1723aa44e25d151cc0563e38da4448319825dd89b21f8c0e
-confidence_reasoning,"Pola transfer berulang antar profil inti, adanya hub (galih valentina) mengaitkan beberapa aktor, serta koordinasi konten dan lokasi pertemuan menunjukkan struktur koordinasi lintas akun. Namun tidak ada bukti pidana eksplisit dan sebagian bukti bersifat indikatif."

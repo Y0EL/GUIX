@@ -36,9 +36,23 @@ export type Peringatan = {
 export type Berita = {
   id: string
   judul: string
+  subjudul?: string
   kategori: string
   lokasi: string
+  provinsi?: string
+  portal?: string
   published_at: string
+  tags?: string[]
+  image_local?: string
+}
+
+export type KlasterPesan = {
+  id_klaster_pesan: string
+  id_kasus: string
+  frasa_kanonik: string
+  id_profil: string[]
+  jumlah_posting: number
+  kemiripan_copy: number
 }
 
 export type Hotspot = {

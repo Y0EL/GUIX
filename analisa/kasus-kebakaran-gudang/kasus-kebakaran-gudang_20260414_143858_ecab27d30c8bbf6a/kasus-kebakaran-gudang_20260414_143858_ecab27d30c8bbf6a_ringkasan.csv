@@ -1,7 +1,0 @@
-kunci,nilai
-id_kasus,kasus-kebakaran-gudang
-judul_kasus,Kebakaran Gudang Logistik - Indikasi Sabotase Terkoordinasi
-indikasi_sindikat,ya
-confidence,0.55
-fingerprint_sha256,ecab27d30c8bbf6ada7bd6a90d294bf62e376a3ce8a413bd534a8654bc0f2e4a
-confidence_reasoning,"Bukti menunjukkan pola koordinasi narasi dan sinyal kehadiran bersama, namun identitas aktor belum terkonfirmasi dan tidak ada bukti motif spesifik."
