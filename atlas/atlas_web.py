@@ -33,6 +33,8 @@ import webbrowser
 from pathlib import Path
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
+from queue import Queue, Empty
+from uuid import uuid4
 from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).parent.parent / ".env", override=False)
@@ -100,6 +102,8 @@ _atlas_data     = None
 _lock_w         = threading.Lock()
 _sesi_konteks: dict[str, dict] = {}
 _lock_sesi_konteks = threading.Lock()
+_asr_tasks: dict[str, dict] = {}
+_lock_asr_tasks = threading.Lock()
 
 # Filler phrases — pre-generate audio saat startup supaya instan
 _FILLER_PHRASES = [
@@ -263,6 +267,180 @@ def _reset_sesi_konteks(session_id: str):
 
 
 _muat_memori_sesi()
+
+
+def _hitung_task_asr_aktif() -> int:
+    with _lock_asr_tasks:
+        return len(_asr_tasks)
+
+
+def _format_sse(event: str, data: dict) -> str:
+    return f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
+
+
+def _ambil_task_asr(task_id: str) -> dict | None:
+    with _lock_asr_tasks:
+        return _asr_tasks.get(task_id)
+
+
+def _buat_task_asr(tmp_path: str, session_id: str) -> str:
+    task_id = f"asr_{uuid4().hex[:12]}"
+    task = {
+        "task_id": task_id,
+        "session_id": session_id,
+        "tmp_path": tmp_path,
+        "queue": Queue(),
+        "stop_event": threading.Event(),
+        "created_at": time.time(),
+        "finished": False,
+    }
+    with _lock_asr_tasks:
+        _asr_tasks[task_id] = task
+    return task_id
+
+
+def _emit_task_asr(task_id: str, event: str, data: dict):
+    task = _ambil_task_asr(task_id)
+    if not task:
+        return
+    payload = dict(data or {})
+    payload.setdefault("task_id", task_id)
+    payload.setdefault("ts", int(time.time() * 1000))
+    task["queue"].put((event, payload))
+
+
+def _tutup_task_asr(task_id: str):
+    with _lock_asr_tasks:
+        _asr_tasks.pop(task_id, None)
+
+
+def _jadwalkan_bersih_task_asr(task_id: str, delay_sec: int = 90):
+    def _runner():
+        time.sleep(delay_sec)
+        _tutup_task_asr(task_id)
+
+    threading.Thread(target=_runner, daemon=True).start()
+
+
+def _jalankan_task_asr(task_id: str):
+    task = _ambil_task_asr(task_id)
+    if not task:
+        return
+
+    tmp_path = task["tmp_path"]
+    stop_event: threading.Event = task["stop_event"]
+    mulai_asr = time.perf_counter()
+
+    try:
+        _emit_task_asr(task_id, "progress", {
+            "status": "loading_model",
+            "message": "Menyiapkan engine transkripsi...",
+        })
+        model = _get_whisper()
+
+        if stop_event.is_set():
+            _emit_task_asr(task_id, "cancelled", {
+                "status": "cancelled",
+                "message": "Transkripsi dibatalkan.",
+            })
+            return
+
+        segments, info = model.transcribe(
+            tmp_path,
+            language="id",
+            beam_size=WHISPER_BEAM_SIZE,
+            best_of=WHISPER_BEST_OF,
+            temperature=0.0,
+            condition_on_previous_text=False,
+            word_timestamps=False,
+            vad_filter=True,
+            vad_parameters={"min_silence_duration_ms": WHISPER_VAD_MIN_SILENCE_MS},
+            log_prob_threshold=-1.0,
+            no_speech_threshold=0.5,
+        )
+
+        total_detik = float(getattr(info, "duration", 0.0) or 0.0)
+        bagian = []
+        segmen_terakhir = 0.0
+        jumlah_segmen = 0
+        status_terakhir = time.time()
+
+        for s in segments:
+            if stop_event.is_set():
+                _emit_task_asr(task_id, "cancelled", {
+                    "status": "cancelled",
+                    "message": "Transkripsi dibatalkan pengguna.",
+                })
+                return
+
+            jumlah_segmen += 1
+            segmen_terakhir = float(getattr(s, "end", segmen_terakhir) or segmen_terakhir)
+            if float(getattr(s, "no_speech_prob", 0.0) or 0.0) < 0.5:
+                teks_segmen = (s.text or "").strip()
+                if teks_segmen:
+                    bagian.append(teks_segmen)
+
+            now = time.time()
+            if jumlah_segmen == 1 or now - status_terakhir >= 0.5:
+                progress = 0
+                if total_detik > 0:
+                    progress = int(max(0.0, min(1.0, segmen_terakhir / total_detik)) * 100)
+                _emit_task_asr(task_id, "progress", {
+                    "status": "transcribing",
+                    "message": f"Transkripsi berjalan {progress}%...",
+                    "current": round(segmen_terakhir, 2),
+                    "total": round(total_detik, 2),
+                    "progress": progress,
+                    "segments": jumlah_segmen,
+                })
+                status_terakhir = now
+
+        teks = " ".join(bagian).strip()
+        if not teks:
+            _emit_task_asr(task_id, "error_asr", {
+                "status": "error",
+                "error": "tidak ada suara terdeteksi",
+            })
+            return
+
+        _HALUSINASI = {
+            "selamat menikmati",
+            "terima kasih telah menonton",
+            "subscribe",
+            "like dan subscribe",
+            "sampai jumpa",
+            "musik",
+            "terima kasih sudah menonton",
+        }
+        if teks.lower().strip(".! ") in _HALUSINASI:
+            _emit_task_asr(task_id, "error_asr", {
+                "status": "error",
+                "error": "tidak ada suara terdeteksi",
+            })
+            return
+
+        durasi_ms = int((time.perf_counter() - mulai_asr) * 1000)
+        print(f"  [ASR] '{teks}' ({durasi_ms} ms)", flush=True)
+        _emit_task_asr(task_id, "done", {
+            "status": "done",
+            "teks": teks,
+            "durasi_ms": durasi_ms,
+        })
+    except Exception as e:
+        _emit_task_asr(task_id, "error_asr", {
+            "status": "error",
+            "error": f"ASR gagal: {str(e)[:120]}",
+        })
+    finally:
+        task = _ambil_task_asr(task_id)
+        if task:
+            task["finished"] = True
+        try:
+            if os.path.exists(tmp_path):
+                os.unlink(tmp_path)
+        except Exception:
+            pass
+        _jadwalkan_bersih_task_asr(task_id)
 
 
 # ============================================================
@@ -885,9 +1063,81 @@ def api_status():
                     "whisper_model": _whisper_model_name,
                     "whisper_target": WHISPER_MODEL,
                     "whisper_effective_target": _whisper_effective_target,
+                      "asr_tasks": _hitung_task_asr_aktif(),
                     "whisper_cpu_safe": WHISPER_CPU_SAFE,
                     "whisper_device": WHISPER_DEVICE,
                     "whisper_compute_type": WHISPER_COMPUTE_TYPE})
+
+
+@app.route("/api/listen/start", methods=["POST"])
+def api_listen_start():
+    """
+    Mulai task ASR realtime.
+    Return cepat dengan task_id, hasil transkripsi diambil via SSE stream.
+    """
+    if "audio" not in request.files:
+        return jsonify({"error": "tidak ada audio"}), 400
+
+    f = request.files["audio"]
+    sid = request.form.get("session_id", "default").strip() or "default"
+    suffix = ".webm"
+    with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp:
+        tmp_path = tmp.name
+        f.save(tmp_path)
+
+    if os.path.getsize(tmp_path) < 2000:
+        try:
+            os.unlink(tmp_path)
+        except Exception:
+            pass
+        return jsonify({"error": "rekaman terlalu pendek"}), 422
+
+    task_id = _buat_task_asr(tmp_path, sid)
+    _emit_task_asr(task_id, "progress", {
+        "status": "upload_done",
+        "message": "Audio diterima, memulai transkripsi...",
+    })
+    threading.Thread(target=_jalankan_task_asr, args=(task_id,), daemon=True).start()
+    return jsonify({"task_id": task_id, "status": "accepted"})
+
+
+@app.route("/api/listen/stream/<task_id>")
+def api_listen_stream(task_id: str):
+    """
+    Stream progres ASR per task.
+    Events: progress | done | error_asr | cancelled | ping
+    """
+    task = _ambil_task_asr(task_id)
+    if not task:
+        return jsonify({"error": "task tidak ditemukan"}), 404
+
+    def generate():
+        q: Queue = task["queue"]
+        while True:
+            try:
+                event, payload = q.get(timeout=15)
+                yield _format_sse(event, payload)
+                if event in {"done", "error_asr", "cancelled"}:
+                    break
+            except Empty:
+                yield _format_sse("ping", {"task_id": task_id})
+
+    return Response(stream_with_context(generate()), mimetype="text/event-stream")
+
+
+@app.route("/api/listen/cancel/<task_id>", methods=["POST"])
+def api_listen_cancel(task_id: str):
+    task = _ambil_task_asr(task_id)
+    if not task:
+        return jsonify({"error": "task tidak ditemukan"}), 404
+
+    stop_event: threading.Event = task["stop_event"]
+    stop_event.set()
+    _emit_task_asr(task_id, "cancelled", {
+        "status": "cancelled",
+        "message": "Permintaan pembatalan diterima.",
+    })
+    return jsonify({"ok": True, "task_id": task_id})
 
 
 @app.route("/api/listen", methods=["POST"])

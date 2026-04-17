@@ -593,6 +593,9 @@
     let audioDecodeQueue = Promise.resolve();
 
     let sseSource = null;
+    let sseListenSource = null;
+    let listenTaskAktif = null;
+    let timerListenTimeout = null;
     let twQueue = "";
     let twTimer = null;
     let loadingMulaiMs = 0;
@@ -607,8 +610,10 @@
     let audioPertamaSudahMulai = false;
     let jendelaUix = null;
     const NAMA_JENDELA_UIX = "uix-live-window";
-    const JEDA_TAMPIL_TEKS_MS = 1200;
-    const JEDA_AKTIVITAS_MS = 2400;
+    const JEDA_TAMPIL_TEKS_MS = 1900;
+    const JEDA_AKTIVITAS_MS = 3000;
+    const TYPEWRITER_BATCH = 1;
+    const TYPEWRITER_INTERVAL_MS = 28;
 
     const FRASE_PIKIR = [
       "Sedang berpikir",
@@ -733,6 +738,9 @@
       mulaiSesiUI();
       if (state === "listening") {
         stopListening("submit");
+        } else if (state === "processing") {
+          batalkanTaskListen();
+          setState("idle");
       } else if (state === "speaking") {
         interruptSpeaking();
       } else {
@@ -795,12 +803,148 @@
       }
 
       if (mode === "cancel") {
+          batalkanTaskListen();
         autoLive = false;
         setState("idle");
       } else {
         setState("processing");
       }
     }
+
+      function tutupListenStream() {
+        if (sseListenSource) {
+          sseListenSource.close();
+          sseListenSource = null;
+        }
+        if (timerListenTimeout) {
+          clearTimeout(timerListenTimeout);
+          timerListenTimeout = null;
+        }
+      }
+
+      function batalkanTaskListen() {
+        tutupListenStream();
+        if (!listenTaskAktif) return;
+        fetch(`/api/listen/cancel/${encodeURIComponent(listenTaskAktif)}`, {
+          method: "POST"
+        }).catch(() => {});
+        listenTaskAktif = null;
+      }
+
+      async function mulaiTaskTranskripsi(formData) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+        try {
+          const r = await fetch("/api/listen/start", {
+            method: "POST",
+            body: formData,
+            signal: controller.signal
+          });
+
+          const ctype = (r.headers.get("content-type") || "").toLowerCase();
+          if (!r.ok) {
+            if (r.status === 404) {
+              return null;
+            }
+            if (!ctype.includes("application/json")) {
+              const txt = await r.text();
+              throw new Error("Server mengembalikan respons non-JSON saat mulai transkripsi");
+            }
+            const d = await r.json();
+            throw new Error(d.error || "Gagal memulai transkripsi");
+          }
+
+          if (!ctype.includes("application/json")) {
+            return null;
+          }
+
+          const d = await r.json();
+          if (d.error || !d.task_id) {
+            return null;
+          }
+          return d.task_id;
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      }
+
+      async function transkripsiModeLama(formData) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+        try {
+          const r = await fetch("/api/listen", {
+            method: "POST",
+            body: formData,
+            signal: controller.signal
+          });
+
+          const ctype = (r.headers.get("content-type") || "").toLowerCase();
+          if (!ctype.includes("application/json")) {
+            throw new Error("Server mengembalikan respons non-JSON pada mode kompatibilitas");
+          }
+
+          const d = await r.json();
+          if (!r.ok || d.error) {
+            throw new Error(d.error || "ASR gagal");
+          }
+          return d.teks || "";
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      }
+
+      function tungguHasilTaskTranskripsi(taskId) {
+        return new Promise((resolve, reject) => {
+          tutupListenStream();
+          listenTaskAktif = taskId;
+          const statusNode = document.getElementById("status-transkrip");
+
+          sseListenSource = new EventSource(`/api/listen/stream/${encodeURIComponent(taskId)}`);
+
+          timerListenTimeout = setTimeout(() => {
+            tutupListenStream();
+            reject(new Error("ASR timeout: transkripsi terlalu lama"));
+          }, 60000);
+
+          sseListenSource.addEventListener("progress", event => {
+            const d = JSON.parse(event.data || "{}");
+            const msg = d.message || "Transkripsi berjalan...";
+            if (typeof d.progress === "number") {
+              statusNode.textContent = `${msg}`;
+            } else {
+              statusNode.textContent = msg;
+            }
+          });
+
+          sseListenSource.addEventListener("done", event => {
+            const d = JSON.parse(event.data || "{}");
+            const teks = d.teks || "";
+            tutupListenStream();
+            listenTaskAktif = null;
+            resolve(teks);
+          });
+
+          sseListenSource.addEventListener("cancelled", event => {
+            const d = JSON.parse(event.data || "{}");
+            tutupListenStream();
+            listenTaskAktif = null;
+            reject(new Error(d.message || "Transkripsi dibatalkan"));
+          });
+
+          sseListenSource.addEventListener("error_asr", event => {
+            const d = JSON.parse(event.data || "{}");
+            tutupListenStream();
+            listenTaskAktif = null;
+            reject(new Error(d.error || "ASR gagal"));
+          });
+
+          sseListenSource.onerror = () => {
+            tutupListenStream();
+            listenTaskAktif = null;
+            reject(new Error("Koneksi progres ASR terputus"));
+          };
+        });
+      }
 
     async function onRecordStop() {
       if (state === "idle") return;
@@ -821,23 +965,13 @@
 
       let teks = "";
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000);
-        const r = await fetch("/api/listen", {
-          method: "POST",
-          body: form,
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        const d = await r.json();
-        if (!r.ok || d.error) {
-          setTranscript(d.error || "ASR gagal", "");
-          document.getElementById("tr-atlas").classList.remove("kedip");
-          document.getElementById("status-transkrip").textContent = "Ucapan belum terbaca jelas. Atlas tetap diam.";
-          setState("idle");
-          return;
-        }
-        teks = d.teks;
+            const taskId = await mulaiTaskTranskripsi(form);
+            if (taskId) {
+              teks = await tungguHasilTaskTranskripsi(taskId);
+            } else {
+              document.getElementById("status-transkrip").textContent = "Server lama terdeteksi, memakai mode kompatibilitas ASR...";
+              teks = await transkripsiModeLama(form);
+            }
       } catch (e) {
         if (e.name === "AbortError") {
           setTranscript("ASR timeout: model masih menyiapkan engine suara.", "");
@@ -1087,10 +1221,10 @@
         checkStreamAudioDone();
         return;
       }
-      const batch = twQueue.slice(0, 3);
-      twQueue = twQueue.slice(3);
+      const batch = twQueue.slice(0, TYPEWRITER_BATCH);
+      twQueue = twQueue.slice(TYPEWRITER_BATCH);
       el.textContent += batch;
-      twTimer = setTimeout(tickTypewriter, 14);
+      twTimer = setTimeout(tickTypewriter, TYPEWRITER_INTERVAL_MS);
     }
 
     function stopTypewriter() {

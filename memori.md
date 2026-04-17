@@ -1,5 +1,5 @@
 # Memori Proyek - Orkestrasi Intelijen
-Diperbarui: 2026-04-17 11:50
+Diperbarui: 2026-04-17 13:40
 
 ## Ringkasan Proyek
 Membangun backend orkestrasi agent TIA, NAA, dan PTA untuk analisis OSINT berbasis data uji internal dengan runtime nyata: OpenAI, LangChain, LangGraph, Kafka, Redis Streams, PostgreSQL, Neo4j, dan Celery.
@@ -68,6 +68,7 @@ Membangun backend orkestrasi agent TIA, NAA, dan PTA untuk analisis OSINT berbas
 | 2026-04-17 | Atlas Live mode diubah menjadi trigger suara sekali-klik globe (tanpa input teks) | Mencegah kebocoran audio dan menyederhanakan alur interaksi live voice |
 | 2026-04-17 | Preload Whisper Atlas dibuat non-blocking + mode aman CPU dan timeout ASR frontend | Startup tidak macet saat model berat, UI tidak menggantung saat ASR lambat, dan respons tetap stabil di perangkat CPU |
 | 2026-04-17 | Atlas memakai memori sesi lokal persisten untuk konteks percakapan lanjutan | Permintaan ambigu seperti "lebih detail" dapat diresolusikan ke halaman terakhir dan langsung membuka navigasi yang relevan |
+| 2026-04-17 | Atlas mulai migrasi ke pola STT realtime berbasis task dan SSE progress (local-only) | Meniru pengalaman realtime mom tanpa mengirim audio ke cloud: start task cepat, progres terlihat, bisa cancel, lalu lanjut ke stream jawaban |
 
 ## Catatan Aktif
 - Isi `OPENAI_API_KEY` yang valid sebelum menjalankan worker.
@@ -97,6 +98,8 @@ Membangun backend orkestrasi agent TIA, NAA, dan PTA untuk analisis OSINT berbas
 - `atlas/atlas_web.py` sekarang mendukung preload Whisper di background (`ATLAS_WHISPER_PRELOAD`) dan mode aman CPU (`ATLAS_WHISPER_CPU_SAFE`) yang otomatis memilih model lebih ringan saat target `turbo` dijalankan di CPU.
 - `atlas/templates/index.html` kini memberi timeout 30 detik untuk `/api/listen` agar status `processing` tidak menggantung saat model ASR belum siap.
 - `atlas/atlas_web.py` kini menyimpan memori sesi Atlas secara lokal di `runtime_state/atlas_session_memory.json` dan memakainya untuk follow-up kontekstual seperti "lanjut" atau "lebih detail" agar tetap membuka halaman yang dimaksud.
+- `atlas/atlas_web.py` kini menambah endpoint fondasi STT realtime: `POST /api/listen/start`, `GET /api/listen/stream/<task_id>`, dan `POST /api/listen/cancel/<task_id>` dengan status event `progress`, `done`, `error_asr`, dan `cancelled`.
+- `atlas/templates/index.html` kini memakai alur task transkripsi (start + SSE progress) sebelum membuka `/api/stream`, serta mendukung pembatalan proses saat status `processing`.
 
 ## Bug & Workaround Diketahui
 | Bug | Workaround / Status |

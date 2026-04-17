@@ -9,3 +9,5 @@ runtime_state
 .pytest_cache
 analisa
 modelsatlas/models/
+.github
+.claude
