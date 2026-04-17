@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Atlas Live</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js" defer></script>
+  <style>
+    :root {
+      --warna-utama: #b31818;
+      --warna-sekunder: #e04b4b;
+      --warna-latar: #f7f3f2;
+      --warna-permukaan: rgba(255, 255, 255, 0.42);
+      --warna-aksen-gelap: #1a1a1a;
+      --warna-teks-lembut: rgba(73, 52, 52, 0.72);
+      --warna-garis: rgba(179, 24, 24, 0.12);
+      --warna-glow: rgba(224, 75, 75, 0.24);
+      --energi: 0;
+      --bayangan-besar: 0 28px 90px rgba(203, 68, 68, 0.12);
+      --font-ui: "Manrope", "Satoshi", "Avenir Next", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      font-family: var(--font-ui);
+      color: var(--warna-aksen-gelap);
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.92), transparent 28%),
+        radial-gradient(circle at 78% 20%, rgba(255, 213, 213, 0.68), transparent 26%),
+        radial-gradient(circle at 50% 82%, rgba(255, 238, 238, 0.92), transparent 34%),
+        linear-gradient(135deg, #fffefe 0%, #fff8f6 48%, #f7f3f2 100%);
+      overflow: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      border-radius: 999px;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      width: 34vw;
+      height: 34vw;
+      top: -8vw;
+      left: -6vw;
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    body::after {
+      width: 28vw;
+      height: 28vw;
+      right: -7vw;
+      bottom: -7vw;
+      background: rgba(224, 75, 75, 0.11);
+    }
+
+    .layar {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      min-height: 100vh;
+      padding: 40px 48px 120px;
+      gap: 28px;
+    }
+
+    .panel-kiri,
+    .panel-kanan {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .panel-kiri {
+      grid-column: 1 / span 2;
+      justify-self: center;
+      width: min(100%, 980px);
+      transition: transform 0.62s cubic-bezier(0.22, 0.61, 0.36, 1),
+                  width 0.62s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    .panel-kanan {
+      grid-column: 2 / span 1;
+      opacity: 0;
+      transform: translateX(70px);
+      pointer-events: none;
+      transition: opacity 0.52s ease, transform 0.62s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    body.sesi-dimulai .panel-kiri {
+      grid-column: 1 / span 1;
+      justify-self: stretch;
+      width: 100%;
+      transform: translateX(-2.2vw);
+    }
+
+    body.sesi-dimulai .panel-kanan {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .hint-bawah,
+    .status-transkrip {
+      color: var(--warna-teks-lembut);
+    }
+
+    .panel-kiri {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 0;
+    }
+
+    .visual-wrap {
+      width: min(100%, 760px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      text-align: center;
+    }
+
+    .visual-trigger {
+      position: relative;
+      width: min(62vh, 520px);
+      aspect-ratio: 1 / 1;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      background: transparent;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    .visual-trigger::before,
+    .visual-trigger::after {
+      content: "";
+      position: absolute;
+      inset: 10%;
+      border-radius: 999px;
+      transition: transform 0.12s linear, opacity 0.12s linear;
+    }
+
+    .visual-trigger::before {
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.78) 34%, rgba(255, 255, 255, 0) 72%);
+      transform: scale(calc(1 + var(--energi) * 0.16));
+      opacity: calc(0.72 + var(--energi) * 0.35);
+      filter: blur(12px);
+    }
+
+    .visual-trigger::after {
+      inset: 14%;
+      background: radial-gradient(circle, rgba(224, 75, 75, 0.14) 0%, rgba(224, 75, 75, 0.08) 42%, rgba(224, 75, 75, 0) 74%);
+      transform: scale(calc(1 + var(--energi) * 0.22));
+      opacity: calc(0.5 + var(--energi) * 0.4);
+      filter: blur(18px);
+    }
+
+    .globe-shell {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      transform: scale(calc(1 + var(--energi) * 0.08));
+      transition: transform 0.09s linear, filter 0.09s linear;
+      filter: drop-shadow(0 28px 55px rgba(179, 24, 24, calc(0.08 + var(--energi) * 0.22)));
+    }
+
+    .globe-shell::before {
+      content: "";
+      position: absolute;
+      inset: 19%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.18) 48%, rgba(255, 255, 255, 0) 72%);
+      filter: blur(calc(12px + var(--energi) * 28px));
+      opacity: calc(0.56 + var(--energi) * 0.4);
+      z-index: 0;
+    }
+
+    #lottie-globe {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .status-live {
+      font-size: clamp(0.9rem, 1.3vw, 1rem);
+      letter-spacing: 0.04em;
+      color: var(--warna-teks-lembut);
+      min-height: 1.4em;
+    }
+
+    .status-live strong {
+      color: var(--warna-utama);
+      font-weight: 700;
+    }
+
+    .gelombang-wrap {
+      width: min(100%, 620px);
+      height: 140px;
+      position: relative;
+      opacity: 1;
+      max-height: 160px;
+      transform: translateY(0);
+      transition: opacity 0.42s ease;
+    }
+
+    #gelombang {
+      width: 100%;
+      height: 100%;
+      display: block;
+      opacity: 0.96;
+    }
+
+    .hint-bawah {
+      font-size: 0.96rem;
+      line-height: 1.7;
+      max-width: 500px;
+      transition: opacity 0.3s ease;
+    }
+
+    body:not(.sesi-dimulai) .hint-bawah {
+      opacity: 0.88;
+    }
+
+    .panel-kanan {
+      padding: 36px 14px 0 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.26s ease, transform 0.26s ease;
+    }
+
+    .transkrip-wrap {
+      width: min(100%, 620px);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .judul-kanan {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 16px;
+      text-align: center;
+      align-items: center;
+    }
+
+    .judul-kanan h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 4.2vw, 4.1rem);
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+      font-weight: 800;
+    }
+
+    .transkrip-kolom {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-height: 280px;
+    }
+
+    .blok-teks {
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .blok-teks::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.35rem;
+      bottom: 0.35rem;
+      width: 1px;
+      background: linear-gradient(180deg, rgba(179, 24, 24, 0.22), rgba(179, 24, 24, 0.02));
+    }
+
+    .blok-teks label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      font-weight: 700;
+      color: rgba(115, 73, 73, 0.74);
+    }
+
+    .blok-teks strong {
+      display: block;
+      margin: 0;
+      font-size: clamp(1.06rem, 1.45vw, 1.22rem);
+      line-height: 1.9;
+      font-weight: 500;
+      white-space: pre-wrap;
+    }
+
+    .atlas-text {
+      font-size: clamp(1.14rem, 1.65vw, 1.38rem);
+      line-height: 1.95;
+      min-height: 6.5em;
+      max-height: min(42vh, 420px);
+      white-space: pre-wrap;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding-right: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(179, 24, 24, 0.28) transparent;
+    }
+
+    .atlas-text::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .atlas-text::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .atlas-text::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: rgba(179, 24, 24, 0.25);
+    }
+
+    .atlas-text::-webkit-scrollbar-thumb:hover {
+      background: rgba(179, 24, 24, 0.4);
+    }
+
+    .status-transkrip {
+      min-height: 1.5em;
+      font-size: 0.95rem;
+      letter-spacing: 0.03em;
+    }
+
+    .status-pikir {
+      min-height: 1.8em;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: rgba(115, 73, 73, 0.78);
+      letter-spacing: 0.01em;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.26s ease, transform 0.26s ease;
+    }
+
+    .status-pikir.aktif {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .status-pikir::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(224, 75, 75, 0.95), rgba(179, 24, 24, 0.72));
+      box-shadow: 0 0 0 8px rgba(224, 75, 75, 0.08);
+      animation: pulse-pikir 1.35s ease-in-out infinite;
+      flex: 0 0 auto;
+    }
+
+    .status-pikir[data-mode="masuk"] {
+      animation: geser-pikir 0.28s ease;
+    }
+
+    .status-transkrip[data-mode="aktif"] {
+      color: var(--warna-utama);
+    }
+
+    .kedip::after {
+      content: "|";
+      margin-left: 2px;
+      color: var(--warna-utama);
+      animation: kedip 0.8s step-end infinite;
+    }
+
+    @keyframes kedip {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    @keyframes pulse-pikir {
+      0%, 100% { transform: scale(0.94); opacity: 0.7; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    @keyframes geser-pikir {
+      0% { opacity: 0; transform: translateY(4px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .toast-nav {
+      position: fixed;
+      top: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      color: var(--warna-utama);
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
+      z-index: 4;
+    }
+
+    .toast-nav.tampil {
+      opacity: 1;
+    }
+
+    /* panel-kanan ditampilkan otomatis berdasarkan sesi-dimulai saja */
+
+    @media (max-width: 1100px) {
+      html, body {
+        overflow: hidden;
+      }
+
+      .layar {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding: 28px 24px 140px;
+      }
+
+      .panel-kiri,
+      .panel-kanan,
+      body.sesi-dimulai .panel-kiri {
+        grid-column: auto;
+        width: 100%;
+        justify-self: stretch;
+        transform: none;
+      }
+
+      body.sesi-dimulai .panel-kanan {
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+      }
+
+      .panel-kiri,
+      .panel-kanan {
+        padding-top: 62px;
+      }
+
+      .transkrip-wrap {
+        margin-left: 0;
+      }
+
+      .visual-trigger {
+        width: min(80vw, 460px);
+      }
+
+    }
+
+    @media (max-width: 680px) {
+      .layar {
+        min-height: 100vh;
+        grid-template-columns: 1fr;
+        padding: 18px 16px 40px;
+        gap: 12px;
+      }
+
+      .panel-kanan,
+      body.sesi-dimulai .panel-kanan {
+        display: none !important;
+        opacity: 0 !important;
+        transform: none !important;
+        pointer-events: none !important;
+      }
+
+      .panel-kiri,
+      body.sesi-dimulai .panel-kiri {
+        width: 100%;
+        grid-column: auto;
+        justify-self: center;
+        padding-top: 10px;
+        transform: none;
+      }
+
+      .visual-wrap {
+        width: min(100%, 520px);
+        gap: 16px;
+      }
+
+      .visual-trigger {
+        width: min(78vw, 420px);
+      }
+
+      .brand-meta strong {
+        font-size: 1rem;
+      }
+
+      .judul-kanan h1 {
+        font-size: 2.2rem;
+      }
+
+      .gelombang-wrap {
+        height: 112px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- [SELANJUTNYA: visual utama] -->
+  <main class="layar">
+    <section class="panel-kiri" aria-label="Visual suara Atlas">
+      <div class="visual-wrap">
+        <button class="visual-trigger" id="visual-trigger" type="button" onclick="toggleLive()" aria-label="Mulai atau hentikan mode bicara">
+          <div class="globe-shell" id="globe-shell">
+            <div id="lottie-globe"></div>
+          </div>
+        </button>
+
+        <div class="status-live" id="state-label">Ketuk globe untuk mulai bicara</div>
+
+        <div class="gelombang-wrap" id="gelombang-wrap">
+          <canvas id="gelombang"></canvas>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="panel-kanan" aria-label="Transkrip percakapan">
+      <div class="transkrip-wrap">
+        <div class="judul-kanan">
+          <h1>ATLAS Intelligence</h1>
+        </div>
+
+        <div class="transkrip-kolom">
+          <div class="blok-teks">
+            <label>Kamu</label>
+            <strong id="tr-kamu">Belum ada ucapan.</strong>
+          </div>
+
+          <div class="blok-teks">
+            <label>Atlas</label>
+            <div class="atlas-text" id="tr-atlas"></div>
+          </div>
+        </div>
+
+        <div class="status-pikir" id="status-pikir" aria-live="polite"></div>
+        <div class="status-transkrip" id="status-transkrip">Atlas menunggu instruksi.</div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast-nav" id="nav-toast"></div>
+
+  <!-- [SELANJUTNYA: skrip interaksi] -->
+  <script>
+    let state = "idle";
+    let autoLive = false;
+
+    let mediaStream = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+
+    let audioCtx = null;
+    let analyser = null;
+    let vadInterval = null;
+    const MIN_RECORD_MS = 600;
+    let recordStart = 0;
+
+    let playCtx = null;
+    let playAnalyser = null;
+    let playGain = null;
+    let nextStartAt = 0;
+    let chunksQueued = 0;
+    let chunksPlayed = 0;
+    let streamDone = false;
+    let currentSrc = null;
+    let audioDecodeQueue = Promise.resolve();
+
+    let sseSource = null;
+    let twQueue = "";
+    let twTimer = null;
+    let loadingMulaiMs = 0;
+    let loadingSeq = 0;
+    const MIN_LOADING_MS = 650;
+    let timerPikir = null;
+    let indeksPikir = 0;
+    let menungguAudioPertama = false;
+    let tahanOutputSampaiAudio = false;
+    let teksTertunda = "";
+    let navTertunda = [];
+    let audioPertamaSudahMulai = false;
+    let jendelaUix = null;
+    const NAMA_JENDELA_UIX = "uix-live-window";
+    const JEDA_TAMPIL_TEKS_MS = 1200;
+    const JEDA_AKTIVITAS_MS = 2400;
+
+    const FRASE_PIKIR = [
+      "Sedang berpikir",
+      "Menganalisis konteks",
+      "Merangkai jawaban",
+      "Menyusun kata yang pas",
+      "Mengurutkan fakta penting",
+      "Mencari benang merah",
+      "Menimbang konteks percakapan",
+      "Menyaring detail yang relevan",
+      "Mencocokkan niat pertanyaan",
+      "Merapikan alur jawaban",
+      "Mengecek konteks UIX dulu",
+      "Mencari sudut pandang terbaik",
+      "Menyusun respons yang lebih natural",
+      "Menggabungkan konteks dan logika",
+      "Menyelaraskan data dan bahasa",
+      "Memilih jawaban yang paling berguna",
+      "Merapikan narasi biar enak didengar",
+      "Memastikan arah jawabannya pas",
+      "Membaca pola pertanyaanmu",
+      "Menyesuaikan gaya bicara",
+      "Menyortir sinyal yang penting",
+      "Mencari inti dari maksudmu",
+      "Menyusun respons seperlunya",
+      "Menghindari jawaban yang bertele-tele",
+      "Sedang menata argumen",
+      "Membuat jawaban lebih manusiawi",
+      "Mengunci konteks sebelum menjawab",
+      "Membandingkan beberapa kemungkinan jawaban",
+      "Menyesuaikan nada bicara",
+      "Menyatukan konteks database dan obrolan",
+      "Menyusun kalimat pembuka",
+      "Sedang memoles respons",
+      "Mengurai detail yang rumit",
+      "Mencari jawaban yang paling nyambung",
+      "Menyusun respons final",
+      "Sedang membuat kopi digital"
+    ];
+
+    const SESSION_ID = "live_" + Math.random().toString(36).slice(2, 9);
+    let globeAnim = null;
+    let frameVisual = null;
+    let sesiDimulai = false;
+
+    const kanvasGelombang = document.getElementById("gelombang");
+    const ctxGelombang = kanvasGelombang.getContext("2d");
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setState("idle");
+      siapkanLottie();
+      aturUkuranKanvas();
+      mulaiLoopVisual();
+      cekStatus();
+      window.addEventListener("resize", aturUkuranKanvas);
+    });
+
+    function siapkanLottie() {
+      if (!window.lottie) return;
+      globeAnim = window.lottie.loadAnimation({
+        container: document.getElementById("lottie-globe"),
+        renderer: "svg",
+        loop: true,
+        autoplay: false,
+        path: "/globe.json"
+      });
+      globeAnim.setSpeed(0.6);
+      globeAnim.addEventListener("DOMLoaded", () => {
+        globeAnim.play();
+        globeAnim.setSpeed(0.46);
+      });
+    }
+
+    function aturUkuranKanvas() {
+      const ratio = window.devicePixelRatio || 1;
+      const rect = kanvasGelombang.getBoundingClientRect();
+      kanvasGelombang.width = Math.max(1, Math.floor(rect.width * ratio));
+      kanvasGelombang.height = Math.max(1, Math.floor(rect.height * ratio));
+      ctxGelombang.setTransform(ratio, 0, 0, ratio, 0, 0);
+    }
+
+    async function cekStatus() {
+      try {
+        const r = await fetch("/api/status");
+        await r.json();
+      } catch (e) {
+        console.warn("Status model belum tersedia");
+      }
+    }
+
+    function setState(nextState) {
+      state = nextState;
+      const label = document.getElementById("state-label");
+      const status = document.getElementById("status-transkrip");
+
+      if (state === "idle") {
+        label.innerHTML = "Ketuk globe untuk mulai rekam";
+        status.textContent = "Atlas menunggu kamu menekan globe untuk mulai merekam.";
+        status.dataset.mode = "diam";
+      } else if (state === "listening") {
+        label.innerHTML = "<strong>Merekam</strong> suara kamu";
+        status.textContent = "Mikrofon aktif. Klik globe lagi untuk stop dan kirim rekaman.";
+        status.dataset.mode = "aktif";
+      } else if (state === "processing") {
+        label.innerHTML = "<strong>Memproses</strong> instruksi";
+        status.textContent = "ASR dan reasoning sedang berjalan.";
+        status.dataset.mode = "aktif";
+      } else if (state === "speaking") {
+        label.innerHTML = "<strong>Atlas</strong> sedang berbicara";
+        status.textContent = "Audio Atlas sedang diputar dan visual kiri mengikuti amplitudonya.";
+        status.dataset.mode = "aktif";
+      }
+    }
+
+    function mulaiSesiUI() {
+      if (sesiDimulai) return;
+      sesiDimulai = true;
+      document.body.classList.add("sesi-dimulai");
+    }
+
+    function toggleLive() {
+      mulaiSesiUI();
+      if (state === "listening") {
+        stopListening("submit");
+      } else if (state === "speaking") {
+        interruptSpeaking();
+      } else {
+        autoLive = false;
+        startListening();
+      }
+    }
+
+    async function startListening() {
+      if (state === "listening") return;
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true,
+            channelCount: 1
+          },
+          video: false
+        });
+      } catch (e) {
+        document.getElementById("status-transkrip").textContent = "Mikrofon tidak bisa diakses: " + e.message;
+        return;
+      }
+
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+      const src = audioCtx.createMediaStreamSource(mediaStream);
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 2048;
+      src.connect(analyser);
+
+      audioChunks = [];
+      const mime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+        ? "audio/webm;codecs=opus"
+        : "audio/webm";
+      mediaRecorder = new MediaRecorder(mediaStream, { mimeType: mime });
+      mediaRecorder.ondataavailable = event => {
+        if (event.data.size > 0) audioChunks.push(event.data);
+      };
+      mediaRecorder.onstop = onRecordStop;
+      mediaRecorder.start(100);
+      recordStart = Date.now();
+      setState("listening");
+    }
+
+    function stopListening(mode = "cancel") {
+      if (vadInterval) {
+        clearInterval(vadInterval);
+        vadInterval = null;
+      }
+      if (mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(track => track.stop());
+        mediaStream = null;
+      }
+      if (audioCtx) {
+        try { audioCtx.close(); } catch (e) {}
+        audioCtx = null;
+        analyser = null;
+      }
+
+      if (mode === "cancel") {
+        autoLive = false;
+        setState("idle");
+      } else {
+        setState("processing");
+      }
+    }
+
+    async function onRecordStop() {
+      if (state === "idle") return;
+
+      const totalSize = audioChunks.reduce((sum, chunk) => sum + chunk.size, 0);
+      if (totalSize < 2000) {
+        setTranscript("[rekaman terlalu pendek]", "");
+        document.getElementById("tr-atlas").classList.remove("kedip");
+        document.getElementById("status-transkrip").textContent = "Tidak ada ucapan yang cukup. Atlas tetap diam.";
+        setState("idle");
+        return;
+      }
+
+      const blob = new Blob(audioChunks, { type: "audio/webm" });
+      const form = new FormData();
+      form.append("audio", blob, "rekam.webm");
+      form.append("session_id", SESSION_ID);
+
+      let teks = "";
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+        const r = await fetch("/api/listen", {
+          method: "POST",
+          body: form,
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        const d = await r.json();
+        if (!r.ok || d.error) {
+          setTranscript(d.error || "ASR gagal", "");
+          document.getElementById("tr-atlas").classList.remove("kedip");
+          document.getElementById("status-transkrip").textContent = "Ucapan belum terbaca jelas. Atlas tetap diam.";
+          setState("idle");
+          return;
+        }
+        teks = d.teks;
+      } catch (e) {
+        if (e.name === "AbortError") {
+          setTranscript("ASR timeout: model masih menyiapkan engine suara.", "");
+        } else {
+          setTranscript("Error: " + e.message, "");
+        }
+        document.getElementById("tr-atlas").classList.remove("kedip");
+        document.getElementById("status-transkrip").textContent = "ASR belum siap. Coba ulang 5-10 detik lagi.";
+        setState("idle");
+        return;
+      }
+
+      setTranscript(teks, "");
+      showAtlasLoading(true);
+      openStream(teks);
+    }
+
+    function openStream(teks) {
+      closeStream();
+      resetAudioQueue();
+      streamDone = false;
+      clearTypewriter();
+      tahanOutputSampaiAudio = true;
+      teksTertunda = "";
+      navTertunda = [];
+      audioPertamaSudahMulai = false;
+
+      const url = `/api/stream?teks=${encodeURIComponent(teks)}&session_id=${encodeURIComponent(SESSION_ID)}`;
+      sseSource = new EventSource(url);
+
+      sseSource.addEventListener("text", event => {
+        const d = JSON.parse(event.data);
+        const potong = d.c || "";
+        if (tahanOutputSampaiAudio) {
+          teksTertunda += potong;
+        } else {
+          tandaiTeksAtlasMulai();
+          appendTypewriter(potong);
+        }
+      });
+
+      sseSource.addEventListener("audio", event => {
+        const d = JSON.parse(event.data);
+        enqueueAudio(d.d);
+      });
+
+      sseSource.addEventListener("nav", event => {
+        const d = JSON.parse(event.data);
+        if (tahanOutputSampaiAudio) {
+          navTertunda.push(d.url);
+        } else {
+          jalankanNavigasi(d.url);
+        }
+      });
+
+      sseSource.addEventListener("done", () => {
+        closeStream();
+        streamDone = true;
+        if (tahanOutputSampaiAudio && !audioPertamaSudahMulai) {
+          bukaOutputTanpaAudio();
+        }
+        if (menungguAudioPertama) {
+          menungguAudioPertama = false;
+          hentikanAnimasiPikir();
+        }
+        checkStreamAudioDone();
+      });
+
+      sseSource.onerror = () => {
+        closeStream();
+        streamDone = true;
+        if (tahanOutputSampaiAudio && !audioPertamaSudahMulai) {
+          bukaOutputTanpaAudio();
+        }
+        if (menungguAudioPertama) {
+          menungguAudioPertama = false;
+          hentikanAnimasiPikir();
+        }
+        checkStreamAudioDone();
+      };
+    }
+
+    function closeStream() {
+      if (sseSource) {
+        sseSource.close();
+        sseSource = null;
+      }
+    }
+
+    function getPlayCtx() {
+      if (!playCtx || playCtx.state === "closed") {
+        playCtx = new (window.AudioContext || window.webkitAudioContext)();
+        playGain = playCtx.createGain();
+        playAnalyser = playCtx.createAnalyser();
+        playAnalyser.fftSize = 2048;
+        playGain.connect(playAnalyser);
+        playAnalyser.connect(playCtx.destination);
+        nextStartAt = 0;
+      }
+      if (playCtx.state === "suspended") playCtx.resume();
+      return playCtx;
+    }
+
+    async function enqueueAudio(b64) {
+      chunksQueued++;
+      audioDecodeQueue = audioDecodeQueue.then(async () => {
+        const ctx = getPlayCtx();
+        const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+        try {
+          const audioBuf = await ctx.decodeAudioData(bytes.buffer.slice(0));
+          setState("speaking");
+          const startAt = Math.max(ctx.currentTime + 0.02, nextStartAt);
+          nextStartAt = startAt + audioBuf.duration;
+          const src = ctx.createBufferSource();
+          src.buffer = audioBuf;
+          src.connect(playGain);
+
+          if (!audioPertamaSudahMulai) {
+            audioPertamaSudahMulai = true;
+            const jedaMs = Math.max(0, (startAt - ctx.currentTime) * 1000);
+            setTimeout(() => {
+              bukaOutputSetelahAudioMulai();
+            }, jedaMs + 20);
+          }
+
+          src.start(startAt);
+          currentSrc = src;
+          src.onended = () => {
+            chunksPlayed++;
+            checkStreamAudioDone();
+          };
+        } catch (err) {
+          chunksPlayed++;
+          checkStreamAudioDone();
+        }
+      });
+    }
+
+    function resetAudioQueue() {
+      if (currentSrc) {
+        try { currentSrc.stop(); } catch (e) {}
+        currentSrc = null;
+      }
+      if (playCtx) {
+        try { playCtx.close(); } catch (e) {}
+      }
+      playCtx = null;
+      playGain = null;
+      playAnalyser = null;
+      chunksQueued = 0;
+      chunksPlayed = 0;
+      nextStartAt = 0;
+      audioDecodeQueue = Promise.resolve();
+    }
+
+    function interruptSpeaking() {
+      closeStream();
+      resetAudioQueue();
+      streamDone = true;
+      tahanOutputSampaiAudio = false;
+      teksTertunda = "";
+      navTertunda = [];
+      audioPertamaSudahMulai = false;
+      menungguAudioPertama = false;
+      hentikanAnimasiPikir();
+      stopTypewriter();
+      setState("idle");
+    }
+
+    function jalankanNavigasi(url) {
+      tampilNavToast(url);
+      setTimeout(() => {
+        try {
+          if (jendelaUix && !jendelaUix.closed) {
+            jendelaUix.location.href = url;
+            jendelaUix.focus();
+            return;
+          }
+        } catch (e) {
+          jendelaUix = null;
+        }
+
+        jendelaUix = window.open(url, NAMA_JENDELA_UIX);
+        if (jendelaUix) {
+          jendelaUix.focus();
+        } else {
+          document.getElementById("status-transkrip").textContent = "Popup browser terblokir. Izinkan popup agar halaman UIX bisa dibuka otomatis.";
+        }
+      }, 700);
+    }
+
+    function bukaOutputSetelahAudioMulai() {
+      if (!tahanOutputSampaiAudio) return;
+      tahanOutputSampaiAudio = false;
+      setTimeout(() => {
+        showAtlasLoading(false);
+        tandaiTeksAtlasMulai();
+        if (teksTertunda) {
+          appendTypewriter(teksTertunda);
+          teksTertunda = "";
+        }
+      }, JEDA_TAMPIL_TEKS_MS);
+
+      setTimeout(() => {
+        if (navTertunda.length) {
+          for (const url of navTertunda) {
+            jalankanNavigasi(url);
+          }
+          navTertunda = [];
+        }
+      }, JEDA_AKTIVITAS_MS);
+    }
+
+    function bukaOutputTanpaAudio() {
+      tahanOutputSampaiAudio = false;
+      showAtlasLoading(false);
+      tandaiTeksAtlasMulai();
+      if (teksTertunda) {
+        appendTypewriter(teksTertunda);
+        teksTertunda = "";
+      }
+      if (navTertunda.length) {
+        for (const url of navTertunda) {
+          jalankanNavigasi(url);
+        }
+        navTertunda = [];
+      }
+    }
+
+    function checkStreamAudioDone() {
+      if (streamDone && chunksPlayed >= chunksQueued && !twTimer && !twQueue) {
+        setTimeout(() => {
+          setState("idle");
+        }, 260);
+      }
+    }
+
+    function appendTypewriter(text) {
+      twQueue += text;
+      if (!twTimer) tickTypewriter();
+    }
+
+    function tickTypewriter() {
+      const el = document.getElementById("tr-atlas");
+      if (!el || !twQueue) {
+        twTimer = null;
+        checkStreamAudioDone();
+        return;
+      }
+      const batch = twQueue.slice(0, 3);
+      twQueue = twQueue.slice(3);
+      el.textContent += batch;
+      twTimer = setTimeout(tickTypewriter, 14);
+    }
+
+    function stopTypewriter() {
+      if (twTimer) {
+        clearTimeout(twTimer);
+        twTimer = null;
+      }
+      const el = document.getElementById("tr-atlas");
+      if (el && twQueue) {
+        el.textContent += twQueue;
+        twQueue = "";
+      }
+      if (el) el.classList.remove("kedip");
+    }
+
+    function tampilkanFrasaPikir() {
+      const el = document.getElementById("status-pikir");
+      if (!el) return;
+      delete el.dataset.mode;
+      void el.offsetWidth;
+      el.textContent = FRASE_PIKIR[indeksPikir % FRASE_PIKIR.length] + "...";
+      el.dataset.mode = "masuk";
+      indeksPikir += 1;
+    }
+
+    function mulaiAnimasiPikir() {
+      const el = document.getElementById("status-pikir");
+      if (!el) return;
+      indeksPikir = Math.floor(Math.random() * FRASE_PIKIR.length);
+      tampilkanFrasaPikir();
+      el.classList.add("aktif");
+      if (timerPikir) clearInterval(timerPikir);
+      timerPikir = setInterval(() => {
+        tampilkanFrasaPikir();
+      }, 1450);
+    }
+
+    function hentikanAnimasiPikir() {
+      const el = document.getElementById("status-pikir");
+      if (timerPikir) {
+        clearInterval(timerPikir);
+        timerPikir = null;
+      }
+      if (!el) return;
+      el.classList.remove("aktif");
+      el.textContent = "";
+      delete el.dataset.mode;
+    }
+
+    function tandaiTeksAtlasMulai() {
+      const el = document.getElementById("tr-atlas");
+      if (el) el.classList.remove("kedip");
+    }
+
+    function clearTypewriter() {
+      if (twTimer) {
+        clearTimeout(twTimer);
+        twTimer = null;
+      }
+      twQueue = "";
+      const el = document.getElementById("tr-atlas");
+      if (el) {
+        el.textContent = "";
+        el.classList.add("kedip");
+      }
+    }
+
+    function setTranscript(kamu, atlas) {
+      const trKamu = document.getElementById("tr-kamu");
+      const trAtlas = document.getElementById("tr-atlas");
+      if (kamu !== null) trKamu.textContent = kamu || "Belum ada ucapan.";
+      if (atlas !== null) trAtlas.textContent = atlas || "";
+    }
+
+    function showAtlasLoading(show) {
+      const el = document.getElementById("tr-atlas");
+      if (show) {
+        loadingSeq += 1;
+        loadingMulaiMs = Date.now();
+        menungguAudioPertama = true;
+        el.textContent = "";
+        el.classList.add("kedip");
+        document.getElementById("status-transkrip").textContent = "Atlas sedang menyusun respons...";
+        mulaiAnimasiPikir();
+      } else {
+        const seq = loadingSeq;
+        const sisa = Math.max(0, MIN_LOADING_MS - (Date.now() - loadingMulaiMs));
+        const tutup = () => {
+          if (seq !== loadingSeq) return;
+          menungguAudioPertama = false;
+          el.classList.remove("kedip");
+          hentikanAnimasiPikir();
+        };
+        if (sisa > 0) {
+          setTimeout(tutup, sisa);
+        } else {
+          tutup();
+        }
+      }
+    }
+
+    function hitungRms(analyserNode) {
+      if (!analyserNode) return 0;
+      const data = new Uint8Array(analyserNode.fftSize);
+      analyserNode.getByteTimeDomainData(data);
+      let total = 0;
+      for (let i = 0; i < data.length; i++) {
+        const normal = (data[i] - 128) / 128;
+        total += normal * normal;
+      }
+      return Math.sqrt(total / data.length);
+    }
+
+    function gambarGelombangAktual() {
+      const width = kanvasGelombang.clientWidth;
+      const height = kanvasGelombang.clientHeight;
+      ctxGelombang.clearRect(0, 0, width, height);
+
+      const aktifOutput = state === "speaking" ? playAnalyser : null;
+      const aktifInput = state === "listening" ? analyser : null;
+      const analyserAktif = aktifOutput || aktifInput;
+
+      const gradient = ctxGelombang.createLinearGradient(0, 0, width, 0);
+      gradient.addColorStop(0, "rgba(224, 75, 75, 0.08)");
+      gradient.addColorStop(0.18, "rgba(224, 75, 75, 0.72)");
+      gradient.addColorStop(0.5, "rgba(255, 255, 255, 0.96)");
+      gradient.addColorStop(0.82, "rgba(224, 75, 75, 0.72)");
+      gradient.addColorStop(1, "rgba(224, 75, 75, 0.08)");
+
+      ctxGelombang.lineWidth = 2.2;
+      ctxGelombang.strokeStyle = gradient;
+      ctxGelombang.lineCap = "round";
+      ctxGelombang.shadowBlur = 20;
+      ctxGelombang.shadowColor = "rgba(224, 75, 75, 0.22)";
+
+      if (analyserAktif) {
+        const data = new Uint8Array(analyserAktif.fftSize);
+        analyserAktif.getByteTimeDomainData(data);
+        ctxGelombang.beginPath();
+        for (let i = 0; i < data.length; i++) {
+          const x = (i / (data.length - 1)) * width;
+          const y = (data[i] / 255) * height;
+          if (i === 0) ctxGelombang.moveTo(x, y);
+          else ctxGelombang.lineTo(x, y);
+        }
+        ctxGelombang.stroke();
+      } else {
+        const waktu = performance.now() * 0.0018;
+        const amplitudo = 12;
+        ctxGelombang.beginPath();
+        for (let i = 0; i <= 120; i++) {
+          const x = (i / 120) * width;
+          const y = height / 2 + Math.sin(waktu + i * 0.18) * amplitudo * Math.sin((i / 120) * Math.PI);
+          if (i === 0) ctxGelombang.moveTo(x, y);
+          else ctxGelombang.lineTo(x, y);
+        }
+        ctxGelombang.stroke();
+      }
+    }
+
+    function sinkronkanGlobe() {
+      const rmsMic = state === "listening" ? hitungRms(analyser) : 0;
+      const rmsOutput = state === "speaking" ? hitungRms(playAnalyser) : 0;
+      const energi = Math.max(rmsOutput, rmsMic * 0.85, 0);
+      document.documentElement.style.setProperty("--energi", energi.toFixed(4));
+
+      if (!globeAnim) return;
+      if (state === "speaking") {
+        globeAnim.play();
+        globeAnim.setSpeed(Math.min(3.1, Math.max(0.65, 0.8 + energi * 18)));
+      } else if (state === "listening") {
+        globeAnim.play();
+        globeAnim.setSpeed(Math.min(2, Math.max(0.45, 0.55 + energi * 10)));
+      } else if (state === "processing") {
+        globeAnim.play();
+        globeAnim.setSpeed(0.55);
+      } else {
+        globeAnim.play();
+        globeAnim.setSpeed(0.46);
+      }
+    }
+
+    function mulaiLoopVisual() {
+      const gambar = () => {
+        sinkronkanGlobe();
+        gambarGelombangAktual();
+        frameVisual = requestAnimationFrame(gambar);
+      };
+      if (!frameVisual) gambar();
+    }
+
+    function tampilNavToast(url) {
+      const el = document.getElementById("nav-toast");
+      el.textContent = "Membuka " + url;
+      el.classList.add("tampil");
+      setTimeout(() => el.classList.remove("tampil"), 2600);
+    }
+
+    async function clearChat() {
+      await fetch("/api/clear", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ session_id: SESSION_ID })
+      });
+      tahanOutputSampaiAudio = false;
+      teksTertunda = "";
+      navTertunda = [];
+      audioPertamaSudahMulai = false;
+      hentikanAnimasiPikir();
+      menungguAudioPertama = false;
+      setTranscript("Belum ada ucapan.", "");
+      document.getElementById("status-transkrip").textContent = "Percakapan dibersihkan.";
+      document.getElementById("tr-atlas").classList.remove("kedip");
+    }
+  </script>
+  <!-- [SELESAI] -->
+</body>
+</html>

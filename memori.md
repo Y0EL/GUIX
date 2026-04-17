@@ -1,5 +1,5 @@
 # Memori Proyek - Orkestrasi Intelijen
-Diperbarui: 2026-04-14 15:10
+Diperbarui: 2026-04-17 11:50
 
 ## Ringkasan Proyek
 Membangun backend orkestrasi agent TIA, NAA, dan PTA untuk analisis OSINT berbasis data uji internal dengan runtime nyata: OpenAI, LangChain, LangGraph, Kafka, Redis Streams, PostgreSQL, Neo4j, dan Celery.
@@ -65,6 +65,9 @@ Membangun backend orkestrasi agent TIA, NAA, dan PTA untuk analisis OSINT berbas
 | 2026-04-14 | Payload dossier sindikat dipadatkan sebelum dikirim ke OpenAI | Bundel kasus mentah memuat duplikasi besar dari `profil.isi_json`, `postingan`, dan `lokasi` yang memicu timeout |
 | 2026-04-14 | Artefak office dipindahkan ke library dokumen nyata | Writer manual XML/PDF terlalu mentah dan tidak cukup human readable untuk konsumsi analis |
 | 2026-04-14 | Workflow agent dipisah menjadi agen operasional, auditor, dan autocompacter | Analisis, audit read-only, dan pemadatan memori perlu fokus tool dan peran yang berbeda agar konteks tidak buyar |
+| 2026-04-17 | Atlas Live mode diubah menjadi trigger suara sekali-klik globe (tanpa input teks) | Mencegah kebocoran audio dan menyederhanakan alur interaksi live voice |
+| 2026-04-17 | Preload Whisper Atlas dibuat non-blocking + mode aman CPU dan timeout ASR frontend | Startup tidak macet saat model berat, UI tidak menggantung saat ASR lambat, dan respons tetap stabil di perangkat CPU |
+| 2026-04-17 | Atlas memakai memori sesi lokal persisten untuk konteks percakapan lanjutan | Permintaan ambigu seperti "lebih detail" dapat diresolusikan ke halaman terakhir dan langsung membuka navigasi yang relevan |
 
 ## Catatan Aktif
 - Isi `OPENAI_API_KEY` yang valid sebelum menjalankan worker.
@@ -85,6 +88,15 @@ Membangun backend orkestrasi agent TIA, NAA, dan PTA untuk analisis OSINT berbas
 - `scripts/jalankan-backend.js` sekarang lebih cocok untuk pembuktian runtime karena event baru diterbitkan setelah worker benar-benar hidup.
 - Folder `.github/agents/` sekarang memuat agen `asisten-operasional-indonesia`, `auditor-ketat`, dan `autocompacter-memori` untuk workflow coding, audit, dan compacting.
 - Arah identitas visual di layer agent/workflow sekarang mendukung dua mode, terang dan gelap, dengan basis warna merah-hitam sebagai identitas utama proyek.
+- `atlas/atlas_web.py` sekarang default ke Ollama lokal dengan model `qwen3.5:latest`; mode cloud hanya aktif jika `ATLAS_OLLAMA_MODE=cloud` dan `OLLAMA_API_KEY` valid.
+- `atlas/atlas_web.py` sekarang default ke `edge-tts` dengan voice `id-ID-ArdiNeural`; Piper hanya aktif jika `ATLAS_TTS_MODE=piper`.
+- UI Atlas dipindah ke template Flask `atlas/templates/index.html` dengan layout fullscreen 2:2, visual Lottie `globe.json` + soundwave amplitudo aktual, chat panel hidden default dengan tombol toggle kanan bawah, dan heading kanan disederhanakan menjadi "ATLAS Intelligence".
+- Mode interaksi Atlas kini voice-trigger only: input teks frontend dihapus, endpoint `/api/chat` dinonaktifkan (`410`), dan rekam dimulai dari klik globe.
+- Kebocoran suara dikurangi dengan `echoCancellation`, `noiseSuppression`, `autoGainControl` pada `getUserMedia`, serta auto-relisten dimatikan.
+- Prompt chat Atlas diperketat: tetap bisa menjawab topik umum, tetapi wajib menjadikan konteks database UIX sebagai rujukan utama saat relevan.
+- `atlas/atlas_web.py` sekarang mendukung preload Whisper di background (`ATLAS_WHISPER_PRELOAD`) dan mode aman CPU (`ATLAS_WHISPER_CPU_SAFE`) yang otomatis memilih model lebih ringan saat target `turbo` dijalankan di CPU.
+- `atlas/templates/index.html` kini memberi timeout 30 detik untuk `/api/listen` agar status `processing` tidak menggantung saat model ASR belum siap.
+- `atlas/atlas_web.py` kini menyimpan memori sesi Atlas secara lokal di `runtime_state/atlas_session_memory.json` dan memakainya untuk follow-up kontekstual seperti "lanjut" atau "lebih detail" agar tetap membuka halaman yang dimaksud.
 
 ## Bug & Workaround Diketahui
 | Bug | Workaround / Status |
